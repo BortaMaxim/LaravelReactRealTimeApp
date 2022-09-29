@@ -1,37 +1,58 @@
 import * as AuthActionTypes from '../types/authActionTypes'
+import {toast} from 'react-toastify'
 import axios from 'axios'
-import {BASE_AUTH_URL, getAuthOptions, postOptions} from "../utils";
+import {BASE_AUTH_URL, getAuthOptions, postOptions, toastOptions} from "../utils";
 
+export const ShowNotificationAction = () => {
+    return {
+        type: AuthActionTypes.IS_SHOW
+    }
+}
+
+export const HideNotificationAction = () => {
+    return {
+        type: AuthActionTypes.IS_HIDE
+    }
+}
 
 export const RegisterAction = (formData, history) => async (dispatch) => {
     dispatch({type: AuthActionTypes.LOADING})
-    await axios.post(`${BASE_AUTH_URL}register`, formData, postOptions()).then(res => {
+    await axios.post(`${BASE_AUTH_URL}registration`, formData, postOptions()).then(res => {
         dispatch({type: AuthActionTypes.REGISTER_SUCCESS, payload: res})
+        toast.success(res.data.message, toastOptions())
         setTimeout(() => {
             history.push('/login')
-        }, 3000)
+        }, 5000)
     }).catch(err => {
-        dispatch({type: AuthActionTypes.REGISTER_FAILED, payload: err})
+        dispatch({type: AuthActionTypes.REGISTER_FAILED, payload: err.response})
+        dispatch(ShowNotificationAction())
+        setTimeout(() => {
+            dispatch(HideNotificationAction())
+        }, 3000)
     })
 }
 
 export const LoginAction = (formData, history) => async (dispatch) => {
     dispatch({type: AuthActionTypes.LOADING})
     await axios.post(`${BASE_AUTH_URL}login`, formData, postOptions()).then(res => {
-        if(res.hasOwnProperty('success') && res.success === true) {
-            dispatch({type: AuthActionTypes.LOGIN_SUCCESS, payload: res})
-            if (res.data.email_verified_at !== null) {
-                console.log(res.data.email_verified_at)
-                localStorage.setItem('user-token', res.token)
-                localStorage.setItem('email-verified-at', res.data.email_verified_at)
-                setTimeout(() => {
-                    history.push('/user/profile')
-                })
-            }
-
+        if(res.data.hasOwnProperty('success') && res.data.success === true) {
+            dispatch({type: AuthActionTypes.LOGIN_SUCCESS, payload: res.data})
+            localStorage.setItem('user-token', res.data.token)
+            localStorage.setItem('email-verified-at', res.data.data.email_verified_at)
+            toast.success(res.data.message, toastOptions())
+            setTimeout(() => {
+                history.push('/chat')
+            }, 4000)
         }else {
-            dispatch({type: AuthActionTypes.LOGIN_FAILED, payload: res.message})
+            dispatch({type: AuthActionTypes.LOGIN_WARNING, payload: res.data})
+            toast.warning(res.data.message, toastOptions())
         }
+    }).catch(err => {
+        dispatch({type: AuthActionTypes.LOGIN_FAILED, payload: err.response})
+        dispatch(ShowNotificationAction())
+        setTimeout(() => {
+            dispatch(HideNotificationAction())
+        }, 3000)
     })
 }
 

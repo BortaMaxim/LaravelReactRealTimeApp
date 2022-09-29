@@ -1,5 +1,5 @@
-export const BASE_AUTH_URL = 'http://127.0.0.1:8000/auth/'
-export const BASE_URL = 'http://127.0.0.1:8000/'
+export const BASE_AUTH_URL = 'http://127.0.0.1:8000/api/auth/'
+export const BASE_URL = 'http://127.0.0.1:8000/api/'
 
 export const getAuthOptions = (token) => {
     return {
@@ -10,6 +10,20 @@ export const getAuthOptions = (token) => {
         }
     }
 }
+
+export const toastOptions = () => {
+    return {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+    }
+}
+
 export const getOptions = () => {
     return {
         headers: {

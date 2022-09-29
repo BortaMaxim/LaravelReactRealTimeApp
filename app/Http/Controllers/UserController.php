@@ -32,6 +32,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ];
+
         $user = $this->user->create($data);
         event(new Registered($user));
         return response()->json([

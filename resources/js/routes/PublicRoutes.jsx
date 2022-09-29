@@ -17,8 +17,8 @@ export const PublicRoutes = () => {
             </Route>
 
             <GuardRoutes
-                path={'/user'}
-                tokenVerified='email-verified-at'
+                path={'/chat'}
+                tokenVerified={'email-verified-at'}
                 routeRedirect="/login"
                 component={PrivateRoutes}
             />

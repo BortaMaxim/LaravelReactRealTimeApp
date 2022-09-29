@@ -2,6 +2,7 @@ import * as AuthActionTypes from '../types/authActionTypes'
 
 let initialState = {
     loading: false,
+    isShow: null,
     successResponse: {},
     profile: {},
     passwordResetToken: {},
@@ -19,6 +20,16 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true
+            }
+        case AuthActionTypes.IS_SHOW:
+            return {
+                ...state,
+                isShow: true
+            }
+        case AuthActionTypes.IS_HIDE:
+            return {
+                ...state,
+                isShow: false
             }
         case AuthActionTypes.IS_LOGGED_OUT:
             return {
@@ -42,6 +53,11 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 successResponse: action.payload
+            }
+        case AuthActionTypes.LOGIN_WARNING:
+            return {
+                ...state,
+                loading: false,
             }
         case AuthActionTypes.LOGIN_FAILED:
             return {
@@ -79,6 +95,7 @@ export const authReducer = (state = initialState, action) => {
                 loading: false,
                 passwordResetToken: action.payload
             }
-        default: return state
+        default:
+            return state
     }
 }

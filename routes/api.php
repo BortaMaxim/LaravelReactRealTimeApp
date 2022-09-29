@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
-    Route::post('register', [UserController::class, 'register']);
+    Route::post('registration', [UserController::class, 'register']);
     Route::post('login', [UserController::class, 'login']);
     Route::get('email/verify/{id}/{hash}', [UserController::class, 'verify'])
         ->middleware(['signed', 'throttle'])
