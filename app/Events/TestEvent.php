@@ -32,6 +32,6 @@ class TestEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel|array
     {
-        return new Channel('test-channel');
+        return new PrivateChannel('test-channel');
     }
 }

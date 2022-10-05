@@ -75,13 +75,16 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                successResponse: action.payload
             }
         case AuthActionTypes.FORGOT_PASSWORD_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                successResponse: action.payload
+            }
+        case AuthActionTypes.FORGOT_PASSWORD_WARNING:
+            return {
+                ...state,
+                loading: false,
             }
         case AuthActionTypes.FORGOT_PASSWORD_ERROR:
             return {
@@ -93,7 +96,22 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                passwordResetToken: action.payload
+            }
+        case AuthActionTypes.RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+            }
+        case AuthActionTypes.RESET_PASSWORD_WARNING:
+            return {
+                ...state,
+                loading: false,
+            }
+        case AuthActionTypes.RESET_PASSWORD_ERROR:
+            return {
+                ...state,
+                loading: false,
+                errorResponse: action.payload
             }
         default:
             return state

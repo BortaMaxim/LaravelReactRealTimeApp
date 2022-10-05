@@ -21,6 +21,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
 
     Route::group(['middleware' => 'auth:api'], function ($route) {
         Route::get('profile', [UserController::class, 'profile']);
+//        Route::get('status', [UserController::class, 'status']);
         Route::get('logout', [UserController::class, 'logout']);
     });
 });

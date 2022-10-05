@@ -10,11 +10,18 @@ export const useForm = ({initialState = {}}) => {
             [e.target.name]: e.target.value
         })
     }
+    const handleUpload = (e) => {
+        let files = e.target.files
+        setFields({
+            ...fields,
+            [e.target.name]: files[0]
+        })
+    }
     const handleSubmit = (action) => {
         dispatch(action)
     }
     const clear = () => {
         setFields({})
     }
-    return {fields, handleChange, handleSubmit, clear}
+    return {fields, handleChange, handleSubmit, clear, handleUpload, setFields}
 }

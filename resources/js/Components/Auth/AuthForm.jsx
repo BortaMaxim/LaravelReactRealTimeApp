@@ -4,7 +4,7 @@ import {CustomSpinner} from "../Details/CustomSpinner";
 
 export const AuthForm = ({title, fields, handleChange, submitHandler, authSelector}) => {
     const {name, email, password, password_confirmation} = fields
-    const {errorResponse, successResponse, loading, isShow} = authSelector
+    const {errorResponse, loading, isShow} = authSelector
 
     return (
         <>
@@ -121,6 +121,9 @@ export const AuthForm = ({title, fields, handleChange, submitHandler, authSelect
                                                         Login
                                                     </button>
                                             }
+                                            <Link to="/forgot-password">
+                                                Forgot password
+                                            </Link>
                                             <Link to="/">Registration</Link>
                                         </>
                                 }

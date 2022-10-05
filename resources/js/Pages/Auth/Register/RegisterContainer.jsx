@@ -1,8 +1,8 @@
 import React from 'react';
-import {AuthForm} from "../../Components/Auth/AuthForm";
-import {useForm} from "../../hooks/useForm";
-import {authSelector} from "../../selectors/auth/authSelector";
-import {RegisterAction} from "../../redux/actions/authAction";
+import {AuthForm} from "../../../Components/Auth/AuthForm";
+import {useForm} from "../../../hooks/useForm";
+import {authSelector} from "../../../selectors/auth/authSelector";
+import {RegisterAction} from "../../../redux/actions/authAction";
 import {useHistory} from "react-router-dom";
 
 export const RegisterContainer = () => {

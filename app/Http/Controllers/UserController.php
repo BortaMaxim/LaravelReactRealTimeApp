@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TestEvent;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\ResetPasswordRequest;
@@ -64,6 +65,7 @@ class UserController extends Controller
             } else {
                 $accessToken = auth()->user()->createToken('accessToken')->accessToken;
                 $user->status = 'online';
+                $this->status($user->name, $user->status);
                 $user->save();
 
                 $responseMessage = "Login Success";
@@ -102,7 +104,8 @@ class UserController extends Controller
 
     public function profile(): ?\Illuminate\Contracts\Auth\Authenticatable
     {
-        return auth()->user();
+        $authUser = auth()->user();
+        return $authUser;
     }
 
     public function logout()
@@ -112,6 +115,7 @@ class UserController extends Controller
         $auth_user->status = 'offline';
         $auth_user->save();
         $user->revoke();
+        $this->status($auth_user->name, $auth_user->status);
         $responseMessage = "Successfully logged out ";
         return response()->json([
             'success' => true,
@@ -144,10 +148,9 @@ class UserController extends Controller
             $user->password = Hash::make($password);
             $user->save();
         });
-        $message = $response == Password::PASSWORD_RESET
-            ? 'Password reset successfully'
-            : 'Please write new password';
-        return response()->json(['message' => $message]);
+        return $response == Password::PASSWORD_RESET
+            ? response()->json(['success' => true, 'message' => 'Password reset successfully'])
+            : response()->json(['success' => false, 'message' => 'Please write new password']);
     }
 
     public function password_reset_token()
