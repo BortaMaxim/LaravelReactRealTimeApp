@@ -1,0 +1,3 @@
+export const LOADING = 'profile/LOADING'
+export const UPDATED_PROFILE_SUCCESS = 'profile/UPDATED_PROFILE_SUCCESS'
+export const UPDATED_PROFILE_FAILED = 'profile/UPDATED_PROFILE_FAILED'

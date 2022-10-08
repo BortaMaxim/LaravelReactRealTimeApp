@@ -2,12 +2,16 @@ import React, {useEffect} from 'react';
 import {CustomSideBar} from "./CustomSideBar";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {ProfileAction} from "../../redux/actions/authAction";
+import {ProfileAction, StatusNotificationAction} from "../../redux/actions/authAction";
 
 export const CustomNav = ({profile, logout}) => {
     const token = localStorage.getItem('user-token')
     const history = useHistory()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(StatusNotificationAction(token))
+    }, [token])
 
     useEffect(() => {
         dispatch(ProfileAction(token))

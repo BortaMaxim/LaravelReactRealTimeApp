@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\TestEvent;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
+use App\Repository\AuthRepository\Authable;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
@@ -14,147 +15,65 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Redirect;
 
+/**
+ * @property Authable $authable
+ */
 class UserController extends Controller
 {
-    public $user;
-    public $confirm_verified_url = "https://mailtrap.io/inboxes/1897989/messages";
-    public function __construct()
+//    public $confirm_verified_url = "https://mailtrap.io/inboxes/1897989/messages";
+    public function __construct(Authable $authable)
     {
-        $this->user = new User();
+        $this->authable = $authable;
     }
 
-    public function register(RegisterUserRequest $request)
+    public function register(RegisterUserRequest $request): \Illuminate\Http\JsonResponse
     {
-        $request->validated();
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ];
-
-        $user = $this->user->create($data);
-        event(new Registered($user));
-        return response()->json([
-            'success' => true,
-            'message' => 'Register Successfully!  Please confirm your email on ' . $this->confirm_verified_url,
-        ]);
+        return $this->authable->sign_up($request);
     }
 
-    public function login(LoginUserRequest $request)
+    public function login(LoginUserRequest $request): \Illuminate\Http\JsonResponse
     {
-        $request->validated();
-        $credentials = $request->only('email', 'password');
-        $user = $this->user->where('email', $credentials['email'])->first();
-        if ($user) {
-            if (!auth()->attempt($credentials)) {
-                $responseMessage = "Invalid username or password";
-                return response()->json([
-                    "success" => false,
-                    "message" => $responseMessage,
-                    "error" => $responseMessage
-                ], 422);
-            }
-            $email_verified = auth()->user()->email_verified_at;
-            if ($email_verified === null) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Please confirm your email! '. $this->confirm_verified_url
-                ]);
-            } else {
-                $accessToken = auth()->user()->createToken('accessToken')->accessToken;
-                $user->status = 'online';
-                $this->status($user->name, $user->status);
-                $user->save();
-
-                $responseMessage = "Login Success";
-                return response()->json([
-                    'success' => true,
-                    'message' => $responseMessage,
-                    'data' => $user,
-                    'token' => $accessToken
-                ]);
-            }
-        } else {
-            $responseMessage = "Sorry, this user does not exist";
-            return response()->json([
-                "success" => false,
-                "message" => $responseMessage,
-                "error" => $responseMessage
-            ]);
-        }
+        return $this->authable->sign_in($request);
     }
 
     public function verify(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
-        $user = User::find($request->route('id'));
-        $clientUrl = 'http://localhost:8000';
-
-        if ($user->hasVerifiedEmail()) {
-            return redirect("$clientUrl/email-already-verified");
-        }
-
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
-
-        return redirect("$clientUrl/email-verified-success");
+        return $this->authable->verify($request);
     }
 
     public function profile(): ?\Illuminate\Contracts\Auth\Authenticatable
     {
-        $authUser = auth()->user();
-        return $authUser;
+        return $this->authable->profile();
     }
 
-    public function logout()
+    public function logout(): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::guard('api')->user()->token();
-        $auth_user = auth()->user();
-        $auth_user->status = 'offline';
-        $auth_user->save();
-        $user->revoke();
-        $this->status($auth_user->name, $auth_user->status);
-        $responseMessage = "Successfully logged out ";
-        return response()->json([
-            'success' => true,
-            'message' => $responseMessage,
-        ]);
+        return $this->authable->logout();
     }
 
-    public function send_reset_link_email_response(Request $request)
+    public function send_reset_link_email_response(Request $request): \Illuminate\Http\JsonResponse
     {
-        $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink(request()->only('email'));
-
-        return $status === Password::RESET_LINK_SENT
-            ? response()->json(['success' => true, 'message' => 'success'])
-            : response()->json(['success' => false, 'message' => 'fail']);
+        return $this->authable->send_reset_link_email_response($request);
     }
 
-    public function reset_password($token)
+    public function reset_password($token): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
-        Cache::put('reset-token', $token);
-        $url = url('/reset-password');
-        return redirect($url);
+        return $this->authable->reset_password($token);
     }
 
-    public function send_reset_response(ResetPasswordRequest $request)
+    public function send_reset_response(ResetPasswordRequest $request): \Illuminate\Http\JsonResponse
     {
-        $request->validated();
-        $input = $request->only(['email','token', 'password', 'password_confirmation']);
-        $response = Password::reset($input, function ($user, $password) {
-            $user->password = Hash::make($password);
-            $user->save();
-        });
-        return $response == Password::PASSWORD_RESET
-            ? response()->json(['success' => true, 'message' => 'Password reset successfully'])
-            : response()->json(['success' => false, 'message' => 'Please write new password']);
+        return $this->authable->send_reset_response($request);
     }
 
     public function password_reset_token()
     {
         return Cache::get('reset-token');
+    }
+
+    public function updateProfile(UpdateProfileRequest $request): \Illuminate\Http\JsonResponse
+    {
+        return $this->authable->updateProfile($request);
     }
 }
