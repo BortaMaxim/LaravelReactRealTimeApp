@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Route, Switch} from "react-router-dom";
-import {DashboardContainer} from "../Pages/ChatDashboard/DashboardContainer";
+import DashboardContainer from "../Pages/ChatDashboard/DashboardContainer";
 import {ProfileContainer} from "../Pages/Profile/ProfileContainer";
 
 export const PrivateRoutes = (props) => {

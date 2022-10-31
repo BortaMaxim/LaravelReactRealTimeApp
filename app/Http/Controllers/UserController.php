@@ -6,22 +6,15 @@ use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
-use App\Models\User;
 use App\Repository\AuthRepository\Authable;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 
 /**
  * @property Authable $authable
  */
 class UserController extends Controller
 {
-//    public $confirm_verified_url = "https://mailtrap.io/inboxes/1897989/messages";
     public function __construct(Authable $authable)
     {
         $this->authable = $authable;

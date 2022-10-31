@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,21 +25,13 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('profile', [UserController::class, 'profile']);
         Route::post('profile/update', [UserController::class, 'updateProfile']);
         Route::get('logout', [UserController::class, 'logout']);
+        Route::get('friends', [FriendsController::class, 'friends']);
+        Route::get('conversation/last', [ConversationController::class, 'last']);
+        Route::get('conversation/last/{user}', [ConversationController::class, 'last']);
+        Route::get('conversation/{user}', [ConversationController::class, 'get_messages']);
+        Route::post('conversation/{user}', [ConversationController::class, 'send_message']);
+        Route::get('unread-messages/count', [ConversationController::class, 'unread_messages_count']);
     });
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});

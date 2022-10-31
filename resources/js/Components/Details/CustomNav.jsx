@@ -21,8 +21,11 @@ export const CustomNav = ({profile, logout}) => {
             <div className="container-fluid">
                 <div className="row w-100 d-flex align-items-center">
                     <div className="col">
-                        <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <button className="btn"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasWithBothOptions"
+                                aria-controls="offcanvasWithBothOptions">
                             <span className="navbar-toggler-icon"></span>
                         </button>
                     </div>

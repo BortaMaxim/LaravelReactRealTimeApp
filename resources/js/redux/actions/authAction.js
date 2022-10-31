@@ -58,12 +58,14 @@ export const LoginAction = (formData, history) => async (dispatch) => {
     })
 }
 
-export const ProfileAction = (token) => async (dispatch) => {
-    dispatch({type: AuthActionTypes.IS_FETCHING_PROFILE})
-    await axios.get(`${BASE_AUTH_URL}profile`, getAuthOptions(token)).then(res => {
-        dispatch({type: AuthActionTypes.PROFILE_FETCHED, payload: res.data})
+export const ProfileAction = (token) => async (dispatch) =>
+     await new Promise(async (resolve, reject) => {
+        dispatch({type: AuthActionTypes.IS_FETCHING_PROFILE})
+        await axios.get(`${BASE_AUTH_URL}profile`, getAuthOptions(token)).then(res => {
+            dispatch({type: AuthActionTypes.PROFILE_FETCHED, payload: res.data})
+            resolve()
+        })
     })
-}
 
 export const LogoutAction = (token, history) => async (dispatch) => {
     dispatch({type: AuthActionTypes.IS_LOGGED_OUT})
