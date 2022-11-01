@@ -70,8 +70,8 @@ class DashboardContainer extends Component {
 
     sendMessage(e) {
         e.preventDefault()
-        this.props.SetMessageAction(this.state.message)
         if (!this.state.message) return
+        this.props.SetMessageAction(this.state.message)
         this.props.SendMessageToAction(this.props.activeUserId, this.token).then(() => {
             EventBus.emit(SEND_MESSAGE_TO)
             this.props.AddLocalMsgToConversationAction()

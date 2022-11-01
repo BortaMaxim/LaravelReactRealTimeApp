@@ -9,7 +9,6 @@ export const ChannelPanel = ({friends, isLoading, lastMessages}) => {
     const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
     const unreadMessagesCount = useSelector(state => state.unreadMessagesCount)
-    console.log(unreadMessagesCount)
     useEffect(() => {
         if (!token) return
         dispatch(UnreadMessagesCountAction(token))

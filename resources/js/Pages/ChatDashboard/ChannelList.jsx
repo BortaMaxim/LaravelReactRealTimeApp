@@ -22,17 +22,18 @@ export const ChannelList = (props) => {
             style={{backgroundColor: el.id === id ? '#84cfc7' : '', cursor: 'pointer'}}
         >
             {el.name}
-            {
-                unreadMessagesCount !== 0
-                ? <small className="text">{unreadMessagesCount}</small>
-                : null
-            }
             <br/>
             {
                 !lastMessage || lastMessage.read || lastMessage.sender_id !== el.id
-                ? ''
-                : <small className="text-success">{lastMessage.message}</small>
-
+                    ? ''
+                    : <div className="d-flex justify-content-between align-items-center">
+                        <small className="text-success">{lastMessage.message}</small>
+                        {
+                            unreadMessagesCount !== 0
+                                ? <small className="badge badge-pill badge-primary bg-primary">{unreadMessagesCount}</small>
+                                : null
+                        }
+                    </div>
             }
         </li>
     )

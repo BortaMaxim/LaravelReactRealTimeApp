@@ -24,7 +24,11 @@ export const MessagesPanel = (props) => {
                             fields={fields}
                         />
                     </>
-                : <span>no messages...</span>
+                : <ChatForm
+                        sendMessage={sendMessage}
+                        handleChange={handleChange}
+                        fields={fields}
+                    />
             }
         </div>
     )
