@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail, IResetPassword
         return $this->hasMany(Message::class, 'recipient_id');
     }
 
+
     /**
      * The attributes that are mass assignable.
      *

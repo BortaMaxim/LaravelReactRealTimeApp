@@ -15,7 +15,7 @@ export const ChannelPanel = ({friends, isLoading, lastMessages}) => {
     }, [lastMessages])
 
     return (
-        <div className="bg-secondary vh-100 p-3">
+        <div className="bg-secondary vh-100 p-3 channel">
             <h1 className="text-light">Channels:</h1>
             <hr/>
             {

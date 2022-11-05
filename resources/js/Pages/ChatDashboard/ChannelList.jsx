@@ -1,18 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {SetActiveUserIdAction} from "../../redux/actions/chatAction";
+import React from 'react';
+import {FetchConversationWithAction} from "../../redux/actions/chatAction";
 import {useDispatch} from "react-redux";
-import EventBus from "../../EventBus";
-import {SET_ACTIVE_USER_ID} from "../../redux/types/chatActionTypes";
 
 export const ChannelList = (props) => {
     const {el, handleActive, id, lastMessage, unreadMessagesCount} = props
-    // const token = localStorage.getItem('user-token')
+    const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
-
     const setActiveUserId = () => {
-        dispatch(SetActiveUserIdAction(el.id)).then(() => {
-            EventBus.emit(SET_ACTIVE_USER_ID)
-        })
+        dispatch(FetchConversationWithAction(el.id, token))
         handleActive(el.id)
     }
     return (

@@ -4,7 +4,7 @@ class EventBus {
     }
 
     on(event, func) {
-        let findSubscribers = this.subscribers.find(sub => sub.event === event && sub.func.toString())
+        let findSubscribers = this.subscribers.find(sub => sub.event === event && sub.func.toString() === func.toString())
         if (findSubscribers) return
         this.subscribers.push({event, func})
     }

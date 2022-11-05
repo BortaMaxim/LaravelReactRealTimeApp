@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageEvent;
 use App\Helpers\Conversation;
 use App\Http\Requests\SendMessageRequest;
+use App\Http\Resources\MessageCollection;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -24,10 +25,13 @@ class ConversationController extends ApiController
     /**
      * @throws \Exception
      */
-    public function get_messages(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function get_messages(User $user)
     {
         $conversation = new Conversation(Auth::user(), $user);
-        return $this->respond($conversation->messages(40, true));
+        return response()->json([
+            'recipient' => $user,
+            'messages' => $conversation->messages(40, true)
+        ]);
     }
 
     public function send_message(SendMessageRequest $request, User $user)

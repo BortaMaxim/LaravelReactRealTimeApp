@@ -9,26 +9,15 @@ export const Message = (props) => {
     return (
         <div className="w-100 mt-3 position-relative p-2 d-flex"
              style={{justifyContent: profileIdComparison ? 'flex-start': 'flex-end'}}>
-            <div
+            <div className="message"
                 style={{
-                    width: '50%',
-                    height: '50%',
                     backgroundColor: profileIdComparison ? `#e2e8f0` : '#7ae572',
-                    minWidth: 200,
-                    padding: 20,
-                    borderRadius: 20,
-                    boxShadow: '6px 3px 20px rgba(0, 0, 0, .5)'
                 }}>
                 {isSent}
                 {
                     profileIdComparison
                     && <div>
-                        <img src={`${URL}/avatars/${profile.avatar}`} alt={profile.name} style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 15,
-                            marginRight: 10
-                        }}/>
+                        <img src={`${URL}/avatars/${profile.avatar}`} alt={profile.name} className="message_img"/>
                         <strong>{profile.name}</strong>
                     </div>
                 }

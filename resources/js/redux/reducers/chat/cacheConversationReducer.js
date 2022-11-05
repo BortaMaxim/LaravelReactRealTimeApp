@@ -1,7 +1,7 @@
-import * as ChatActionTypes from '../types/chatActionTypes'
+import * as ChatActionTypes from '../../types/chatActionTypes'
 
 
-export const conversationCacheReducer = (state = {}, action) => {
+export const cacheConversationReducer = (state = {}, action) => {
     switch (action.type) {
         case ChatActionTypes.CACHE_CONVERSATION_WITH:
             let newState = {...state}

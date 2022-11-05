@@ -3,9 +3,9 @@ import React from 'react';
 export const ChatForm = ({sendMessage, fields, handleChange}) => {
 
     return (
-        <div className="w-100 mt-5">
+        <div className="w-100">
             <hr/>
-            <form className="w-100" onSubmit={sendMessage}>
+            <form onSubmit={sendMessage}>
                 <input
                     type="text"
                     name="message"

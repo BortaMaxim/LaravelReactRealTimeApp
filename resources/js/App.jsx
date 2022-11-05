@@ -19,7 +19,7 @@ function App() {
                 <>
                     <PublicRoutes/>
                     <ToastContainer/>
-                    <Footer/>
+                    {/*<Footer/>*/}
                 </>
             </BrowserRouter>
         </Provider>

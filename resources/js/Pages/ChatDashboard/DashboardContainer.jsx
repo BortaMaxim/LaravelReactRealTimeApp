@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
+import '../../../sass/chat.scss'
 import {SEND_MESSAGE_TO, SET_ACTIVE_USER_ID} from '../../redux/types/chatActionTypes'
 import {CustomNav} from "../../Components/Details/CustomNav";
 import {Dashboard} from "./Dashboard";
@@ -6,7 +7,7 @@ import {connect} from "react-redux";
 import {LogoutAction, ProfileAction} from "../../redux/actions/authAction";
 import {withRouter} from "react-router-dom";
 import {
-    AddLocalMsgToConversationAction,
+    AddLocalMsgToConversationAction, ConnectChatChannelAction,
     FetchConversationWithAction,
     FetchFriendsAction,
     FetchLastMessagesAction,
@@ -29,9 +30,11 @@ class DashboardContainer extends Component {
         this.sendMessage = this.sendMessage.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
+        this.scrollToBottom = this.scrollToBottom.bind(this)
     }
 
     token = localStorage.getItem('user-token')
+    messagesEnd = createRef()
 
     componentDidMount() {
         const echo = echoInstance(this.token)
@@ -44,22 +47,34 @@ class DashboardContainer extends Component {
 
         if(this.token !== undefined)
         this.props.ProfileAction(this.token).then(() => {
-            echo.private(`user-channel.${this.props.profile.id}`)
-                .listen('MessageEvent', (event) => {
-                    let msg = event.message
-                    console.log(msg)
-                    if (msg.sender_id === this.props.activeUserId)
-                        this.props.FetchConversationWithAction(msg.sender_id, this.token, true)
-                    else
-                        this.props.FetchLastMessageWithAction(msg.sender_id, this.token)
-
-                    if(!document.hasFocus()) this.state.notification.play()
-                })
+            this.props.ConnectChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
+            // echo.private(`user-channel.${this.props.profile.id}`)
+            //     .listen('MessageEvent', (event) => {
+            //         let msg = event.message
+            //         if (msg.sender_id === this.props.activeUserId)
+            //             this.props.FetchConversationWithAction(msg.sender_id, this.token, true)
+            //         else
+            //             this.props.FetchLastMessageWithAction(msg.sender_id, this.token)
+            //
+            //         if(!document.hasFocus()) this.state.notification.play()
+            //     })
         })
+        this.scrollToBottom()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.scrollToBottom()
     }
 
     startConversation() {
         this.props.FetchConversationWithAction(this.props.activeUserId, this.token)
+    }
+
+    scrollToBottom() {
+        this.messagesEnd.current?.addEventListener('DOMNodeInserted', event => {
+            const {currentTarget: target} = event
+            target.scroll({top: target.scrollHeight, behavior: 'smooth'})
+        })
     }
 
     handleChange(e) {
@@ -70,11 +85,12 @@ class DashboardContainer extends Component {
 
     sendMessage(e) {
         e.preventDefault()
-        if (!this.state.message) return
         this.props.SetMessageAction(this.state.message)
-        this.props.SendMessageToAction(this.props.activeUserId, this.token).then(() => {
-            EventBus.emit(SEND_MESSAGE_TO)
-            this.props.AddLocalMsgToConversationAction()
+        if (!this.state.message) return
+        this.props.AddLocalMsgToConversationAction().then(() => {
+            this.props.SendMessageToAction(this.props.activeUserId, this.token).then(() => {
+                EventBus.emit(SEND_MESSAGE_TO)
+            })
         })
         this.setState({
             message: ''
@@ -90,7 +106,9 @@ class DashboardContainer extends Component {
             <div>
                 <CustomNav logout={this.logout} profile={this.props.profile}/>
                 <Dashboard
+                    messagesEnd={this.messagesEnd}
                     friends={this.props.friends}
+                    activeUserId={this.props.activeUserId}
                     isLoading={this.props.isLoading}
                     conversation={this.props.conversation}
                     lastMessages={this.props.lastMessages}
@@ -114,6 +132,7 @@ const mapStateToProps = (state) => ({
     lastMessages: state.lastMessages,
     activeUserId: state.activeUserId,
     conversation: state.conversation,
+    message: state.message,
 
 })
 
@@ -128,81 +147,6 @@ export default connect(mapStateToProps, {
     SendMessageToAction,
     FetchLastMessagesAction,
     ProfileAction,
-    LogoutAction
+    LogoutAction,
+    ConnectChatChannelAction
 })(DashboardWithRouterContainer)
-
-// export const DashboardContainer = () => {
-//     const token = localStorage.getItem('user-token')
-//     const {fields, handleChange, clear} = useForm({
-//         message: ''
-//     })
-//     const history = useHistory()
-//     const dispatch = useDispatch()
-//     const profile = authSelector()
-//     const chat = chatSelector()
-//     const lastMessages = useSelector(state =>  state.lastMessages)
-//     const activeUserId = useSelector(state => state.activeUserId)
-//     const conversation = useSelector(state => state.conversation)
-//     const profileID = profile.profile.id
-//     const echo = echoInstance(token)
-//
-//     useEffect(() => {
-//         // if (activeUserId !== 0)
-//         EventBus.on(SEND_MESSAGE_TO, () => dispatch(FetchConversationWithAction(activeUserId, token)))
-//     }, [activeUserId, token, dispatch])
-//
-//     useEffect(() => {
-//         if (profileID !== undefined) {
-//             dispatch(ProfileAction(token)).then(() => {
-//                 echo.private(`user-channel.${profileID}`)
-//                     .listen('MessageEvent', (event) => {
-//                         let msg = event.message
-//                         console.log(msg)
-//                         if (msg.sender_id === activeUserId) {
-//                             console.log('FetchConversationWithAction, true')
-//                             console.log('FetchConversationWithAction ActiveUserId ', activeUserId)
-//                             dispatch(FetchConversationWithAction(msg.sender_id, token, true))
-//                         }else {
-//                             console.log('FetchLastMessageWithAction')
-//                             console.log('FetchLastMessageWithAction ActiveUserId ', activeUserId)
-//                             dispatch(FetchLastMessageWithAction(msg.sender_id, token))
-//                         }
-//                     })
-//             })
-//         }
-//     }, [profileID, activeUserId, token, ])
-//
-//
-//     const sendMessage = (e) => {
-//         e.preventDefault()
-//         dispatch(SetMessageAction(fields.message))
-//         dispatch(AddLocalMsgToConversationAction())
-//         dispatch(SendMessageToAction(activeUserId, token)).then(() => {
-//             EventBus.emit(SEND_MESSAGE_TO)
-//         })
-//         clear()
-//     }
-//
-//     const logout = () => {
-//         dispatch(LogoutAction(token, history))
-//     }
-//     useEffect(() => {
-//         dispatch(FetchFriendsAction(token))
-//         dispatch(FetchLastMessagesAction(token))
-//     }, [dispatch, token])
-//
-//     return (
-//         <div>
-//             <CustomNav logout={logout} profile={profile.profile}/>
-//             <Dashboard
-//                 chat={chat}
-//                 conversation={conversation}
-//                 lastMessages={lastMessages}
-//                 profile={profile}
-//                 sendMessage={sendMessage}
-//                 handleChange={handleChange}
-//                 fields={fields}
-//             />
-//         </div>
-//     )
-// }

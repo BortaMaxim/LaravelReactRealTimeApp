@@ -1,5 +1,6 @@
 import * as ChatActionTypes from '../types/chatActionTypes'
 import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
+import {IS_FETCHING_RECIPIENT} from "../types/chatActionTypes";
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -25,26 +26,18 @@ export const SendMessageToAction = (id, token) => async (dispatch, getState) =>
 export const FetchConversationWithAction = (id, token, force = false) => (dispatch, getState) =>
 
     new Promise((resolve, reject) => {
-        let cached = getState().cache[id]
-        let lastMessage = getState().lastMessages[id]
-
-        if (!force && cached !== undefined && (!lastMessage || cached[cached.length - 1].id === lastMessage.id)) {
-            dispatch({
-                type: ChatActionTypes.FETCH_CONVERSATION_WITH,
-                payload: cached
-            });
-
-            resolve();
-            return;
-        }
         axios.get(`${BASE_AUTH_URL}conversation/${id}`, getAuthOptions(token)).then(res => {
-            if (getState().activeUserId !== id) return
-            dispatch({type: ChatActionTypes.FETCH_CONVERSATION_WITH, payload: res.data})
+            dispatch({
+                type: ChatActionTypes.SET_ACTIVE_USER_ID,
+                payload: id
+            })
+            dispatch({type: ChatActionTypes.FETCH_CONVERSATION_WITH, payload: res.data.messages})
+            dispatch({type: ChatActionTypes.FETCH_RECIPIENT, payload: res.data.recipient})
             dispatch({
                 type: ChatActionTypes.FETCH_LAST_MESSAGE_WITH,
                 payload: {
-                    id,
-                    message: res.data[res.data.length - 1]
+                    id: id,
+                    message: res.data.messages[res.data.messages.length - 1]
                 }
             })
             resolve()
@@ -86,31 +79,28 @@ export const AddLocalMsgToConversationAction = () => (dispatch, getState) =>
         resolve();
     })
 
-export const SetActiveUserIdAction = id => async (dispatch, getState) =>
-    await new Promise((resolve, reject) => {
-        let conversation = getState().conversation;
-        let currentId = getState().activeUserId;
-
-        if (conversation.length &&
-            (conversation[conversation.length - 1].sender_id === currentId ||
-                conversation[conversation.length - 1].recipient_id === currentId))
-            dispatch({
-                type: ChatActionTypes.CACHE_CONVERSATION_WITH,
-                payload: {
-                    id: currentId,
-                    conversation
-                }
-            })
-        dispatch({
-            type: ChatActionTypes.SET_ACTIVE_USER_ID,
-            payload: id
-        });
-        return resolve()
-    })
 
 export const UnreadMessagesCountAction = (token) => async (dispatch) => {
     await axios.get(`${BASE_AUTH_URL}unread-messages/count`, getAuthOptions(token)).then(res => {
         dispatch({type: ChatActionTypes.FETCH_UNREAD_MESSAGES_COUNT, payload: res.data})
     })
+}
+
+export const ConnectChatChannelAction = (echo, token, profileId, notification) => (dispatch, getState) => {
+    // let activeUserId = getState().activeUserId
+    echo.private(`user-channel.${profileId}`)
+        .listen('MessageEvent', (event) => {
+            let msg = event.message
+            console.log(getState().activeUserId)
+            if (msg.sender_id === getState().activeUserId) {
+                console.log('FetchConversationWithAction')
+                dispatch(FetchConversationWithAction(msg.sender_id, token, true))
+            } else {
+                console.log('FetchLastMessageWithAction')
+                dispatch(FetchLastMessageWithAction(msg.sender_id, token))
+            }
+
+            if (!document.hasFocus()) notification.play()
+        })
 }
 

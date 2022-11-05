@@ -1,9 +1,24 @@
 import React from 'react';
 import {ChannelPanel} from "./ChannelPanel";
 import {MessagesPanel} from "./MessagesPanel";
+import {useSelector} from "react-redux";
 
 export const Dashboard = (props) => {
-    const {friends, isLoading, conversation, lastMessages, channelMessages, profile, sendMessage, handleChange, fields} = props
+    const {
+        friends,
+        isLoading,
+        conversation,
+        lastMessages,
+        channelMessages,
+        profile,
+        sendMessage,
+        handleChange,
+        fields,
+        activeUserId,
+        messagesEnd
+    } = props
+
+    const recipient = useSelector(state => state.recipient)
 
     return (
         <div className="pt-lg-5">
@@ -17,6 +32,9 @@ export const Dashboard = (props) => {
                     />
                 </div>
                 <MessagesPanel
+                    recipient={recipient}
+                    messagesEnd={messagesEnd}
+                    activeUserId={activeUserId}
                     chatMessages={conversation}
                     profile={profile}
                     sendMessage={sendMessage}

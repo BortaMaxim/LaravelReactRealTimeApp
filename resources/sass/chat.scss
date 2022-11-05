@@ -1,0 +1,57 @@
+.message {
+    width: 50%;
+    height: 50%;
+    min-width: 200px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 6px 3px 20px rgba(0, 0, 0, .5);
+    &_img {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        margin-right: 10px;
+    }
+    &_panel {
+        height: 800px;
+        overflow: auto;
+    }
+}
+
+.channel {
+    height: 300px;
+    overflow: auto;
+}
+
+.message_header {
+    width: 100%;
+    display: flex;
+    background-color: #9971a0;
+    padding: 10px;
+    position: fixed;
+    z-index: 100;
+    box-shadow: 3px 6px 30px rgba(0, 0, 0, .5);
+    &_details {
+        margin-left: 20px;
+    }
+    &_title {
+        color: #cbd5e0;
+    }
+    &_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    &_status_online {
+        color: #72da32;
+    }
+    &_status_offline {
+        color: #cb2b15;
+    }
+}
+
+.profile_recipient {
+    &_img {
+        width: 100%;
+    }
+}

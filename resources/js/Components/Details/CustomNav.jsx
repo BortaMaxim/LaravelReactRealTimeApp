@@ -20,16 +20,7 @@ export const CustomNav = ({profile, logout}) => {
         <nav className="navbar bg-secondary fixed-top">
             <div className="container-fluid">
                 <div className="row w-100 d-flex align-items-center">
-                    <div className="col">
-                        <button className="btn"
-                                type="button"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasWithBothOptions"
-                                aria-controls="offcanvasWithBothOptions">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div className="col-6">
+                    <div className="col-9">
                         <h1 className="navbar-brand text-light">Chat</h1>
                     </div>
                     <div className="col">
