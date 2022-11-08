@@ -7,11 +7,11 @@ import {connect} from "react-redux";
 import {LogoutAction, ProfileAction} from "../../redux/actions/authAction";
 import {withRouter} from "react-router-dom";
 import {
-    AddLocalMsgToConversationAction, ConnectChatChannelAction,
+    AddLocalMsgToConversationAction,
     FetchConversationWithAction,
     FetchFriendsAction,
     FetchLastMessagesAction,
-    FetchLastMessageWithAction,
+    FetchLastMessageWithAction, MessageChatChannelAction,
     SendMessageToAction,
     SetMessageAction
 } from "../../redux/actions/chatAction";
@@ -45,20 +45,10 @@ class DashboardContainer extends Component {
         this.props.FetchFriendsAction(this.token)
         this.props.FetchLastMessagesAction(this.token)
 
-        if(this.token !== undefined)
-        this.props.ProfileAction(this.token).then(() => {
-            this.props.ConnectChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
-            // echo.private(`user-channel.${this.props.profile.id}`)
-            //     .listen('MessageEvent', (event) => {
-            //         let msg = event.message
-            //         if (msg.sender_id === this.props.activeUserId)
-            //             this.props.FetchConversationWithAction(msg.sender_id, this.token, true)
-            //         else
-            //             this.props.FetchLastMessageWithAction(msg.sender_id, this.token)
-            //
-            //         if(!document.hasFocus()) this.state.notification.play()
-            //     })
-        })
+        if (this.token !== undefined)
+            this.props.ProfileAction(this.token).then(() => {
+                this.props.MessageChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
+            })
         this.scrollToBottom()
     }
 
@@ -148,5 +138,5 @@ export default connect(mapStateToProps, {
     FetchLastMessagesAction,
     ProfileAction,
     LogoutAction,
-    ConnectChatChannelAction
+    MessageChatChannelAction
 })(DashboardWithRouterContainer)

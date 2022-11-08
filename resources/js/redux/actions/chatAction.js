@@ -1,6 +1,5 @@
 import * as ChatActionTypes from '../types/chatActionTypes'
 import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
-import {IS_FETCHING_RECIPIENT} from "../types/chatActionTypes";
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -23,7 +22,7 @@ export const SendMessageToAction = (id, token) => async (dispatch, getState) =>
         })
     })
 
-export const FetchConversationWithAction = (id, token, force = false) => (dispatch, getState) =>
+export const FetchConversationWithAction = (id, token, force = false) => (dispatch) =>
 
     new Promise((resolve, reject) => {
         axios.get(`${BASE_AUTH_URL}conversation/${id}`, getAuthOptions(token)).then(res => {
@@ -86,17 +85,13 @@ export const UnreadMessagesCountAction = (token) => async (dispatch) => {
     })
 }
 
-export const ConnectChatChannelAction = (echo, token, profileId, notification) => (dispatch, getState) => {
-    // let activeUserId = getState().activeUserId
+export const MessageChatChannelAction = (echo, token, profileId, notification) => (dispatch, getState) => {
     echo.private(`user-channel.${profileId}`)
         .listen('MessageEvent', (event) => {
             let msg = event.message
-            console.log(getState().activeUserId)
             if (msg.sender_id === getState().activeUserId) {
-                console.log('FetchConversationWithAction')
                 dispatch(FetchConversationWithAction(msg.sender_id, token, true))
             } else {
-                console.log('FetchLastMessageWithAction')
                 dispatch(FetchLastMessageWithAction(msg.sender_id, token))
             }
 

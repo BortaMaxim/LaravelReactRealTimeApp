@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Contracts\Channel\BelongsToManyChannelsI;
+use App\Contracts\Details\HasOneDetailI;
+use App\Models\Concern\Channel\BelongsToManyChannels;
+use App\Models\Concern\Detail\HasOneDetail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,9 +16,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Contracts\Auth\CanResetPassword as IResetPassword;
 
-class User extends Authenticatable implements MustVerifyEmail, IResetPassword
+class User extends Authenticatable implements MustVerifyEmail, IResetPassword, BelongsToManyChannelsI, HasOneDetailI
 {
-    use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
+    use HasApiTokens, HasFactory, Notifiable, CanResetPassword, BelongsToManyChannels, HasOneDetail;
 
     public function sendEmailVerificationNotification()
     {
