@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Contracts\User\BelongsToUserI;
+use App\Models\Concern\User\BelongsUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
-class Message extends Model
+class Message extends Model implements BelongsToUserI
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsUser;
 
     protected $guarded = [];
 

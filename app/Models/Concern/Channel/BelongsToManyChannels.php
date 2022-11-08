@@ -8,6 +8,6 @@ trait BelongsToManyChannels
 {
     public function channels(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Channel::class, 'user_channel');
+        return $this->belongsToMany(Channel::class, 'user_channel')->withTimestamps();
     }
 }
