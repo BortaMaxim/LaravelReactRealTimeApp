@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\UserController;
@@ -31,6 +32,8 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('conversation/{user}', [ConversationController::class, 'get_messages']);
         Route::post('conversation/{user}', [ConversationController::class, 'send_message']);
         Route::get('unread-messages/count', [ConversationController::class, 'unread_messages_count']);
+        Route::post('create-channel', [ChannelController::class, 'createChannel']);
+        Route::get('get-all-channels', [ChannelController::class, 'getAllChannels']);
     });
 });
 

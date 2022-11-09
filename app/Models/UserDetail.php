@@ -11,5 +11,5 @@ class UserDetail extends Model implements BelongsToUserI
 {
     use HasFactory, BelongsUser;
 
-    protected $guarded = [];
+    protected $fillable = ['avatar', 'desc'];
 }

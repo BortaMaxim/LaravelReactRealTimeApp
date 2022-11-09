@@ -22,8 +22,8 @@ class UserChannel
      * @param  \App\Models\User  $user
      * @return array|bool
      */
-    public function join(User $user, $userId): bool|array
+    public function join(User $user, $channelId): bool|array
     {
-        return $user->id == $userId;
+        return $user->id == $channelId;
     }
 }

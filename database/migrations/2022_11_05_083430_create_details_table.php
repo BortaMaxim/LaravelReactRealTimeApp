@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('channel_id');
             $table->text('name');
             $table->text('desc');
-            $table->text('image');
+            $table->text('image')->nullable();
             $table->boolean('visible');
             $table->enum('type', ['public', 'private']);
             $table->timestamps();

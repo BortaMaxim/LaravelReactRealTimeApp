@@ -7,9 +7,9 @@ use App\Models\Concern\Channel\BelongsChannel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Detail extends Model implements BelongsToChannelI
+class Details extends Model implements BelongsToChannelI
 {
     use HasFactory, BelongsChannel;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'desc', 'visible', 'type'];
 }

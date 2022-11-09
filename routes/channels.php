@@ -6,4 +6,4 @@ use Illuminate\Support\Facades\Broadcast;
 
 
 Broadcast::channel('base-channel', BaseChannel::class);
-Broadcast::channel('user-channel.{userId}', UserChannel::class);
+Broadcast::channel('user-channel.{channelId}', UserChannel::class);
