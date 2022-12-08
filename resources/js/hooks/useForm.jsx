@@ -17,11 +17,19 @@ export const useForm = ({initialState = {}}) => {
             [e.target.name]: files[0]
         })
     }
+
+    const handleCheck = (e) => {
+        setFields({
+            ...fields,
+            [e.target.name]: e.target.checked
+        })
+    }
+
     const handleSubmit = (action) => {
         dispatch(action)
     }
     const clear = () => {
         setFields({})
     }
-    return {fields, handleChange, handleSubmit, clear, handleUpload, setFields}
+    return {fields, handleCheck, handleChange, handleSubmit, clear, handleUpload, setFields}
 }

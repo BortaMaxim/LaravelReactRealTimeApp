@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const ChatForm = ({sendMessage, fields, handleChange}) => {
 
@@ -17,4 +18,10 @@ export const ChatForm = ({sendMessage, fields, handleChange}) => {
             </form>
         </div>
     )
+}
+
+ChatForm.propTypes = {
+    sendMessage: PropTypes.func.isRequired,
+    fields: PropTypes.string,
+    handleChange: PropTypes.func.isRequired
 }

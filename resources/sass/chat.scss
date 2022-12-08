@@ -1,4 +1,24 @@
-.message {
+@import "variables";
+
+.channel::-webkit-scrollbar {
+    background-color: $scrollbar_bg;
+    width: 10px;
+}
+.channel::-webkit-scrollbar-thumb {
+    background-color: $scrollbar_thumb_bg;
+    border-radius: 10px;
+}
+
+.public_channel_details_users_wrapper::-webkit-scrollbar {
+    background-color: $scrollbar_bg;
+    width: 10px;
+}
+.public_channel_details_users_wrapper::-webkit-scrollbar-thumb {
+    background-color: $scrollbar_thumb_bg;
+    border-radius: 10px;
+}
+
+ .message {
     width: 50%;
     height: 50%;
     min-width: 200px;
@@ -18,7 +38,7 @@
 }
 
 .channel {
-    height: 300px;
+    height: 200px;
     overflow: auto;
 }
 
@@ -50,8 +70,52 @@
     }
 }
 
+.channel_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    color: #2d3748;
+    background-color: #a779af;
+    padding: 10px;
+    border-radius: 10px;
+}
+.channel_info:hover {
+    background-color: #764d7e;
+    transition: background-color .2s;
+    color: #cbd5e0;
+}
+
+.channel_title {
+    width: 100%;
+}
+
 .profile_recipient {
     &_img {
         width: 100%;
     }
 }
+
+.public_channel_details_users_wrapper {
+    height: 200px;
+    overflow: auto;
+}
+.channel_details_users {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c796d0;
+    color: #2d3748;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 5px;
+    &_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+}
+
+
+

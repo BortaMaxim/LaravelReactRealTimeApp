@@ -1,10 +1,9 @@
 import React, {Component, createRef} from 'react';
-import '../../../sass/chat.scss'
 import {SEND_MESSAGE_TO, SET_ACTIVE_USER_ID} from '../../redux/types/chatActionTypes'
 import {CustomNav} from "../../Components/Details/CustomNav";
 import {Dashboard} from "./Dashboard";
 import {connect} from "react-redux";
-import {LogoutAction, ProfileAction} from "../../redux/actions/authAction";
+import {LogoutAction, ProfileAction, StatusNotificationAction} from "../../redux/actions/authAction";
 import {withRouter} from "react-router-dom";
 import {
     AddLocalMsgToConversationAction,
@@ -13,10 +12,12 @@ import {
     FetchLastMessagesAction,
     FetchLastMessageWithAction, MessageChatChannelAction,
     SendMessageToAction,
-    SetMessageAction
+    SetMessageAction,
 } from "../../redux/actions/chatAction";
 import EventBus from "../../EventBus";
 import {echoInstance} from "../../bootstrap";
+import {GetAllChannelsAction} from "../../redux/actions/channelAction";
+import PropTypes from "prop-types";
 
 
 class DashboardContainer extends Component {
@@ -43,7 +44,9 @@ class DashboardContainer extends Component {
             this.props.FetchConversationWithAction(this.props.activeUserId, this.token)
         });
         this.props.FetchFriendsAction(this.token)
+        this.props.GetAllChannelsAction(this.token)
         this.props.FetchLastMessagesAction(this.token)
+        this.props.StatusNotificationAction(this.token)
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
@@ -94,7 +97,10 @@ class DashboardContainer extends Component {
     render() {
         return (
             <div>
-                <CustomNav logout={this.logout} profile={this.props.profile}/>
+                <CustomNav
+                    logout={this.logout}
+                    profile={this.props.profile}
+                />
                 <Dashboard
                     messagesEnd={this.messagesEnd}
                     friends={this.props.friends}
@@ -112,6 +118,30 @@ class DashboardContainer extends Component {
     }
 }
 
+DashboardContainer.propTypes = {
+    loading: PropTypes.bool,
+    errorResponse: PropTypes.object,
+    profile: PropTypes.object,
+    isShow: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    friends: PropTypes.array,
+    lastMessages: PropTypes.object,
+    activeUserId: PropTypes.number,
+    conversation: PropTypes.array,
+    message: PropTypes.string,
+    FetchConversationWithAction: PropTypes.func.isRequired,
+    FetchLastMessageWithAction: PropTypes.func.isRequired,
+    FetchFriendsAction: PropTypes.func.isRequired,
+    SetMessageAction: PropTypes.func.isRequired,
+    AddLocalMsgToConversationAction: PropTypes.func.isRequired,
+    SendMessageToAction: PropTypes.func.isRequired,
+    FetchLastMessagesAction: PropTypes.func.isRequired,
+    ProfileAction: PropTypes.func.isRequired,
+    LogoutAction: PropTypes.func.isRequired,
+    MessageChatChannelAction: PropTypes.func.isRequired,
+    GetAllChannelsAction: PropTypes.func.isRequired,
+}
+
 const mapStateToProps = (state) => ({
     loading: state.auth.loading,
     errorResponse: state.auth.errorResponse,
@@ -123,7 +153,6 @@ const mapStateToProps = (state) => ({
     activeUserId: state.activeUserId,
     conversation: state.conversation,
     message: state.message,
-
 })
 
 const DashboardWithRouterContainer = withRouter(DashboardContainer)
@@ -138,5 +167,7 @@ export default connect(mapStateToProps, {
     FetchLastMessagesAction,
     ProfileAction,
     LogoutAction,
-    MessageChatChannelAction
+    MessageChatChannelAction,
+    GetAllChannelsAction,
+    StatusNotificationAction
 })(DashboardWithRouterContainer)

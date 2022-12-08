@@ -1,0 +1,12 @@
+@import "variables";
+body {
+    background-color: $body-bg;
+}
+body::-webkit-scrollbar {
+    background-color: $scrollbar_bg;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: $scrollbar_thumb_bg;
+    border-radius: 10px;
+}
+

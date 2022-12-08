@@ -1,9 +1,15 @@
 import React, {useState} from 'react';
 
 export const useActive = () => {
-    const [id, setId] = useState('')
-    const handleActive = (id) => {
-        setId(id)
+    const [friendId, setFriendId] = useState('')
+    const [roomId, setRoomId] = useState('')
+    const handleActive = (id, elName) => {
+        if (elName === 'friends') {
+            return setFriendId(id)
+
+        } else if (elName === 'rooms') {
+            return setRoomId(id)
+        }
     }
-    return {id, handleActive}
+    return {friendId, roomId, handleActive}
 }

@@ -24,7 +24,6 @@ class CreateChannelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'channel_type' => 'required',
             'channel_name' => 'required|string',
             'detail_name' => 'required|string',
             'detail_desc' => 'required|string',

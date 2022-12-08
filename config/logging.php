@@ -8,7 +8,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Log ChannelList
+    | Default Log FriendsList
     |--------------------------------------------------------------------------
     |
     | This option defines the default log channel that gets used when writing
@@ -21,7 +21,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Deprecations Log ChannelList
+    | Deprecations Log FriendsList
     |--------------------------------------------------------------------------
     |
     | This option controls the log channel that should be used to log warnings

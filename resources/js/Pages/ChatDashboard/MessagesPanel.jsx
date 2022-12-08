@@ -1,10 +1,21 @@
 import React from 'react';
 import {ChatForm} from "./ChatForm";
 import {Message} from "./Message";
-import {URL} from "../../redux/utils";
+import PropTypes from "prop-types";
+import {MessagePanelHeader} from "./MessagePanelHeader";
+import {PublicChannelPanel} from "./PublicChannelPanel";
 
 export const MessagesPanel = (props) => {
-    const {chatMessages, profile, sendMessage, handleChange, fields, activeUserId, messagesEnd, recipient} = props
+    const {
+        chatMessages,
+        profile,
+        sendMessage,
+        handleChange,
+        fields,
+        activeUserId,
+        messagesEnd,
+        recipient,
+    } = props
     return (
         <>
             <div className="p-2 w-100">
@@ -13,20 +24,7 @@ export const MessagesPanel = (props) => {
                         ? <>
                             {
                                 recipient
-                                && <div className="message_header">
-                                    <img className="message_header_avatar" src={`${URL}/avatars/${recipient.avatar}`}
-                                         data-bs-toggle="offcanvas"
-                                         data-bs-target="#offcanvasWithBothOptions"
-                                         aria-controls="offcanvasWithBothOptions"
-                                         alt={recipient.name}/>
-                                    <div className="message_header_details">
-                                        <h4 className="message_header_title">{recipient.name}</h4>
-                                        <span
-                                            className={recipient.status === 'online' ? 'message_header_status_online' : 'message_header_status_offline'}>
-                                        {recipient.status}
-                                    </span>
-                                    </div>
-                                </div>
+                                && <MessagePanelHeader recipient={recipient}/>
                             }
                             <div className="message_panel" ref={messagesEnd}>
                                 {
@@ -61,4 +59,15 @@ export const MessagesPanel = (props) => {
             </div>
         </>
     )
+}
+
+MessagesPanel.propTypes = {
+    chatMessages: PropTypes.array,
+    profile: PropTypes.object,
+    sendMessage: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    fields: PropTypes.string,
+    activeUserId: PropTypes.number,
+    messagesEnd: PropTypes.object,
+    recipient: PropTypes.object,
 }

@@ -8,6 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/fc2d8f50e2.js" crossorigin="anonymous"></script>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <!-- Styles -->
         <style>

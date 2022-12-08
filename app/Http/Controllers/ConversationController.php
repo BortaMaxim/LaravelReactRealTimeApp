@@ -5,11 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\MessageEvent;
 use App\Helpers\Conversation;
 use App\Http\Requests\SendMessageRequest;
-use App\Http\Resources\MessageCollection;
-use App\Models\Message;
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Request;
+use App\Models\Message\Message;
+use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
 
 class ConversationController extends ApiController
@@ -46,7 +43,7 @@ class ConversationController extends ApiController
         ];
         $message = $this->message->create($message);
 
-        event(new MessageEvent($message));
+        broadcast(new MessageEvent($message));
     }
 
     /**

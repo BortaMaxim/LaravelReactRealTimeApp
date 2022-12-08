@@ -2,7 +2,7 @@ import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'react-toastify/dist/ReactToastify.css'
-import '../css/app.css'
+import '../sass/app.scss'
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import store from "./redux/store";

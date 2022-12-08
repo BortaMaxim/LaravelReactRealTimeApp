@@ -2,8 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Models\User\User;
 
 class Conversation
 {

@@ -3,11 +3,12 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotificationRequest extends Notification
+class NotificationRequest extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
@@ -75,9 +76,10 @@ class NotificationRequest extends Notification
             'sender_name' => $this->invite->name,
             'invite_id' => $this->invite->id,
             'request_type' => $this->invite->type,
-            'reqv_channel' => $this->invite->recv_name,
+            'recv_channel' => $this->invite->recv_name,
             'desc' => $desc,
-            'id' => $this->id
+            'id' => $this->id,
         ];
     }
+
 }

@@ -2,7 +2,7 @@
 
 namespace App\Broadcasting;
 
-use App\Models\User;
+use App\Models\User\User;
 
 class BaseChannel
 {
@@ -19,7 +19,7 @@ class BaseChannel
     /**
      * Authenticate the user's access to the channel.
      *
-     * @param \App\Models\User $user
+     * @param \App\Models\User\User $user
      * @return User
      */
     public function join(User $user): User

@@ -3,19 +3,11 @@ import {CustomSideBar} from "./CustomSideBar";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {ProfileAction, StatusNotificationAction} from "../../redux/actions/authAction";
+import PropTypes from "prop-types";
 
 export const CustomNav = ({profile, logout}) => {
-    const token = localStorage.getItem('user-token')
     const history = useHistory()
-    const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(StatusNotificationAction(token))
-    }, [token])
-
-    useEffect(() => {
-        dispatch(ProfileAction(token))
-    }, [dispatch])
     return (
         <nav className="navbar bg-secondary fixed-top">
             <div className="container-fluid">
@@ -39,4 +31,9 @@ export const CustomNav = ({profile, logout}) => {
             </div>
         </nav>
     )
+}
+
+CustomNav.propTypes = {
+    profile: PropTypes.object,
+    logout: PropTypes.func.isRequired,
 }

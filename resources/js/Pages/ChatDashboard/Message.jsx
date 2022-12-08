@@ -1,5 +1,6 @@
 import React from 'react';
 import {URL} from '../../redux/utils'
+import PropTypes from "prop-types";
 
 export const Message = (props) => {
     const {el, profile} = props
@@ -28,4 +29,9 @@ export const Message = (props) => {
             </div>
         </div>
     )
+}
+
+Message.propTypes = {
+    el: PropTypes.object,
+    profile: PropTypes.object,
 }
