@@ -5,7 +5,7 @@ export const CreateChannel = (props) => {
     const {handleOpen} = props
 
     return (
-        <button className="btn btn-primary mt-5" onClick={handleOpen}>
+        <button className="btn btn-primary" onClick={handleOpen}>
             &#10010;
         </button>
     )

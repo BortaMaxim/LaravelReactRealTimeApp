@@ -99,3 +99,16 @@ export const MessageChatChannelAction = (echo, token, profileId, notification) =
         })
 }
 
+
+export const GetNotificationsAction = (token) => async (dispatch) => {
+    await axios.get(`${BASE_AUTH_URL}notifications`, getAuthOptions(token))
+        .then(res => {
+            dispatch({
+                type: ChatActionTypes.FETCHED_NOTIFICATION_SUCCESS,
+                payload: res.data.notifications,
+                count: res.data.unread_count
+            })
+        })
+}
+
+

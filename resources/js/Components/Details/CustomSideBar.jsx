@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector} from "react-redux";
-import {RecipientDetails} from "../../Pages/ChatDashboard/RecipientDetails";
+import {RecipientInfo} from "../../Pages/ChatDashboard/RecipientInfo";
 
 export const CustomSideBar = () => {
     const profile_recipient = useSelector(state => state.recipient)
@@ -10,7 +10,7 @@ export const CustomSideBar = () => {
             <div className="offcanvas-header">
                 <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <RecipientDetails recipient={profile_recipient}/>
+            <RecipientInfo recipient={profile_recipient}/>
         </div>
     )
 }

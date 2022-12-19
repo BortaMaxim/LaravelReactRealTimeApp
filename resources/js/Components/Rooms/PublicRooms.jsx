@@ -2,7 +2,7 @@ import React from 'react';
 import {RoomList} from "../../Pages/ChatDashboard/RoomList";
 
 export const PublicRooms = (props) => {
-    const {channels, setActiveRoom, id} = props
+    const {channels, setActiveRoom, roomId} = props
     return (
        <div>
            {
@@ -13,7 +13,7 @@ export const PublicRooms = (props) => {
                                <RoomList
                                    key={el.id}
                                    el={el}
-                                   id={id}
+                                   roomId={roomId}
                                    setActiveRoom={setActiveRoom}
                                />
                            ))

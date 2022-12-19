@@ -19,7 +19,6 @@ export const Dashboard = (props) => {
         messagesEnd
     } = props
 
-    const recipient = chatPropsValidation(useSelector(state => state.recipient))
     const publicChannel = useSelector(state => state.oneChannel)
 
     return (
@@ -35,7 +34,6 @@ export const Dashboard = (props) => {
                 </div>
                 <MessagesPanel
                     publicChannel={publicChannel}
-                    recipient={recipient}
                     messagesEnd={messagesEnd}
                     activeUserId={activeUserId}
                     chatMessages={conversation}

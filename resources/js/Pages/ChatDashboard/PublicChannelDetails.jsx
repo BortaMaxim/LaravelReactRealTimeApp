@@ -1,21 +1,61 @@
 import React from 'react';
 import {UsersOfChannels} from "./UsersOfChannels";
+import DeleteChannelBtn from "../../Components/Channels/DeleteChannelBtn";
+import JoinToChannelBtn from '../../Components/Channels/JoinToChannelBtn'
+import InviteToChannelBtn from "../../Components/Channels/InviteToChannelBtn";
 
-export const PublicChannelDetails = ({publicChannelDetails}) => {
-    const {users} = publicChannelDetails
+export const PublicChannelDetails = (props) => {
+    const {
+        compairedOwnerId,
+        publicChannel,
+        deleteChannel,
+        profile,
+        joinToPublicChannel,
+        setOpen,
+        allUsers, userChoice, friendId, inviteToChannel} = props
+    const {users, owner_id, id, desc, name, type, detail_type} = publicChannel
+    const compareAuthId = profile.id === owner_id
+
     return (
         <div>
-            <h6>name: {publicChannelDetails.name}</h6>
-            <h6>type: {publicChannelDetails.type}</h6>
+            <h6>name: {name}</h6>
+            <h6>type: {type}</h6>
             <p>
                 <strong>channels is: </strong>
-                {publicChannelDetails.detail_type}
+                {detail_type}
             </p>
             <p>
                 <strong>about channel:</strong>
                 &nbsp;
-                {publicChannelDetails.desc}
+                {desc}
             </p>
+            <div className="channel_actions">
+                {
+                    compairedOwnerId === true
+                        ? <>
+                            <DeleteChannelBtn
+                                channelId={id}
+                                deleteChannel={deleteChannel}
+                            />
+                            <InviteToChannelBtn
+                                usersList={allUsers}
+                                userChoice={userChoice}
+                                inviteToChannel={inviteToChannel}
+                                friendId={friendId}
+                            />
+                        </>
+                        : null
+                }
+                {
+                    compareAuthId === false
+                        ? <JoinToChannelBtn
+                            channelId={id}
+                            setOpen={setOpen}
+                            joinToPublicChannel={joinToPublicChannel}
+                        />
+                        : null
+                }
+            </div>
             <h4>Users:</h4>
             {
                 users.length !== 0

@@ -2,7 +2,7 @@ import React from 'react';
 import {ChatForm} from "./ChatForm";
 import {Message} from "./Message";
 import PropTypes from "prop-types";
-import {MessagePanelHeader} from "./MessagePanelHeader";
+import {RecipientAvatar} from "./RecipientAvatar";
 import {PublicChannelPanel} from "./PublicChannelPanel";
 
 export const MessagesPanel = (props) => {
@@ -22,10 +22,6 @@ export const MessagesPanel = (props) => {
                 {
                     chatMessages.length !== 0
                         ? <>
-                            {
-                                recipient
-                                && <MessagePanelHeader recipient={recipient}/>
-                            }
                             <div className="message_panel" ref={messagesEnd}>
                                 {
                                     chatMessages.map((el, idx) => (

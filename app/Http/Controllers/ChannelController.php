@@ -81,7 +81,7 @@ class ChannelController extends Controller
         if ($channelWithData->detail_type === 'public') {
             foreach ($channelWithData->users as $user) {
                 if ($user->id === $userId) {
-                    return response()->json("You have been added to the channel - $channelWithData->name", 201);
+                    return response()->json("You have been added to the channel - $channelWithData->name");
                 }
             }
             $channelWithData->users()->attach($userId);
@@ -114,11 +114,13 @@ class ChannelController extends Controller
         $userId = auth()->user()->id;
         $invite = new Invite();
         $invite->type = 'INVT';
-        $invite->from_id = $userId;
+        $invite->from_id = $request->channel_id;
         $invite->to_id = $request->receiver;
+
         $invite->save();
 
         $inviteJoin = Invite::where('invites.id', $invite->id)
+            ->join('channels', 'invites.from_id', '=', 'channels.id')
             ->join('details', 'invites.from_id', '=', 'details.channel_id')
             ->join('users', 'details.owner_id', '=', 'users.id')
             ->select(
@@ -127,9 +129,11 @@ class ChannelController extends Controller
                 'invites.from_id',
                 'invites.to_id',
                 'invites.type',
-                'details.name as recv_name'
+                'channels.name as recv_name'
             )->first();
+
         $receiver = User::where('id', $request->receiver)->first();
+
         $receiver->notify(new NotificationRequest($inviteJoin));
         return response()->json('Invite Sent Successfully');
     }
@@ -183,15 +187,15 @@ class ChannelController extends Controller
         return response()->json($output);
     }
 
-    public function getAllNotifications()
-    {
-        return response()->json(auth()->user()->notifications()->get(['data', 'read_at', 'id']));
-    }
+//    public function getAllNotifications()
+//    {
+//        return response()->json(auth()->user()->notifications()->get(['data', 'read_at', 'id']));
+//    }
 
-    public function markNotificationAsRead($id)
+    public function markNotificationAsRead()
     {
-        auth()->user()->unreadNotifications()->find($id)->markAsRead();
-        return response()->json(auth()->user()->notifications()->where('id', $id)->get(['data', 'read_at', 'id']));
+        auth()->user()->unreadNotifications()->get()->markAsRead();
+        return response()->json(auth()->user()->notifications()->get(['data', 'read_at', 'id']));
     }
 
     public function deleteNotification($id)

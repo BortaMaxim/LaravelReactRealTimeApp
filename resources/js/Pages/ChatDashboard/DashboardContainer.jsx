@@ -10,7 +10,7 @@ import {
     FetchConversationWithAction,
     FetchFriendsAction,
     FetchLastMessagesAction,
-    FetchLastMessageWithAction, MessageChatChannelAction,
+    FetchLastMessageWithAction, GetNotificationsAction, MessageChatChannelAction,
     SendMessageToAction,
     SetMessageAction,
 } from "../../redux/actions/chatAction";
@@ -47,6 +47,7 @@ class DashboardContainer extends Component {
         this.props.GetAllChannelsAction(this.token)
         this.props.FetchLastMessagesAction(this.token)
         this.props.StatusNotificationAction(this.token)
+        this.props.GetNotificationsAction(this.token)
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
@@ -169,5 +170,6 @@ export default connect(mapStateToProps, {
     LogoutAction,
     MessageChatChannelAction,
     GetAllChannelsAction,
-    StatusNotificationAction
+    StatusNotificationAction,
+    GetNotificationsAction
 })(DashboardWithRouterContainer)

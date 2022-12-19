@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {PublicRooms} from "../../Components/Rooms/PublicRooms";
-import {useOpen} from "../../hooks/useOpen";
+import {useChannelPannelOpen} from "../../hooks/useChannelPannelOpen";
 
 
 export const Rooms = (props) => {
-    const {channels, setActiveRoom, id} = props
-    const {openPublic, handlePublicToggle} = useOpen()
+    const {channels, setActiveRoom, roomId} = props
+    const {openPublic, handlePublicToggle} = useChannelPannelOpen()
     return (
         <div>
             <h1 className="text-light">Rooms:</h1>
@@ -18,7 +18,7 @@ export const Rooms = (props) => {
                 && <PublicRooms
                     channels={channels}
                     setActiveRoom={setActiveRoom}
-                    id={id}
+                    roomId={roomId}
                 />
             }
 
@@ -29,5 +29,5 @@ export const Rooms = (props) => {
 Rooms.propTypes = {
     channels: PropTypes.array.isRequired,
     setActiveRoom: PropTypes.func.isRequired,
-    id: PropTypes.any,
+    roomId: PropTypes.any,
 }

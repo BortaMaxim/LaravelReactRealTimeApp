@@ -46,3 +46,19 @@ export const DeleteChannelAction = (id, token) => async (dispatch) => {
             toast.success(res.data.message, toastOptions('top-right'))
         })
 }
+
+export const JoinToPublicChannel = (channelId, receiver, token) => async (dispatch) => {
+    await axios.post(`${BASE_AUTH_URL}join-channel/${channelId}`, receiver, postAuthOptions(token))
+        .then(res => {
+            dispatch({type: ChannelActionTypes.JOIN_TO_PUBLIC_CHANNEL})
+            toast.success(res.data, toastOptions('top-right'))
+        })
+}
+
+export const InviteToChannelAction = (data, token) => async (dispatch) => {
+    await axios.post(`${BASE_AUTH_URL}invite-to-channel`, data, postAuthOptions(token))
+        .then(res => {
+            dispatch({type: ChannelActionTypes.INVITE_TO_CHANNEL_SUCCESS})
+            toast.success(res.data, toastOptions('top-right'))
+        })
+}

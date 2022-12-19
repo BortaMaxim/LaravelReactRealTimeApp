@@ -5,7 +5,7 @@ const DeleteChannelBtn = (props) => {
     return (
         <>
             <button
-                className="btn btn-sm btn-outline-danger"
+                className="btn btn-outline-danger"
                 onClick={() => deleteChannel(channelId)}
             >
                 <i className="fa-solid fa-trash-can" ></i>

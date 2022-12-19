@@ -17,4 +17,5 @@ export const RESET_PASSWORD_ERROR = 'auth/RESET_PASSWORD_ERROR'
 export const PASSWORD_RESET_TOKEN = 'auth/PASSWORD_RESET_TOKEN'
 export const IS_SHOW = 'auth/IS_SHOW'
 export const IS_HIDE = 'auth/IS_HIDE'
+export const MARK_AS_READ_NOTIFICATIONS = 'auth/MARK_AS_READ_NOTIFICATIONS'
 

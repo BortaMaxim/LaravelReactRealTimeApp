@@ -34,19 +34,19 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::post('conversation/{user}', [ConversationController::class, 'send_message']);
         Route::get('unread-messages/count', [ConversationController::class, 'unread_messages_count']);
 
-        Route::post('create-channel', [ChannelController::class, 'createChannel']);
-        Route::delete('delete-channel/{channel_id}', [ChannelController::class, 'deleteChannel']);
-        Route::post('join-channel/{chanel_id}', [ChannelController::class, 'joinChannel']);
-        Route::get('channel-users/{channel_id}', [ChannelController::class, 'getChannelUsers']);
-        Route::post('invite-to-channel', [ChannelController::class, 'inviteToChannel']);
+        Route::post('create-channel', [ChannelController::class, 'createChannel']); // done
+        Route::delete('delete-channel/{channel_id}', [ChannelController::class, 'deleteChannel']); //done
+        Route::post('join-channel/{channel_id}', [ChannelController::class, 'joinChannel']); //done - but not
+        Route::get('channel-users/{channel_id}', [ChannelController::class, 'getChannelUsers']); // done
+        Route::post('invite-to-channel', [ChannelController::class, 'inviteToChannel']); //done
         Route::post('make-request', [ChannelController::class, 'createInvite']);
         Route::get('accept-invite/{invite_id}', [ChannelController::class, 'acceptRequest']);
-        Route::get('notifications', [ChannelController::class, 'getNotifications']);
-        Route::get('all-notifications', [ChannelController::class, 'getAllNotifications']);
-        Route::get('mark-as-read/{id}', [ChannelController::class, 'markNotificationAsRead']);
+        Route::get('notifications', [ChannelController::class, 'getNotifications']); //done
+//        Route::get('all-notifications', [ChannelController::class, 'getAllNotifications']);
+        Route::get('mark-as-read', [ChannelController::class, 'markNotificationAsRead']); //done
         Route::delete('delete-notification/{id}', [ChannelController::class, 'deleteNotification']);
-        Route::get('get-all-channels', [ChannelController::class, 'getAllChannels']);
-        Route::get('get-channel/{channel_id}', [ChannelController::class, 'getOneChannel']);
+        Route::get('get-all-channels', [ChannelController::class, 'getAllChannels']); //done
+        Route::get('get-channel/{channel_id}', [ChannelController::class, 'getOneChannel']); //done
 //        Route::get('get-channels', [ChannelController::class, 'getSubscribedChannels']);
         Route::post('send-message-to/{channel_id}', [MessageToChannelController::class, 'sendMessageTo']);
         Route::get('get-message-to/{channel_id}', [MessageToChannelController::class, 'getMessages']);

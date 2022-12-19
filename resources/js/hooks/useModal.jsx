@@ -4,6 +4,7 @@ import React, {useState} from "react";
 export const useModal = () => {
     const [active, setActive] = useState(false)
     const [open, setOpen] = useState(false)
+    const [openNotification, setOpenNotification] = useState(false)
 
     const toggle = () => setActive(!active)
 
@@ -12,6 +13,8 @@ export const useModal = () => {
         active,
         setActive,
         open,
-        setOpen
+        setOpen,
+        openNotification,
+        setOpenNotification,
     }
 }

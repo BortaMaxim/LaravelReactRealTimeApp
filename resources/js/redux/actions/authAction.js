@@ -1,5 +1,6 @@
 import * as AuthActionTypes from '../types/authActionTypes'
 import * as ProfileActionTypes from '../types/profileActionTypes'
+import * as ChatActionTypes from '../types/chatActionTypes'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, postOptions, toastOptions, uploadAuthOptions} from "../utils";
@@ -63,6 +64,7 @@ export const ProfileAction = (token) => async (dispatch) =>
         dispatch({type: AuthActionTypes.IS_FETCHING_PROFILE})
         await axios.get(`${BASE_AUTH_URL}profile`, getAuthOptions(token)).then(res => {
             dispatch({type: AuthActionTypes.PROFILE_FETCHED, payload: res.data})
+            initNotificationAndEventChannels(res.data.id, token, dispatch)
             resolve()
         })
     })
@@ -151,5 +153,27 @@ export const StatusNotificationAction = (token) => async () => {
     await echo.private('base-channel')
         .listen('StatusEvent', (data) => {
             toast(data.message, toastOptions('bottom-right'))
+        })
+}
+
+export const MarkAsReadNotifications = (token) => async (dispatch) => {
+    await axios.get(`${BASE_AUTH_URL}mark-as-read`, getAuthOptions(token))
+        .then(() => {
+            dispatch({type: AuthActionTypes.MARK_AS_READ_NOTIFICATIONS})
+        })
+}
+
+const initNotificationAndEventChannels = (userId, token, dispatch) => {
+    const echo = echoInstance(token)
+    echo.private(`App.Models.User.User.${userId}`)
+        .notification((notification) => {
+            dispatch({
+                type: ChatActionTypes.REALTIME_NOTIFICATIONS,
+                payload: {
+                    data: notification,
+                    read_at: null,
+                    id: notification.id,
+                }
+            })
         })
 }

@@ -11,5 +11,5 @@ export const useActive = () => {
             return setRoomId(id)
         }
     }
-    return {friendId, roomId, handleActive}
+    return {friendId, roomId, setFriendId, handleActive}
 }

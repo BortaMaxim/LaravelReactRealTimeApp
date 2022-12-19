@@ -2,26 +2,25 @@ import React, {useEffect} from 'react';
 import {UnreadMessagesCountAction} from "../../redux/actions/chatAction";
 import {useDispatch, useSelector} from "react-redux";
 import {useActive} from "../../hooks/useActive";
-import {Friends} from "./Friends";
+import {Users} from "./Users";
 import {Rooms} from "./Rooms";
-import {CreateChannel} from "./CreateChannel";
-import CreateChannelModal from "../../Components/Details/Modal";
-import ModalChannelDetails from "../../Components/Details/Modal";
-import {CreateChannelForm} from "../../Components/Channels/CreateChannelForm";
-import {useModal} from "../../hooks/useModal";
 import {useForm} from "../../hooks/useForm";
-import {CreateChannelAction, DeleteChannelAction, GetOnePublicChannel} from "../../redux/actions/channelAction";
+import {
+    CreateChannelAction,
+    DeleteChannelAction,
+    GetOnePublicChannel,
+    JoinToPublicChannel
+} from "../../redux/actions/channelAction";
 import PropTypes from "prop-types";
 import {chatPropsValidation} from "../../propTypes/chatPropTypes/chatPropsValidation";
-import {PublicChannelPanel} from "./PublicChannelPanel";
-import {PublicChannelDetails} from "./PublicChannelDetails";
+import {GetNotificationsContainer} from "./ContainersComponent/GetNotificationsContainer";
+import {CreateChanelContainer} from "./ContainersComponent/CreateChanelContainer";
+import {PublicChannelsContainer} from "./ContainersComponent/PublicChannelsContainer";
 
 export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel}) => {
     const {friendId, roomId, handleActive} = useActive()
     const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
-    const {active, setActive} = useModal()
-    const {open, setOpen} = useModal()
 
     const {fields, handleChange, handleCheck, handleSubmit, clear} = useForm({
         channel_name: '',
@@ -40,6 +39,8 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel}) 
     })))
     const profile = useSelector((state) => state.auth.profile)
     const modify = useSelector((state) => state.modifyFlag)
+    const recipient = chatPropsValidation(useSelector(state => state.recipient))
+
 
     useEffect(() => {
         if (!token) return
@@ -61,34 +62,35 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel}) 
         dispatch(DeleteChannelAction(id, token))
     }
 
+    const joinToPublicChannel = (e, id, setOpen) => {
+        e.preventDefault()
+        const {owner_id} = publicChannel
+        dispatch(JoinToPublicChannel(id, owner_id, token))
+        setOpen(false)
+    }
+
     return (
         <div className="bg-secondary vh-100 p-2 channel">
-            <div className="mt-5">
-                <CreateChannel
-                    handleOpen={() => setActive(true)}
+            <div className="chat_panel_header">
+                <CreateChanelContainer
+                    fields={fields}
+                    createChannel={createChannel}
+                    handleCheck={handleCheck}
+                    handleChange={handleChange}
+                    createChannelSelector={createChannelSelector}
+                />
+                <GetNotificationsContainer
+                    profile={profile}
                 />
             </div>
-            <CreateChannelModal
-                isOpen={active}
-                handleClose={() => setActive(false)}
-                title="Create channel:"
-            >
-                <CreateChannelForm
-                    createChannelSelector={createChannelSelector}
-                    fields={fields}
-                    handleChange={handleChange}
-                    handleCheck={handleCheck}
-                    createChannel={createChannel}
-                />
-            </CreateChannelModal>
-
-            <Friends
+            <Users
+                recipient={recipient}
                 isLoading={isLoading}
-                friends={friends}
+                users={friends}
                 unreadMessagesCount={unreadMessagesCount}
                 lastMessages={lastMessages}
                 handleActive={handleActive}
-                id={friendId}
+                friendId={friendId}
             />
             {
                 publicChannel !== null
@@ -96,26 +98,20 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel}) 
                            style={{
                                display: modify === true ? 'none' : 'block'
                            }}>
-                        <PublicChannelPanel
-                            profile={profile}
-                            deleteChannel={deleteChannel}
-                            handleOpen={() => setOpen(true)}
+                        <PublicChannelsContainer
                             publicChannel={publicChannel}
+                            joinToPublicChannel={joinToPublicChannel}
+                            deleteChannel={deleteChannel}
+                            profile={profile}
+                            compairedOwnerId={publicChannel.owner_id === profile.id}
                         />
-                        <ModalChannelDetails
-                            isOpen={open}
-                            title="Channel details:"
-                            handleClose={() => setOpen(false)}
-                        >
-                            <PublicChannelDetails publicChannelDetails={publicChannel}/>
-                        </ModalChannelDetails>
                     </div>
                     : null
             }
             <Rooms
                 channels={getAllChannelsSelector.channels}
                 setActiveRoom={setActiveRoom}
-                id={roomId}
+                roomId={roomId}
             />
         </div>
     )
