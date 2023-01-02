@@ -14,6 +14,8 @@ import {getAllChannelsReducer} from "./channel/getAllChannelsReducer";
 import {getOnePublicChannelReducer} from "./channel/getOnePublicChannelReducer";
 import {modifiedChannelReducer} from "./channel/modifiedChannelReducer";
 import {notificationReducer} from "./chat/notificationReducer";
+import {getAllPrivateChannelsReducer} from "./channel/getAllPrivateChannelsReducer";
+import {getOnePrivateChannelReducer} from "./channel/getOnePrivateChannelReducer";
 
 
 export const rootReducer = combineReducers({
@@ -29,7 +31,9 @@ export const rootReducer = combineReducers({
     recipient: recipientReducer,
     createChannel: createChannelReducer,
     getAllChannels: getAllChannelsReducer,
+    getAllPrivateChannels: getAllPrivateChannelsReducer,
     oneChannel: getOnePublicChannelReducer,
+    onePrivateChannel: getOnePrivateChannelReducer,
     modifyFlag: modifiedChannelReducer,
     notifications: notificationReducer
 })

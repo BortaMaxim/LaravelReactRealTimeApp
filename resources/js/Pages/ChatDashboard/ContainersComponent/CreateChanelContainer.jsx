@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {useModal} from "../../../hooks/useModal";
 import {CreateChannel} from "../CreateChannel";
 import {CreateChannelForm} from "../../../Components/Channels/CreateChannelForm";
 import CreateChannelModal from "../../../Components/Details/Modal";
 
-export const CreateChanelContainer = (props) => {
-    const {fields, createChannel, handleCheck, handleChange, createChannelSelector} = props
+export const CreateChanelContainer = memo((props) => {
+    const {fields, createChannel, handleCheck, handleChange, createChannelSelector, compareType, compareVisible} = props
     const {active, setActive} = useModal()
 
     return (
@@ -19,6 +19,8 @@ export const CreateChanelContainer = (props) => {
                 title="Create channel:"
             >
                 <CreateChannelForm
+                    compareType={compareType}
+                    compareVisible={compareVisible}
                     createChannelSelector={createChannelSelector}
                     fields={fields}
                     handleChange={handleChange}
@@ -28,4 +30,4 @@ export const CreateChanelContainer = (props) => {
             </CreateChannelModal>
         </>
     )
-}
+})

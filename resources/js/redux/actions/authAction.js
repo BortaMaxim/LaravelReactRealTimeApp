@@ -156,10 +156,18 @@ export const StatusNotificationAction = (token) => async () => {
         })
 }
 
-export const MarkAsReadNotifications = (token) => async (dispatch) => {
+export const MarkAsReadNotificationsAction = (token) => async (dispatch) => {
     await axios.get(`${BASE_AUTH_URL}mark-as-read`, getAuthOptions(token))
         .then(() => {
             dispatch({type: AuthActionTypes.MARK_AS_READ_NOTIFICATIONS})
+        })
+}
+
+export const DeleteNotificationAction = (id, token) => async (dispatch) => {
+    await axios.delete(`${BASE_AUTH_URL}delete-notification/${id}`, getAuthOptions(token))
+        .then(res => {
+            dispatch({type: AuthActionTypes.DELETE_NOTIFICATION, id})
+            toast.success(res.data, toastOptions('top-right'))
         })
 }
 

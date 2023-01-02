@@ -3,7 +3,7 @@ import {CustomSpinner} from "../Details/CustomSpinner";
 import PropTypes from "prop-types";
 
 export const CreateChannelForm = (props) => {
-    const {fields, handleCheck, handleChange, createChannel, createChannelSelector} = props
+    const {fields, handleChange, createChannel, createChannelSelector, compareType, compareVisible} = props
     const {loading, createChannelExeption} = createChannelSelector
 
     return (
@@ -43,26 +43,35 @@ export const CreateChannelForm = (props) => {
                     value={fields.detail_desc || ''}/>
             </div>
             <div className="mb-3">
-                <label htmlFor="detail_visible">Detail visible:</label>
-                &nbsp;
                 <input
-                    className="form-check-input"
-                    type="checkbox"
+                    type="text"
+                    hidden={true}
                     id="detail_visible"
                     name="detail_visible"
-                    onChange={handleCheck}
-                    value={fields.detail_visible || 0}
+                    value={compareVisible}
+                    readOnly={true}
+                />
+                <input
+                    type="text"
+                    hidden={true}
+                    id="detail_type"
+                    name="detail_type"
+                    value={compareType}
+                    readOnly={true}
                 />
             </div>
             <div className="mb-3">
+                <label htmlFor="channel_type">Channel type:</label>
+                &nbsp;
                 <select
                     className="form-select"
-                    id="detail_type"
-                    name="detail_type"
+                    id="channel_type"
+                    name="channel_type"
+                    defaultValue={'channel'}
                     onChange={handleChange}
-                    value={fields.detail_type}>
-                    <option value="private">private</option>
-                    <option value="public">public</option>
+                    value={fields.channel_type}>
+                    <option value="dm">private</option>
+                    <option value="channel">public</option>
                 </select>
             </div>
             <div className="mb-3">

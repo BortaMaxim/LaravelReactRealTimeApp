@@ -19,7 +19,7 @@ class ChannelController extends Controller
         $userId = auth()->user()->id;
 
         $channel = new Channel();
-        $channel->type = 'channel';
+        $channel->type = $request->channel_type;
         $channel->name = $request->channel_name;
         $channel->save();
         $channelId = $channel->id;
@@ -37,7 +37,7 @@ class ChannelController extends Controller
 
         $createdChannel = Channel::where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
-            ->select('channels.id', 'channels.name', 'details.owner_id as owner_id')->first();
+            ->select('channels.id', 'channels.type', 'channels.name', 'details.owner_id as owner_id')->first();
 
         return response()->json($createdChannel);
     }
@@ -65,7 +65,7 @@ class ChannelController extends Controller
     public function joinChannel(Request $request, $channelId)
     {
         $userId = auth()->user()->id;
-        $channelWithData = Channel::where('channels.type', 'channel')
+        $channelWithData = Channel::where('channels.type', $request->channelType)
             ->where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
             ->select(
@@ -86,27 +86,24 @@ class ChannelController extends Controller
             }
             $channelWithData->users()->attach($userId);
             return response()->json('Success!');
-        } else {
+        } else if($channelWithData->detail_type === 'private') {
             $invite = new Invite();
             $invite->type = "JOIN";
             $invite->from_id = $userId;
-            $invite->to_id = $request->receiver;
+            $invite->to_id = $channelId;
             $invite->save();
 
             $inviteJoin = Invite::where('invites.id', $invite->id)
+                ->join('channels', 'invites.to_id', '=', 'channels.id')
                 ->join('users', 'invites.from_id', '=', 'users.id')
                 ->join('details', 'invites.to_id', '=', 'details.channel_id')
-                ->select('users.name', 'invites.id', 'invites.from_id', 'invites.to_id', 'invites.type', 'details.name as recv_name')
+                ->select('users.name', 'invites.id', 'invites.from_id', 'invites.to_id', 'invites.type', 'channels.name as recv_name')
                 ->first();
+
             $owner = User::where('id', $channelWithData->owner_id)->first();
             $owner->notify(new NotificationRequest($inviteJoin));
             return response()->json("Join Request Sent");
         }
-    }
-
-    public function getChannelUsers($channelId)
-    {
-        return Channel::where('type', 'channel')->where('id', $channelId)->with(['users'])->get();
     }
 
     public function inviteToChannel(Request $request)
@@ -187,10 +184,10 @@ class ChannelController extends Controller
         return response()->json($output);
     }
 
-//    public function getAllNotifications()
-//    {
-//        return response()->json(auth()->user()->notifications()->get(['data', 'read_at', 'id']));
-//    }
+    public function getOneNotification($id)
+    {
+        return auth()->user()->notifications()->where('id', $id)->first();
+    }
 
     public function markNotificationAsRead()
     {
@@ -223,24 +220,31 @@ class ChannelController extends Controller
 
     }
 
-    public function getOneChannel($channelId)
+    public function getAllPrivateChannels()
     {
-        $channel = Channel::where("channels.type", "channel")
-            ->where('channels.id', $channelId)
+        $channels = Channel::where('channels.type', 'dm')
             ->join('details', 'channels.id', '=', 'details.channel_id')
+            ->join('users', 'users.id', '=', 'details.owner_id')
             ->select(
                 'channels.id',
                 'channels.type',
                 'channels.name',
+                'users.name as owner',
                 'details.desc',
-                'details.owner_id',
-                'details.type as detail_type',
-                'details.visible');
-        $activeChannel = $channel->with(['users'])->first();
-        return response()->json([
-            'modify' => false,
-            'data' => $activeChannel
-        ]);
+                'details.type',
+                'details.visible',
+                'details.owner_id')->get();
+        return response()->json($channels);
+    }
+
+    public function getOneChannel($channelId)
+    {
+        return Channel::getChannel($channelId, 'channel');
+    }
+
+    public function getOnePrivateChannel($channelId)
+    {
+        return Channel::getChannel($channelId, 'dm');
     }
 
 //    public function getSubscribedChannels()

@@ -23,6 +23,11 @@ export const createChannelReducer = (state = initialState, action) => {
                 loading: false,
                 createChannelExeption: action.payload
             }
+        case ChannelActionTypes.CREATE_PRIVATE_CHANNEL:
+            return {
+                ...state,
+                loading: false
+            }
         default:
             return state
     }

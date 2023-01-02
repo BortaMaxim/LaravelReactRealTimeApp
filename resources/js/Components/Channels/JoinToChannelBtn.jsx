@@ -1,12 +1,13 @@
 import React from 'react';
 
 const JoinToChannelBtn = (props) => {
-    const {joinToPublicChannel, channelId, setOpen} = props
+    const {joinToChannel, channelId, setOpen, ownerId, type} = props
+
     return (
         <>
             <button
                 className="btn btn-outline-success"
-                onClick={(e) => joinToPublicChannel(e,channelId, setOpen)}
+                onClick={(e) => joinToChannel(e,channelId, ownerId, type, setOpen)}
             >
                 join
                 &nbsp;

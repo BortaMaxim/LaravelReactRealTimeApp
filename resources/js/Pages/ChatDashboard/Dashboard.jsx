@@ -1,5 +1,5 @@
-import React from 'react';
-import {ChannelPanel} from "./ChannelPanel";
+import React, {memo} from 'react';
+import {ChannelPanel} from "./PublicChannels/ChannelPanel";
 import {MessagesPanel} from "./MessagesPanel";
 import {useSelector} from "react-redux";
 import PropTypes from "prop-types";
@@ -20,12 +20,14 @@ export const Dashboard = (props) => {
     } = props
 
     const publicChannel = useSelector(state => state.oneChannel)
+    const privateChannel = useSelector(state => state.onePrivateChannel)
 
     return (
         <div className="pt-lg-5">
             <div className="d-flex justify-content-center min-vw-100">
                 <div className="w-25 p-0" style={{minWidth: 200}}>
                     <ChannelPanel
+                        privateChannel={privateChannel}
                         publicChannel={publicChannel}
                         friends={friends}
                         isLoading={isLoading}

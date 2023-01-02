@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const NotificationsListItem = (props) => {
-    const {el, profile} = props
+    const {el, profile, deleteNotification, showNotificationDetails} = props
     const {data} = el
     const {name} = profile
     const {sender_name, desc} = data
@@ -13,11 +13,17 @@ export const NotificationsListItem = (props) => {
                             <span>
                                 <strong>Owner of channel:</strong>
                                 &nbsp;
-                                {sender_name}
+                                {name}
                             </span>
-                    <p><strong>{name}</strong>&nbsp;{desc}</p>
-                    <button className="btn btn-warning rounded-circle">
+                    <p><strong>{sender_name}</strong>&nbsp;{desc}</p>
+                    <button
+                        onClick={() => showNotificationDetails(el.id)}
+                        className="btn btn-warning rounded-circle margin_right"
+                    >
                         <i className="fa-sharp fa-solid fa-info"></i>
+                    </button>
+                    <button className="btn btn-outline-danger margin_right" onClick={() => deleteNotification(el.id)}>
+                        <i className="fa-solid fa-trash-can" ></i>
                     </button>
                 </div>
             </div>

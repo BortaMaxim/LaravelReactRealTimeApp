@@ -3,7 +3,7 @@ import * as AuthActionTypes from '../../types/authActionTypes'
 
 let initialState = {
     notifications: [],
-    realTimeNotifications: [],
+    details: {},
     unread_count: 0
 }
 
@@ -15,6 +15,11 @@ export const notificationReducer = (state = initialState, action) => {
                 notifications: action.payload,
                 unread_count: action.count
             }
+        case ChatActionTypes.GET_ONE_NOTIFICATION:
+            return {
+                ...state,
+                details: action.payload
+            }
         case ChatActionTypes.REALTIME_NOTIFICATIONS:
             return {
                 ...state,
@@ -25,6 +30,11 @@ export const notificationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 unread_count: 0
+            }
+        case AuthActionTypes.DELETE_NOTIFICATION:
+            return {
+                ...state,
+                notifications: state.notifications.filter((el) => el.id !== action.id)
             }
         default:
             return state

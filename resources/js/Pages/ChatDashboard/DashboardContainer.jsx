@@ -16,7 +16,7 @@ import {
 } from "../../redux/actions/chatAction";
 import EventBus from "../../EventBus";
 import {echoInstance} from "../../bootstrap";
-import {GetAllChannelsAction} from "../../redux/actions/channelAction";
+import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channelAction";
 import PropTypes from "prop-types";
 
 
@@ -43,11 +43,14 @@ class DashboardContainer extends Component {
         EventBus.on(SEND_MESSAGE_TO, () => {
             this.props.FetchConversationWithAction(this.props.activeUserId, this.token)
         });
+
         this.props.FetchFriendsAction(this.token)
         this.props.GetAllChannelsAction(this.token)
         this.props.FetchLastMessagesAction(this.token)
         this.props.StatusNotificationAction(this.token)
         this.props.GetNotificationsAction(this.token)
+        this.props.GetAllPrivateChannelsAction(this.token)
+
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
@@ -170,6 +173,7 @@ export default connect(mapStateToProps, {
     LogoutAction,
     MessageChatChannelAction,
     GetAllChannelsAction,
+    GetAllPrivateChannelsAction,
     StatusNotificationAction,
     GetNotificationsAction
 })(DashboardWithRouterContainer)

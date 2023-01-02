@@ -4,7 +4,7 @@ import FriendModal from '../../Components/Details/Modal'
 import {AllUsers} from "../../Pages/ChatDashboard/AllUsers";
 
 const InviteToChannelBtn = (props) => {
-    const {usersList, userChoice, friendId, inviteToChannel} = props
+    const {usersList, userChoice, friendId, inviteToChannel, channelId} = props
     const {open, setOpen} = useModal()
 
     return (
@@ -23,6 +23,7 @@ const InviteToChannelBtn = (props) => {
                 <AllUsers
                     users={usersList}
                     friendId={friendId}
+                    channelId={channelId}
                     userChoice={userChoice}
                     inviteToChannel={inviteToChannel}
                 />

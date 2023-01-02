@@ -3,7 +3,7 @@ import {ChatForm} from "./ChatForm";
 import {Message} from "./Message";
 import PropTypes from "prop-types";
 import {RecipientAvatar} from "./RecipientAvatar";
-import {PublicChannelPanel} from "./PublicChannelPanel";
+import {PublicChannelPanel} from "./PublicChannels/PublicChannelPanel";
 
 export const MessagesPanel = (props) => {
     const {

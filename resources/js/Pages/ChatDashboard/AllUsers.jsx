@@ -2,7 +2,7 @@ import React from 'react';
 import {URL} from '../../redux/utils'
 
 export const AllUsers = (props) => {
-    const {inviteToChannel, users, userChoice, friendId} = props
+    const {inviteToChannel, users, userChoice, friendId, channelId} = props
 
     return (
         <div className="public_channel_details_users_wrapper">
@@ -21,7 +21,7 @@ export const AllUsers = (props) => {
             }
             <button
                 className="btn btn-primary mt-3"
-                onClick={() => inviteToChannel(friendId)}
+                onClick={() => inviteToChannel(friendId, channelId)}
             >
                 Ok
             </button>

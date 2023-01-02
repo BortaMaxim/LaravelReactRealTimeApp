@@ -1,8 +1,8 @@
 import React from 'react';
-import {UsersOfChannels} from "./UsersOfChannels";
-import DeleteChannelBtn from "../../Components/Channels/DeleteChannelBtn";
-import JoinToChannelBtn from '../../Components/Channels/JoinToChannelBtn'
-import InviteToChannelBtn from "../../Components/Channels/InviteToChannelBtn";
+import {UsersOfChannels} from "../UsersOfChannels";
+import DeleteChannelBtn from "../../../Components/Channels/DeleteChannelBtn";
+import JoinToChannelBtn from '../../../Components/Channels/JoinToChannelBtn'
+import InviteToChannelBtn from "../../../Components/Channels/InviteToChannelBtn";
 
 export const PublicChannelDetails = (props) => {
     const {
@@ -10,7 +10,7 @@ export const PublicChannelDetails = (props) => {
         publicChannel,
         deleteChannel,
         profile,
-        joinToPublicChannel,
+        joinToChannel,
         setOpen,
         allUsers, userChoice, friendId, inviteToChannel} = props
     const {users, owner_id, id, desc, name, type, detail_type} = publicChannel
@@ -39,6 +39,7 @@ export const PublicChannelDetails = (props) => {
                             />
                             <InviteToChannelBtn
                                 usersList={allUsers}
+                                channelId={id}
                                 userChoice={userChoice}
                                 inviteToChannel={inviteToChannel}
                                 friendId={friendId}
@@ -50,8 +51,10 @@ export const PublicChannelDetails = (props) => {
                     compareAuthId === false
                         ? <JoinToChannelBtn
                             channelId={id}
+                            ownerId={owner_id}
+                            type={type}
                             setOpen={setOpen}
-                            joinToPublicChannel={joinToPublicChannel}
+                            joinToChannel={joinToChannel}
                         />
                         : null
                 }
