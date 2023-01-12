@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const Notifications = (props) => {
     const {notificationsCount, openHandler} = props
@@ -18,4 +19,9 @@ export const Notifications = (props) => {
             </button>
         </>
     )
+}
+
+Notifications.propTypes = {
+    notificationsCount: PropTypes.number,
+    openHandler: PropTypes.func.isRequired,
 }

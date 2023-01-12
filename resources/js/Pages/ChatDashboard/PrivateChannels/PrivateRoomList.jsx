@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const PrivateRoomList = (props) => {
      const {el, privateRoomId, setPrivateActiveRoom} = props
@@ -15,4 +16,9 @@ export const PrivateRoomList = (props) => {
             {el.name}
         </div>
     )
+}
+PrivateRoomList.propTypes = {
+    el: PropTypes.object,
+    privateRoomId: PropTypes.any,
+    setPrivateActiveRoom: PropTypes.func.isRequired,
 }

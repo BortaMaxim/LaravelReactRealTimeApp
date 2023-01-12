@@ -7,6 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -29,14 +30,19 @@ class AcceptRequest implements ShouldBroadcast
         $this->userId = $userId;
         $this->type = $type;
     }
+    public function broadcastWith(): array
+    {
+        return [ '0' => $this->friendChannel,
+            '1' => $this->type];
+    }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|PrivateChannel|array
      */
-    public function broadcastOn(): Channel|PresenceChannel|array
+    public function broadcastOn(): Channel|PrivateChannel|array
     {
-        return new PresenceChannel('event.acceptRequest.'.$this->userId);
+        return new PrivateChannel('event.acceptRequest.'.$this->userId);
     }
 }

@@ -8,6 +8,8 @@ import {NotificationsList} from "../NotificationsList";
 import {DeleteNotificationAction, MarkAsReadNotificationsAction} from "../../../redux/actions/authAction";
 import {NotificationDetails} from "../../../Components/Notifications/NotificationDetails";
 import {GetOneNotificationAction} from "../../../redux/actions/chatAction";
+import PropTypes from "prop-types";
+import {AcceptInviteAction} from "../../../redux/actions/invitesAction";
 
 export const GetNotificationsContainer = (props) => {
     const {profile} = props
@@ -39,6 +41,10 @@ export const GetNotificationsContainer = (props) => {
         }
     }
 
+    const accentInvite = (inviteId, requestType) => {
+        dispatch(AcceptInviteAction(inviteId, requestType, token))
+    }
+
     return (
         <>
             <Notifications
@@ -52,6 +58,7 @@ export const GetNotificationsContainer = (props) => {
             >
                 <NotificationsList
                     profile={profile}
+                    accentInvite={accentInvite}
                     showNotificationDetails={showNotificationDetails}
                     deleteNotification={deleteNotification}
                     notifications={notifications.notifications}/>
@@ -67,4 +74,7 @@ export const GetNotificationsContainer = (props) => {
             </NotificationDetailsModal>
         </>
     )
+}
+GetNotificationsContainer.propTypes = {
+    profile: PropTypes.object
 }

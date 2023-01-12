@@ -2,6 +2,7 @@ import React from 'react';
 import {useModal} from "../../hooks/useModal";
 import FriendModal from '../../Components/Details/Modal'
 import {AllUsers} from "../../Pages/ChatDashboard/AllUsers";
+import PropTypes from "prop-types";
 
 const InviteToChannelBtn = (props) => {
     const {usersList, userChoice, friendId, inviteToChannel, channelId} = props
@@ -32,5 +33,12 @@ const InviteToChannelBtn = (props) => {
     )
 }
 
+InviteToChannelBtn.propTypes = {
+    usersList: PropTypes.array,
+    userChoice: PropTypes.func.isRequired,
+    inviteToChannel: PropTypes.func.isRequired,
+    friendId: PropTypes.any,
+    channelId: PropTypes.number,
+}
 export default InviteToChannelBtn
 

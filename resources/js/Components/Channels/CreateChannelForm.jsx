@@ -3,7 +3,7 @@ import {CustomSpinner} from "../Details/CustomSpinner";
 import PropTypes from "prop-types";
 
 export const CreateChannelForm = (props) => {
-    const {fields, handleChange, createChannel, createChannelSelector, compareType, compareVisible} = props
+    const {fields, handleChange, createChannel, createChannelSelector, compareType, compareVisible, handleCheck} = props
     const {loading, createChannelExeption} = createChannelSelector
 
     return (
@@ -93,4 +93,6 @@ CreateChannelForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
     createChannel: PropTypes.func.isRequired,
     createChannelSelector: PropTypes.object.isRequired,
+    compareType: PropTypes.string,
+    compareVisible: PropTypes.string,
 }

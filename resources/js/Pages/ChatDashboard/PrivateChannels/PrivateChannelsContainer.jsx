@@ -3,6 +3,7 @@ import {PrivateChannelPanel} from "./PrivateChannelPanel";
 import {useSelector} from "react-redux";
 import ModalPrivateChannelDetails from '../../../Components/Details/Modal'
 import {PrivateChannelsDetails} from "./PrivateChannelsDetails";
+import PropTypes from "prop-types";
 
 export const PrivateChannelsContainer = (props) => {
     const {
@@ -45,4 +46,17 @@ export const PrivateChannelsContainer = (props) => {
             </ModalPrivateChannelDetails>
         </>
     )
+}
+
+PrivateChannelsContainer.propTypes = {
+    profile: PropTypes.object,
+    privateChannel: PropTypes.object,
+    compairedOwnerId: PropTypes.bool,
+    deleteChannel: PropTypes.func.isRequired,
+    joinToChannel: PropTypes.func.isRequired,
+    inviteToChannel: PropTypes.func.isRequired,
+    userChoice: PropTypes.func.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    friendId: PropTypes.any,
+    open: PropTypes.bool,
 }

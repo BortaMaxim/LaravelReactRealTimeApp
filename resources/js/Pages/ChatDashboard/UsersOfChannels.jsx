@@ -1,7 +1,9 @@
 import React from 'react';
 import {URL} from '../../redux/utils'
+import PropTypes from "prop-types";
 
 export const UsersOfChannels = ({user}) => {
+
     return (
         <div className="channel_details_users">
             <div>
@@ -12,4 +14,8 @@ export const UsersOfChannels = ({user}) => {
             <img className="channel_details_users_avatar" src={`${URL}/avatars/${user.avatar}`} alt={user.name}/>
         </div>
     )
+}
+
+UsersOfChannels.propTypes = {
+    user: PropTypes.object
 }

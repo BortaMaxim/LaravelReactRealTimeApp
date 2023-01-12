@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const NotificationDetails = (props) => {
     const {details} = props
@@ -15,4 +16,14 @@ export const NotificationDetails = (props) => {
             }
         </>
     )
+}
+NotificationDetails.propTypes = {
+    details: PropTypes.shape({
+        desc: PropTypes.string,
+        id: PropTypes.string,
+        invite_id: PropTypes.number,
+        recv_channel: PropTypes.string,
+        request_type: PropTypes.string,
+        sender_name: PropTypes.string,
+    })
 }

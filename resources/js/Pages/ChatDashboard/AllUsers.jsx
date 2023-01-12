@@ -1,5 +1,6 @@
 import React from 'react';
 import {URL} from '../../redux/utils'
+import PropTypes from "prop-types";
 
 export const AllUsers = (props) => {
     const {inviteToChannel, users, userChoice, friendId, channelId} = props
@@ -20,6 +21,7 @@ export const AllUsers = (props) => {
                 ))
             }
             <button
+                disabled={!friendId}
                 className="btn btn-primary mt-3"
                 onClick={() => inviteToChannel(friendId, channelId)}
             >
@@ -27,4 +29,12 @@ export const AllUsers = (props) => {
             </button>
         </div>
     )
+}
+
+AllUsers.propTypes = {
+    inviteToChannel: PropTypes.func.isRequired,
+    userChoice: PropTypes.func.isRequired,
+    users: PropTypes.array,
+    friendId: PropTypes.any,
+    channelId: PropTypes.number,
 }

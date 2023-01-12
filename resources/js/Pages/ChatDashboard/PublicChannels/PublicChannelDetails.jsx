@@ -3,6 +3,7 @@ import {UsersOfChannels} from "../UsersOfChannels";
 import DeleteChannelBtn from "../../../Components/Channels/DeleteChannelBtn";
 import JoinToChannelBtn from '../../../Components/Channels/JoinToChannelBtn'
 import InviteToChannelBtn from "../../../Components/Channels/InviteToChannelBtn";
+import PropTypes from "prop-types";
 
 export const PublicChannelDetails = (props) => {
     const {
@@ -72,4 +73,17 @@ export const PublicChannelDetails = (props) => {
             }
         </div>
     )
+}
+
+PublicChannelDetails.propTypes = {
+    compairedOwnerId: PropTypes.bool,
+    friendId: PropTypes.any,
+    publicChannel: PropTypes.object,
+    profile: PropTypes.object,
+    allUsers: PropTypes.array,
+    deleteChannel: PropTypes.func.isRequired,
+    joinToChannel: PropTypes.func.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    userChoice: PropTypes.func.isRequired,
+    inviteToChannel: PropTypes.func.isRequired,
 }

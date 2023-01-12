@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const PublicChannelPanel = (props) => {
 
@@ -19,4 +20,8 @@ export const PublicChannelPanel = (props) => {
             }
         </div>
     )
+}
+PublicChannelPanel.propTypes = {
+    publicChannel: PropTypes.object,
+    handleOpen: PropTypes.func.isRequired,
 }

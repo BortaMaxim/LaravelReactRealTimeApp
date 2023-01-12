@@ -3,6 +3,7 @@ import {useModal} from "../../../hooks/useModal";
 import {CreateChannel} from "../CreateChannel";
 import {CreateChannelForm} from "../../../Components/Channels/CreateChannelForm";
 import CreateChannelModal from "../../../Components/Details/Modal";
+import PropTypes from "prop-types";
 
 export const CreateChanelContainer = memo((props) => {
     const {fields, createChannel, handleCheck, handleChange, createChannelSelector, compareType, compareVisible} = props
@@ -31,3 +32,13 @@ export const CreateChanelContainer = memo((props) => {
         </>
     )
 })
+
+CreateChanelContainer.propTypes = {
+    fields: PropTypes.object,
+    createChannel: PropTypes.func.isRequired,
+    handleCheck: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    createChannelSelector: PropTypes.object,
+    compareType: PropTypes.string,
+    compareVisible: PropTypes.string,
+}

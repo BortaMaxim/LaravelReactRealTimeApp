@@ -36,9 +36,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
 
         Route::post('create-channel', [ChannelController::class, 'createChannel']); // done
         Route::delete('delete-channel/{channel_id}', [ChannelController::class, 'deleteChannel']); //done
-        Route::post('join-channel/{channel_id}', [ChannelController::class, 'joinChannel']); //done - maybe
+        Route::post('join-channel/{channel_id}', [ChannelController::class, 'joinChannel']); //done
         Route::post('invite-to-channel', [ChannelController::class, 'inviteToChannel']); //done
-        Route::post('make-request', [ChannelController::class, 'createInvite']);
+        Route::post('make-request', [ChannelController::class, 'createInvite']);///Not yet
         Route::get('accept-invite/{invite_id}', [ChannelController::class, 'acceptRequest']);
         Route::get('notifications', [ChannelController::class, 'getNotifications']); //done
         Route::get('get-one-notification/{id}', [ChannelController::class, 'getOneNotification']); //done
@@ -48,10 +48,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('get-all-private-channels', [ChannelController::class, 'getAllPrivateChannels']); //done
         Route::get('get-channel/{channel_id}', [ChannelController::class, 'getOneChannel']); //done
         Route::get('get-private-channel/{channel_id}', [ChannelController::class, 'getOnePrivateChannel']); //done
-        Route::get('get-channels', [ChannelController::class, 'getSubscribedChannels']);
         Route::post('send-message-to/{channel_id}', [MessageToChannelController::class, 'sendMessageTo']);
         Route::get('get-message-to/{channel_id}', [MessageToChannelController::class, 'getMessages']);
-        Route::get('get-friend-list', [FriendsController::class, 'getFriendList']);
+        Route::get('get-friend-list', [FriendsController::class, 'getFriendList']);///Not yet
     });
 });
 

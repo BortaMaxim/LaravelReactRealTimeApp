@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Transition } from "react-transition-group";
 import Tween  from "gsap";
+import PropTypes from "prop-types";
 
 const duration = 200;
 
@@ -45,6 +46,13 @@ class Modal extends Component {
             </Transition>
         );
     }
+}
+
+Modal.propTypes = {
+    isOpen: PropTypes.bool,
+    title: PropTypes.string,
+    children: PropTypes.object,
+    handleClose: PropTypes.func.isRequired,
 }
 
 export default Modal;

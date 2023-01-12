@@ -1,10 +1,9 @@
 import * as AuthActionTypes from '../types/authActionTypes'
 import * as ProfileActionTypes from '../types/profileActionTypes'
-import * as ChatActionTypes from '../types/chatActionTypes'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, postOptions, toastOptions, uploadAuthOptions} from "../utils";
-import {echoInstance} from "../../bootstrap";
+import {initNotificationAndEventChannels, statusEventUserChannels} from "./echoActions";
 
 export const ShowNotificationAction = () => {
     return {
@@ -149,11 +148,7 @@ export const UpdateProfileAction = (formData, token) => async (dispatch) => {
 }
 
 export const StatusNotificationAction = (token) => async () => {
-    const echo = echoInstance(token)
-    await echo.private('base-channel')
-        .listen('StatusEvent', (data) => {
-            toast(data.message, toastOptions('bottom-right'))
-        })
+    await statusEventUserChannels(token)
 }
 
 export const MarkAsReadNotificationsAction = (token) => async (dispatch) => {
@@ -171,17 +166,3 @@ export const DeleteNotificationAction = (id, token) => async (dispatch) => {
         })
 }
 
-const initNotificationAndEventChannels = (userId, token, dispatch) => {
-    const echo = echoInstance(token)
-    echo.private(`App.Models.User.User.${userId}`)
-        .notification((notification) => {
-            dispatch({
-                type: ChatActionTypes.REALTIME_NOTIFICATIONS,
-                payload: {
-                    data: notification,
-                    read_at: null,
-                    id: notification.id,
-                }
-            })
-        })
-}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 const JoinToChannelBtn = (props) => {
     const {joinToChannel, channelId, setOpen, ownerId, type} = props
@@ -15,6 +16,13 @@ const JoinToChannelBtn = (props) => {
             </button>
         </>
     )
+}
+JoinToChannelBtn.propTypes = {
+    joinToChannel: PropTypes.func.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    channelId: PropTypes.number,
+    ownerId: PropTypes.number,
+    type: PropTypes.string,
 }
 
 export default JoinToChannelBtn;

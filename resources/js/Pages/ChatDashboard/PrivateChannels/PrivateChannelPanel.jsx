@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export const PrivateChannelPanel = (props) => {
     const {privateChannel, handleOpen} = props
@@ -17,4 +18,8 @@ export const PrivateChannelPanel = (props) => {
             }
         </div>
     )
+}
+PrivateChannelPanel.propTypes = {
+    privateChannel: PropTypes.object,
+    handleOpen: PropTypes.func,
 }

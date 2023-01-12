@@ -1,5 +1,6 @@
 import React from 'react';
 import {PrivateRoomList} from "../../Pages/ChatDashboard/PrivateChannels/PrivateRoomList";
+import PropTypes from "prop-types";
 
 export const PrivateRooms = (props) => {
     const {privateChannels, privateRoomId, setPrivateActiveRoom} = props
@@ -22,4 +23,9 @@ export const PrivateRooms = (props) => {
             }
         </div>
     )
+}
+PrivateRooms.propTypes = {
+    privateChannels: PropTypes.array,
+    privateRoomId: PropTypes.any,
+    setPrivateActiveRoom: PropTypes.func.isRequired,
 }

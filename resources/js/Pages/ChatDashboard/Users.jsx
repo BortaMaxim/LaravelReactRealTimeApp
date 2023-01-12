@@ -37,7 +37,7 @@ export const Users = (props) => {
                                         ))
                                     }
                                 </div>
-                                : <span>No Channels...</span>
+                                : <span>No Users...</span>
                         }
                     </>
             }
@@ -47,9 +47,10 @@ export const Users = (props) => {
 
 Users.propTypes = {
     isLoading: PropTypes.bool,
-    friends: PropTypes.array,
+    users: PropTypes.array,
     unreadMessagesCount: PropTypes.number,
     lastMessages: PropTypes.object,
     handleActive: PropTypes.func.isRequired,
-    id: PropTypes.any,
+    friendId: PropTypes.any,
+    recipient: PropTypes.object,
 }

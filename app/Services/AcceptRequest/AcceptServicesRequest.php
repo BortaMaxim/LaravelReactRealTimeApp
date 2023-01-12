@@ -77,6 +77,7 @@ class AcceptServicesRequest
             ->join('users', 'users.id', '=', 'details.owner_id')
             ->select('channels.id as id',
                 'channels.type',
+                'channels.name as channel_name',
                 'details.name',
                 'users.name as owner',
                 'details.desc',
@@ -84,7 +85,13 @@ class AcceptServicesRequest
                 'details.visible',
                 'details.owner_id as owner_id')
             ->first();
+        foreach ($channel->users as $user) {
+            if ($user->id === $userId) {
+                return response()->json("You have been added to the channel $channel->channel_name");
+            }
+        }
         $channel->users()->attach($userId);
-        return $channel;
+        broadcast(new AcceptRequest($channel, $invite->id, 'INVT'));
+        return response()->json('Join successfully!');
     }
 }

@@ -1,11 +1,13 @@
 import React from 'react';
 import {FetchConversationWithAction} from "../../redux/actions/chatAction";
 import {useDispatch} from "react-redux";
+import PropTypes from "prop-types";
 
 export const UsersList = (props) => {
-    const {el, handleActive, friendId, lastMessage, unreadMessagesCount, users} = props
+    const {el, handleActive, friendId, lastMessage, unreadMessagesCount} = props
     const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
+
     const setActiveUserId = () => {
         dispatch(FetchConversationWithAction(el.id, token))
         handleActive(el.id, 'friends')
@@ -35,4 +37,11 @@ export const UsersList = (props) => {
             </li>
         </div>
     )
+}
+UsersList.propTypes = {
+    el: PropTypes.object,
+    friendId: PropTypes.any,
+    handleActive: PropTypes.func,
+    lastMessage: PropTypes.any,
+    unreadMessagesCount: PropTypes.number,
 }

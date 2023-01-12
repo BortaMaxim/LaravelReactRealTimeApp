@@ -198,6 +198,9 @@ class ChannelController extends Controller
     public function deleteNotification($id)
     {
         $currentNotification = auth()->user()->notifications()->where('id', $id)->first();
+        $inviteId = $currentNotification->data['invite_id'];
+        $invite = Invite::find($inviteId);
+        $invite->delete();
         $currentNotification->delete();
         return response()->json('Deleted!');
     }
@@ -247,25 +250,4 @@ class ChannelController extends Controller
         return Channel::getChannel($channelId, 'dm');
     }
 
-//    public function getSubscribedChannels()
-//    {
-//        $user = auth()->user()->id;
-//        $channels = Channel::whereHas('users', function ($q) use ($user) {
-//            $q->where('user_id', $user);
-//        })->join('details', 'channels.id', '=', 'details.channel_id')
-//            ->join('users', 'users.id', '=', 'details.owner_id')
-//            ->join('user_details', 'user_id', '=', 'details.owner_id')
-//            ->select(
-//                'channels.id',
-//                'channels.type',
-//                'details.name',
-//                'users.name as owner',
-//                'details.desc',
-//                'details.type',
-//                'details.visible',
-//                'details.owner_id as owner_id',
-////                'user_details.avatar as owner_avatar'
-//            )->get();
-//        return response()->json($channels);
-//    }
 }

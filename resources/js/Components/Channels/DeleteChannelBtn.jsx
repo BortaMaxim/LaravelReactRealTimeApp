@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 const DeleteChannelBtn = (props) => {
     const {channelId, deleteChannel} = props
@@ -13,5 +14,10 @@ const DeleteChannelBtn = (props) => {
         </>
     )
 };
+
+DeleteChannelBtn.propTypes = {
+    channelId: PropTypes.number,
+    deleteChannel: PropTypes.func.isRequired,
+}
 
 export default DeleteChannelBtn;

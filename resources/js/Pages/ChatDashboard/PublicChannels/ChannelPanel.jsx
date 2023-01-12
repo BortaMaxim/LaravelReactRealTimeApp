@@ -104,7 +104,6 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
         setFriendId('')
     }
 
-
     return (
         <div className="bg-secondary vh-100 p-2 channel">
             <div className="chat_panel_header">
@@ -188,4 +187,6 @@ ChannelPanel.propTypes = {
     friends: PropTypes.array,
     isLoading: PropTypes.bool,
     lastMessages: PropTypes.object,
+    publicChannel: PropTypes.object,
+    privateChannel: PropTypes.object,
 }
