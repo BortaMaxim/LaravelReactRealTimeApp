@@ -16,7 +16,6 @@ export const CreateChannelAction = (formData, token) => async (dispatch, getStat
                 dispatch({type: ChannelActionTypes.CHANNEL_CREATED_SUCCESS})
             }
             if (res.data.type === 'dm') {
-                console.log('privateChannels', privateChannels)
                 privateChannels.push(res.data)
                 dispatch({type: ChannelActionTypes.CREATE_PRIVATE_CHANNEL})
             }

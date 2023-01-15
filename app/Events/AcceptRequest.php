@@ -15,7 +15,7 @@ class AcceptRequest implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $friendChannel;
+    public $message;
     public $userId;
     public $type;
 
@@ -24,15 +24,15 @@ class AcceptRequest implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($friendChannel, $userId, $type)
+    public function __construct($message, $userId, $type)
     {
-        $this->friendChannel = $friendChannel;
+        $this->message = $message;
         $this->userId = $userId;
         $this->type = $type;
     }
     public function broadcastWith(): array
     {
-        return [ '0' => $this->friendChannel,
+        return [ '0' => $this->message,
             '1' => $this->type];
     }
 

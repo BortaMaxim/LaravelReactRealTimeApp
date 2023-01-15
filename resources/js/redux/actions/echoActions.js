@@ -16,6 +16,10 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                 }
             })
         })
+    echo.private(`event.acceptRequest.${userId}`)
+        .listen('AcceptRequest', (data) => {
+            toast(`${data[0]}, channel type: ${data[1]}`, toastOptions('top-right'))
+        })
 }
 
 export const statusEventUserChannels = (token) => {

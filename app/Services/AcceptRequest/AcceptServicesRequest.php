@@ -10,6 +10,9 @@ use App\Models\User\User;
 
 class AcceptServicesRequest
 {
+    private string $message = 'joined to channel!';
+    private string $responseMessage = 'Join successfully!';
+
     public function acceptFriendRequest(Invite $invite, int $userId)
     {
         $sender = $invite->from_id;
@@ -47,13 +50,15 @@ class AcceptServicesRequest
 
     public function acceptJoinRequest(Invite $invite)
     {
-        $user = $invite->from_id;
+        $userId = $invite->from_id;
         $privateChannel = $invite->to_id;
+        $userName = User::find($userId)->name;
 
         $channelWithDataNew = Channel::where('channels.id', $privateChannel)
             ->join('details', 'channels.id', '=', 'details.channel_id')
             ->select('channels.id as id',
                 'channels.type',
+                'channels.name as channel_name',
                 'details.name',
                 'details.desc',
                 'details.type',
@@ -62,15 +67,25 @@ class AcceptServicesRequest
             ->first();
         $channel = $channelWithDataNew;
         $details = Detail::where('channel_id', $privateChannel)->first();
-        $channel->users()->attach($user);
-        broadcast(new AcceptRequest($channel, $user, 'JOIN'));
-        return $channel;
+        foreach ($channel->users as $user) {
+            if ($user->id === $userId) {
+                return response()->json("You have been added to the channel $channel->channel_name");
+            }
+        };
+        foreach ($channel->users as $user) {
+            if ($user->id !== $userId) {
+                $channel->users()->attach($userId);
+                broadcast(new AcceptRequest("$userName $this->message to $channel->channel_name", $userId, 'JOIN'));
+                return response()->json($this->responseMessage);
+            }
+        }
     }
 
     public function acceptInviteRequest(Invite $invite)
     {
         $channelId = $invite->from_id;
         $userId = $invite->to_id;
+        $userName = User::find($userId)->name;
 
         $channel = Channel::where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
@@ -85,13 +100,16 @@ class AcceptServicesRequest
                 'details.visible',
                 'details.owner_id as owner_id')
             ->first();
+
         foreach ($channel->users as $user) {
             if ($user->id === $userId) {
                 return response()->json("You have been added to the channel $channel->channel_name");
             }
         }
-        $channel->users()->attach($userId);
-        broadcast(new AcceptRequest($channel, $invite->id, 'INVT'));
-        return response()->json('Join successfully!');
+        foreach ($channel->users as $user) {
+            $channel->users()->attach($userId);
+            broadcast(new AcceptRequest("$userName $this->message to $channel->channel_name", $user->id, 'INVT'));
+            return response()->json($this->responseMessage);
+        }
     }
 }

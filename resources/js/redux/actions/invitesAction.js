@@ -1,24 +1,21 @@
 // import * as InviteActionTypes from '../types/inviteActionTypes'
-import {BASE_AUTH_URL, getAuthOptions} from '../utils'
-import {echoInstance} from "../../bootstrap";
+import {BASE_AUTH_URL, getAuthOptions, toastOptions} from '../utils'
+import {toast} from "react-toastify";
 
 
 export const AcceptInviteAction = (inviteId, requestType, token) => async (dispatch) => {
     await axios.get(`${BASE_AUTH_URL}accept-invite/${inviteId}`, getAuthOptions(token))
         .then(res => {
-            const echo = echoInstance(token)
-            echo.private(`event.acceptRequest.${inviteId}`)
-                .listen('AcceptRequest', (data) => {
-                    console.log('echo data', data)
-                })
-            console.log(res)
-            console.log('requestType', requestType)
             switch (requestType) {
                 case 'INVT':
-                    console.log('INVT')
+                    if (res.status === 200) {
+                        toast.success(res.data.original, toastOptions('top-right'))
+                    }
                     break;
                 case 'JOIN':
-                    console.log('JOIN')
+                    if (res.status === 200) {
+                        toast.success(res.data.original, toastOptions('top-right'))
+                    }
                     break;
                 default:
                     break;

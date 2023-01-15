@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef} from 'react';
+import React, {memo, useEffect} from 'react';
 import {UnreadMessagesCountAction} from "../../../redux/actions/chatAction";
 import {useDispatch, useSelector} from "react-redux";
 import {useActive} from "../../../hooks/useActive";
@@ -7,8 +7,10 @@ import {Rooms} from "../Rooms";
 import {useForm} from "../../../hooks/useForm";
 import {
     CreateChannelAction,
-    DeleteChannelAction, GetOnePrivateChannelAction,
-    GetOnePublicChannel, InviteToChannelAction,
+    DeleteChannelAction,
+    GetOnePrivateChannelAction,
+    GetOnePublicChannel,
+    InviteToChannelAction,
     JoinToPublicChannel
 } from "../../../redux/actions/channelAction";
 import PropTypes from "prop-types";
