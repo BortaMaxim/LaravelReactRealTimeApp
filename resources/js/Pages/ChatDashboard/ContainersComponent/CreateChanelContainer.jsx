@@ -6,7 +6,7 @@ import CreateChannelModal from "../../../Components/Details/Modal";
 import PropTypes from "prop-types";
 
 export const CreateChanelContainer = memo((props) => {
-    const {fields, createChannel, handleCheck, handleChange, createChannelSelector, compareType, compareVisible} = props
+    const {fields, createChannel, handleCheck, handleChange, getAllChannelsSelector, compareType, compareVisible} = props
     const {active, setActive} = useModal()
 
     return (
@@ -22,7 +22,7 @@ export const CreateChanelContainer = memo((props) => {
                 <CreateChannelForm
                     compareType={compareType}
                     compareVisible={compareVisible}
-                    createChannelSelector={createChannelSelector}
+                    getAllChannelsSelector={getAllChannelsSelector}
                     fields={fields}
                     handleChange={handleChange}
                     handleCheck={handleCheck}

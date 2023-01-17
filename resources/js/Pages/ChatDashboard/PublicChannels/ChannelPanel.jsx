@@ -38,14 +38,13 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
     const compareVisible = fields.channel_type === 'channel' ? '1' : '0'
 
     const unreadMessagesCount = chatPropsValidation(useSelector(state => state.unreadMessagesCount))
-    const createChannelSelector = chatPropsValidation(useSelector(state => ({
-        loading: state.createChannel.loading,
-        createChannelExeption: state.createChannel.createChannelExeption,
-    })))
     const getAllChannelsSelector = chatPropsValidation(useSelector(state => ({
-        channels: state.getAllChannels
+        publicChannels: state.getAllChannels.publicChannels,
+        privateChannels: state.getAllChannels.privateChannels,
+        loading: state.getAllChannels.loading,
+        createChannelExeption: state.getAllChannels.createChannelExeption,
     })))
-    const getAllPrivateChannels = useSelector(state => state.getAllPrivateChannels)
+
     const profile = useSelector((state) => state.auth.profile)
     const modify = useSelector((state) => state.modifyFlag)
     const recipient = chatPropsValidation(useSelector(state => state.recipient))
@@ -78,8 +77,8 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
         dispatch(GetOnePrivateChannelAction(id, token))
     }
 
-    const deleteChannel = (id) => {
-        dispatch(DeleteChannelAction(id, token))
+    const deleteChannel = (id, type) => {
+        dispatch(DeleteChannelAction(id, token, type))
     }
 
     const joinToChannel = (e, id, owner_id, type, setOpen) => {
@@ -116,7 +115,7 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
                     createChannel={createChannel}
                     handleCheck={handleCheck}
                     handleChange={handleChange}
-                    createChannelSelector={createChannelSelector}
+                    getAllChannelsSelector={getAllChannelsSelector}
                 />
                 <GetNotificationsContainer
                     profile={profile}
@@ -174,8 +173,8 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
                     : null
             }
             <Rooms
-                channels={getAllChannelsSelector.channels}
-                privateChannels={getAllPrivateChannels}
+                publicChannels={getAllChannelsSelector.publicChannels}
+                privateChannels={getAllChannelsSelector.privateChannels}
                 setActiveRoom={setActiveRoom}
                 setPrivateActiveRoom={setPrivateActiveRoom}
                 roomId={roomId}

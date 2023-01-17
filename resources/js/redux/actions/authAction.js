@@ -3,7 +3,7 @@ import * as ProfileActionTypes from '../types/profileActionTypes'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, postOptions, toastOptions, uploadAuthOptions} from "../utils";
-import {initNotificationAndEventChannels, statusEventUserChannels} from "./echoActions";
+import {createChannelEvent, initNotificationAndEventChannels, statusEventUserChannels} from "./echoActions";
 
 export const ShowNotificationAction = () => {
     return {

@@ -34,6 +34,7 @@ export const PrivateChannelsDetails = (props) => {
                             <DeleteChannelBtn
                                 deleteChannel={deleteChannel}
                                 channelId={id}
+                                type={type}
                             />
                             <InviteToChannelBtn
                                 channelId={id}

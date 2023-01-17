@@ -3,8 +3,8 @@ import {CustomSpinner} from "../Details/CustomSpinner";
 import PropTypes from "prop-types";
 
 export const CreateChannelForm = (props) => {
-    const {fields, handleChange, createChannel, createChannelSelector, compareType, compareVisible, handleCheck} = props
-    const {loading, createChannelExeption} = createChannelSelector
+    const {fields, handleChange, createChannel, getAllChannelsSelector, compareType, compareVisible, handleCheck} = props
+    const {loading, createChannelExeption} = getAllChannelsSelector
 
     return (
         <form onSubmit={createChannel}>
@@ -92,7 +92,7 @@ CreateChannelForm.propTypes = {
     handleCheck: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
     createChannel: PropTypes.func.isRequired,
-    createChannelSelector: PropTypes.object.isRequired,
+    getAllChannelsSelector: PropTypes.object.isRequired,
     compareType: PropTypes.string,
     compareVisible: PropTypes.string,
 }

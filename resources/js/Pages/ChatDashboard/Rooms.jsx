@@ -6,9 +6,8 @@ import {PrivateRooms} from "../../Components/Rooms/PrivateRooms";
 
 
 export const Rooms = (props) => {
-    const {channels, privateChannels, setActiveRoom, roomId, privateRoomId, setPrivateActiveRoom} = props
+    const {publicChannels, privateChannels, setActiveRoom, roomId, privateRoomId, setPrivateActiveRoom} = props
     const {openPublic, openPrivate, handlePrivateToggle, handlePublicToggle} = useChannelPannelOpen()
-
 
     return (
         <div>
@@ -19,7 +18,7 @@ export const Rooms = (props) => {
             {
                 openPublic === true
                 && <PublicRooms
-                    channels={channels}
+                    publicChannels={publicChannels}
                     setActiveRoom={setActiveRoom}
                     roomId={roomId}
                 />
@@ -40,7 +39,7 @@ export const Rooms = (props) => {
 }
 
 Rooms.propTypes = {
-    channels: PropTypes.array.isRequired,
+    publicChannels: PropTypes.any,
     setActiveRoom: PropTypes.func.isRequired,
     roomId: PropTypes.any,
 }

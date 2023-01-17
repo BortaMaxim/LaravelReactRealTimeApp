@@ -3,14 +3,15 @@ import {RoomList} from "../../Pages/ChatDashboard/RoomList";
 import PropTypes from "prop-types";
 
 export const PublicRooms = (props) => {
-    const {channels, setActiveRoom, roomId} = props
+    const {publicChannels, setActiveRoom, roomId} = props
+
     return (
        <div>
            {
-               channels.length !== 0
+               publicChannels.length !== 0
                    ? <div className="channel">
                        {
-                           channels.map(el => (
+                           publicChannels.map(el => (
                                <RoomList
                                    key={el.id}
                                    el={el}
@@ -26,7 +27,7 @@ export const PublicRooms = (props) => {
     )
 }
 PublicRooms.propTypes = {
-    channels: PropTypes.array,
+    publicChannels: PropTypes.any,
     roomId: PropTypes.any,
     setActiveRoom: PropTypes.func.isRequired,
 }

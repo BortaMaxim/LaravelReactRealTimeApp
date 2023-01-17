@@ -9,12 +9,10 @@ import {messageReducer} from "./chat/messageReducer";
 import {unreadMessagesCountReducer} from "./chat/unreadMessagesCountReducer";
 import {cacheConversationReducer} from "./chat/cacheConversationReducer";
 import {recipientReducer} from "./chat/recipientReducer";
-import {createChannelReducer} from "./channel/createChannelReducer";
 import {getAllChannelsReducer} from "./channel/getAllChannelsReducer";
 import {getOnePublicChannelReducer} from "./channel/getOnePublicChannelReducer";
 import {modifiedChannelReducer} from "./channel/modifiedChannelReducer";
 import {notificationReducer} from "./chat/notificationReducer";
-import {getAllPrivateChannelsReducer} from "./channel/getAllPrivateChannelsReducer";
 import {getOnePrivateChannelReducer} from "./channel/getOnePrivateChannelReducer";
 
 
@@ -29,9 +27,7 @@ export const rootReducer = combineReducers({
     message: messageReducer,
     unreadMessagesCount: unreadMessagesCountReducer,
     recipient: recipientReducer,
-    createChannel: createChannelReducer,
     getAllChannels: getAllChannelsReducer,
-    getAllPrivateChannels: getAllPrivateChannelsReducer,
     oneChannel: getOnePublicChannelReducer,
     onePrivateChannel: getOnePrivateChannelReducer,
     modifyFlag: modifiedChannelReducer,

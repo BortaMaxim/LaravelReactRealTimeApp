@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreateChannelEvent;
+use App\Events\DeleteChannelEvent;
+use App\Events\StatusEvent;
 use App\Http\Requests\CreateChannelRequest;
 use App\Models\Channel\Channel;
 use App\Models\Detail\Detail;
@@ -37,9 +40,12 @@ class ChannelController extends Controller
 
         $createdChannel = Channel::where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
-            ->select('channels.id', 'channels.type', 'channels.name', 'details.owner_id as owner_id')->first();
-
-        return response()->json($createdChannel);
+            ->select('channels.id', 'details.type', 'channels.name', 'details.owner_id as owner_id')->first();
+        $message = "new channel $createdChannel->name is created!";
+        broadcast(new CreateChannelEvent($createdChannel, $message));
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
     public function deleteChannel($channelId)
@@ -47,15 +53,11 @@ class ChannelController extends Controller
         $userId = auth()->user()->id;
         $detail = Detail::where('channel_id', $channelId)->first();
         $channel = Channel::find($channelId);
-
+        $message = "$channel->name channel deleted!";
         if ($detail->owner_id === $userId) {
+            broadcast(new DeleteChannelEvent($channel, $message, true));
             $channel->delete();
             $detail->delete();
-
-            return response()->json([
-                'modify' => true,
-                'message' => 'Channel deleted!'
-            ]);
         } else {
             return response()->json('Error', 400);
         }
@@ -86,7 +88,7 @@ class ChannelController extends Controller
             }
             $channelWithData->users()->attach($userId);
             return response()->json('Success!');
-        } else if($channelWithData->detail_type === 'private') {
+        } else if ($channelWithData->detail_type === 'private') {
             $invite = new Invite();
             $invite->type = "JOIN";
             $invite->from_id = $userId;
@@ -212,7 +214,7 @@ class ChannelController extends Controller
             ->join('users', 'users.id', '=', 'details.owner_id')
             ->select(
                 'channels.id',
-                'channels.type',
+                'channels.type as channel_type',
                 'channels.name',
                 'users.name as owner',
                 'details.desc',

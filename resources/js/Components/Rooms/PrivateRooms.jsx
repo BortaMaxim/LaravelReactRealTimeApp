@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 export const PrivateRooms = (props) => {
     const {privateChannels, privateRoomId, setPrivateActiveRoom} = props
+
     return (
         <div>
             {

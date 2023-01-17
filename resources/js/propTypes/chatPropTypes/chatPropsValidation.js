@@ -15,7 +15,8 @@ const propTypes = {
     unreadMessagesCount: PropTypes.number,
     loading: PropTypes.bool,
     createChannelExeption: PropTypes.object,
-    channels: PropTypes.array,
+    publicChannels: PropTypes.any,
+    privateChannels: PropTypes.any,
 }
 
 export const chatPropsValidation = propTypesValidation(propTypes)
