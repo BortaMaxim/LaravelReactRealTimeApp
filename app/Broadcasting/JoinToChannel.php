@@ -4,7 +4,7 @@ namespace App\Broadcasting;
 
 use App\Models\User\User;
 
-class ChatDm
+class JoinToChannel
 {
     /**
      * Create a new channel instance.
@@ -19,13 +19,11 @@ class ChatDm
     /**
      * Authenticate the user's access to the channel.
      *
-     * @param \App\Models\User\User $user
+     * @param  \App\Models\User\User  $user
      * @return array|bool
      */
-    public function join(User $user, $channelId)
+    public function join(User $user, $user_id): bool|array
     {
-        return User::where('id', $user->id)
-            ->whereHas('channels', fn($q) => $q->where('channel_id', $channelId))
-            ->first();
+        return (int) $user->id === (int) $user_id;
     }
 }

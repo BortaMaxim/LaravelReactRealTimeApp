@@ -43,6 +43,19 @@ export const CreateChannelForm = (props) => {
                     value={fields.detail_desc || ''}/>
             </div>
             <div className="mb-3">
+                <label htmlFor="channel_type">Channel type:</label>
+                &nbsp;
+                <select
+                    className="form-select"
+                    id="channel_type"
+                    name="channel_type"
+                    onChange={handleChange}
+                    value={fields.channel_type}>
+                    <option value="channel">public</option>
+                    <option value="dm">private</option>
+                </select>
+            </div>
+            <div className="mb-3">
                 <input
                     type="text"
                     hidden={true}
@@ -59,20 +72,6 @@ export const CreateChannelForm = (props) => {
                     value={compareType}
                     readOnly={true}
                 />
-            </div>
-            <div className="mb-3">
-                <label htmlFor="channel_type">Channel type:</label>
-                &nbsp;
-                <select
-                    className="form-select"
-                    id="channel_type"
-                    name="channel_type"
-                    defaultValue={'channel'}
-                    onChange={handleChange}
-                    value={fields.channel_type}>
-                    <option value="dm">private</option>
-                    <option value="channel">public</option>
-                </select>
             </div>
             <div className="mb-3">
                 {

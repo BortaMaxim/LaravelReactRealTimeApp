@@ -113,7 +113,7 @@ class AuthRepository extends Controller implements Authable
         $user = Auth::guard('api')->user()->token();
         $auth_user = auth()->user();
         $auth_user->status = 'offline';
-        broadcast(new OfflineUsers($user));
+        broadcast(new OfflineUsers($user))->toOthers();
 
         $auth_user->save();
         $user->revoke();

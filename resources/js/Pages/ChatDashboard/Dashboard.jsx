@@ -1,9 +1,8 @@
-import React, {memo} from 'react';
+import React from 'react';
 import {ChannelPanel} from "./PublicChannels/ChannelPanel";
 import {MessagesPanel} from "./MessagesPanel";
 import {useSelector} from "react-redux";
 import PropTypes from "prop-types";
-import {chatPropsValidation} from "../../propTypes/chatPropTypes/chatPropsValidation";
 
 export const Dashboard = (props) => {
     const {
@@ -16,12 +15,13 @@ export const Dashboard = (props) => {
         handleChange,
         fields,
         activeUserId,
-        messagesEnd
+        messagesEnd,
+        publicMessages,
+        privateMessages
     } = props
 
     const publicChannel = useSelector(state => state.oneChannel)
     const privateChannel = useSelector(state => state.onePrivateChannel)
-
     return (
         <div className="pt-lg-5">
             <div className="d-flex justify-content-center min-vw-100">
@@ -43,6 +43,8 @@ export const Dashboard = (props) => {
                     sendMessage={sendMessage}
                     handleChange={handleChange}
                     fields={fields}
+                    publicMessages={publicMessages}
+                    privateMessages={privateMessages}
                 />
             </div>
         </div>

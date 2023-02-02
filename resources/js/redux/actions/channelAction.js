@@ -1,7 +1,9 @@
 import * as ChannelActionTypes from '../types/channelActionTypes'
+import * as ChatActionTypes from '../types/chatActionTypes'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, postAuthOptions, toastOptions} from '../utils'
 import {toast} from 'react-toastify'
+import {channelSelect, dmSelect} from "./echoActions";
 
 
 export const CreateChannelAction = (formData, token) => async (dispatch) => {
@@ -52,13 +54,13 @@ export const DeleteChannelAction = (id, token, type = null) => async (dispatch) 
         })
 }
 
-export const JoinToPublicChannel = (channelId, data, token) => async (dispatch) => {
+export const JoinToChannel = (channelId, data, token) => async (dispatch) => {
     let {channelType} = data
     switch (channelType) {
         case 'channel':
             await axios.post(`${BASE_AUTH_URL}join-channel/${channelId}`, data, postAuthOptions(token))
                 .then(res => {
-                    dispatch({type: ChannelActionTypes.JOIN_TO_PUBLIC_CHANNEL})
+                    dispatch(GetAllChannelsAction(token))
                     toast.success(res.data, toastOptions('top-right'))
                 })
             break;
@@ -81,5 +83,43 @@ export const InviteToChannelAction = (data, token) => async (dispatch) => {
         .then(res => {
             dispatch({type: ChannelActionTypes.INVITE_TO_CHANNEL_SUCCESS})
             toast.success(res.data, toastOptions('top-right'))
+        })
+}
+
+export const ChannelsSelectAction = (channel, token) => async (dispatch, getState) => {
+    let prevChannelId = getState().oneChannel
+    let authUserId = getState().auth.profile.id
+    let usersOfChannel = channel.users
+    let foundedUser = usersOfChannel.find(user => user.id === authUserId)
+    console.log(channel)
+
+    await axios.get(`${BASE_AUTH_URL}get-message-to/${channel.id}`, getAuthOptions(token))
+        .then((res) => {
+            switch (channel.channel_type) {
+                case 'channel':
+                    if (res.status === 200) {
+                        dispatch({type: ChatActionTypes.TOGGLE_CHANNEL_MESSAGES, payload: 'publicMessages'})
+                        dispatch({type: ChatActionTypes.FETCH_PUBLIC_CHANNEL_MESSAGES, payload: res.data})
+                        if (foundedUser !== undefined) {
+                            dispatch(channelSelect(channel.id, prevChannelId, token))
+                        } else {
+                            toast.success('you must join to the channel!', toastOptions('top-right'))
+                        }
+                    }
+                    break;
+                case 'dm':
+                    if (res.status === 200) {
+                        dispatch({type: ChatActionTypes.TOGGLE_CHANNEL_MESSAGES, payload: 'privateMessages'})
+                        dispatch({type: ChatActionTypes.FETCH_PRIVATE_CHANNEL_MESSAGES, payload: res.data})
+                        if (foundedUser !== undefined) {
+                            dispatch(dmSelect(channel.id, prevChannelId, token))
+                        } else {
+                            toast.success('you must join to the private channel!', toastOptions('top-right'))
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         })
 }

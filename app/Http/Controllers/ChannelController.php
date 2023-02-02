@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CreateChannelEvent;
 use App\Events\DeleteChannelEvent;
+use App\Events\JoinToChannelEvent;
 use App\Events\StatusEvent;
 use App\Http\Requests\CreateChannelRequest;
 use App\Models\Channel\Channel;
@@ -13,6 +14,7 @@ use App\Models\User\User;
 use App\Notifications\NotificationRequest;
 use App\Services\AcceptRequest\AcceptServicesRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChannelController extends Controller
 {
@@ -67,6 +69,8 @@ class ChannelController extends Controller
     public function joinChannel(Request $request, $channelId)
     {
         $userId = auth()->user()->id;
+        $authUserName = auth()->user()->name;
+
         $channelWithData = Channel::where('channels.type', $request->channelType)
             ->where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
@@ -86,7 +90,9 @@ class ChannelController extends Controller
                     return response()->json("You have been added to the channel - $channelWithData->name");
                 }
             }
+            $message = "$authUserName Joined to channel $channelWithData->name";
             $channelWithData->users()->attach($userId);
+            broadcast(new JoinToChannelEvent($channelWithData->owner_id, $message));
             return response()->json('Success!');
         } else if ($channelWithData->detail_type === 'private') {
             $invite = new Invite();
@@ -209,7 +215,7 @@ class ChannelController extends Controller
 
     public function getAllChannels()
     {
-        $channels = Channel::where('channels.type', 'channel')
+        $channels = Channel::where('channels.type', 'channel')->with(['users'])
             ->join('details', 'channels.id', '=', 'details.channel_id')
             ->join('users', 'users.id', '=', 'details.owner_id')
             ->select(
@@ -220,19 +226,20 @@ class ChannelController extends Controller
                 'details.desc',
                 'details.type',
                 'details.visible',
-                'details.owner_id')->get();
+                'details.owner_id',
+            )->get();
         return response()->json($channels);
 
     }
 
     public function getAllPrivateChannels()
     {
-        $channels = Channel::where('channels.type', 'dm')
+        $channels = Channel::where('channels.type', 'dm')->with(['users'])
             ->join('details', 'channels.id', '=', 'details.channel_id')
             ->join('users', 'users.id', '=', 'details.owner_id')
             ->select(
                 'channels.id',
-                'channels.type',
+                'channels.type as channel_type',
                 'channels.name',
                 'users.name as owner',
                 'details.desc',

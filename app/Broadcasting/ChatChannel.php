@@ -22,7 +22,7 @@ class ChatChannel
      * @param  \App\Models\User\User  $user
      * @return User|array|bool
      */
-    public function join(User $user, $channelId): User|bool|array
+    public function join(User $user, $channelId)
     {
         if($channelId == 1) {
             return $user;

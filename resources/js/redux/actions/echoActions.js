@@ -3,7 +3,12 @@ import * as ChatActionTypes from "../types/chatActionTypes";
 import {toast} from "react-toastify";
 import {toastOptions} from "../utils";
 import * as ChannelActionTypes from "../types/channelActionTypes";
+import {GetAllPrivateChannelsAction} from "./channelAction";
 
+
+export const echoPresenceInit = (token) => {
+    return echoInstance(token)
+}
 export const initNotificationAndEventChannels = (userId, token, dispatch) => {
     const echo = echoInstance(token)
     echo.private(`App.Models.User.User.${userId}`)
@@ -19,6 +24,7 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
         })
     echo.private(`event.acceptRequest.${userId}`)
         .listen('AcceptRequest', (data) => {
+            dispatch(GetAllPrivateChannelsAction(token))
             toast(`${data[0]}, channel type: ${data[1]}`, toastOptions('top-right'))
         })
     echo.private('create-channel')
@@ -51,7 +57,6 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                     toast.success(channel.message, toastOptions('top-right'))
                     break;
                 case 'dm':
-                    console.log('event delete private channel', channel)
                     dispatch({
                         type: ChannelActionTypes.DELETE_PRIVATE_CHANNEL_SUCCESS,
                         id: channel.channel.id
@@ -61,7 +66,6 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                 default:
                     break;
             }
-
         })
 }
 
@@ -73,8 +77,41 @@ export const statusEventUserChannels = (token) => {
         })
 }
 
-export const createChannelEvent = (token, channels = null, privateChannels = null) => {
+export const joinToPublicChannel = (userId, token) => async (dispatch) => {
     const echo = echoInstance(token)
-
+    await echo.private(`join-to-channel.${userId}`)
+        .listen('JoinToChannelEvent', (eventMessage) => {
+            dispatch(GetAllPrivateChannelsAction(token))
+            toast.success(eventMessage.message, toastOptions('top-right'))
+        })
 }
+
+export const channelSelect = (channelId, prevChannelId = null, token) => async (dispatch) => {
+    await echoPresenceInit(token).join(`chat.channel.${channelId}`)
+        .listen('SendMessageToChannel', (data) => {
+            console.log('listen,', data)
+        })
+        .listenForWhisper('typing', (event) => {
+            console.log('listenForWhisper,', event)
+        })
+}
+
+export const dmSelect = (channelId, prevChannelId, token) => async (dispatch) => {
+    await echoPresenceInit(token).join(`chat.dm.${channelId}`)
+        .here( (user) => {
+            console.log('here private', user)
+        })
+        .joining((user) => {
+            console.log('joining', user)
+        })
+        .listen('', (data) => {
+            console.log('listen', data)
+        })
+        .listenForWhisper('typing', (event) => {
+            console.log('listenForWhisper,', event)
+        })
+}
+
+
+
 

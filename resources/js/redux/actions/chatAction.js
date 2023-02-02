@@ -1,5 +1,6 @@
 import * as ChatActionTypes from '../types/chatActionTypes'
 import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
+import {TOGGLE_CHANNEL_MESSAGES} from "../types/chatActionTypes";
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -26,6 +27,7 @@ export const FetchConversationWithAction = (id, token, force = false) => (dispat
 
     new Promise((resolve, reject) => {
         axios.get(`${BASE_AUTH_URL}conversation/${id}`, getAuthOptions(token)).then(res => {
+            dispatch({type: ChatActionTypes.TOGGLE_CHANNEL_MESSAGES, payload: 'userChannel'})
             dispatch({
                 type: ChatActionTypes.SET_ACTIVE_USER_ID,
                 payload: id

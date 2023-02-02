@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {UnreadMessagesCountAction} from "../../../redux/actions/chatAction";
 import {useDispatch, useSelector} from "react-redux";
 import {useActive} from "../../../hooks/useActive";
@@ -6,12 +6,13 @@ import {Users} from "../Users";
 import {Rooms} from "../Rooms";
 import {useForm} from "../../../hooks/useForm";
 import {
+    ChannelsSelectAction,
     CreateChannelAction,
     DeleteChannelAction,
     GetOnePrivateChannelAction,
     GetOnePublicChannel,
     InviteToChannelAction,
-    JoinToPublicChannel
+    JoinToChannel
 } from "../../../redux/actions/channelAction";
 import PropTypes from "prop-types";
 import {chatPropsValidation} from "../../../propTypes/chatPropTypes/chatPropsValidation";
@@ -21,7 +22,7 @@ import {PublicChannelsContainer} from "../ContainersComponent/PublicChannelsCont
 import {PrivateChannelsContainer} from "../PrivateChannels/PrivateChannelsContainer";
 import {useModal} from "../../../hooks/useModal";
 
-export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChannel, privateChannel}) => {
+export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, privateChannel}) => {
     const {friendId, roomId, privateRoomId, setFriendId, handleActive} = useActive()
     const {open, setOpen} = useModal()
     const token = localStorage.getItem('user-token')
@@ -32,10 +33,10 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
         channel_name: '',
         detail_name: '',
         detail_desc: '',
-        channel_type: ''
+        channel_type: '',
     })
-    const compareType = fields.channel_type === 'channel' ? detailPublic : detailPrivate
-    const compareVisible = fields.channel_type === 'channel' ? '1' : '0'
+    const compareType = fields.channel_type === undefined || fields.channel_type === 'channel' ? detailPublic : detailPrivate
+    const compareVisible = fields.channel_type === undefined || fields.channel_type === 'channel' ? '1' : '0'
 
     const unreadMessagesCount = chatPropsValidation(useSelector(state => state.unreadMessagesCount))
     const getAllChannelsSelector = chatPropsValidation(useSelector(state => ({
@@ -68,13 +69,16 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
         clear()
     }
 
-    const setActiveRoom = (id) => {
-        handleActive(id, 'rooms')
-        dispatch(GetOnePublicChannel(id, token))
+    const setActiveRoom = (channel) => {
+        handleActive(channel.id, 'rooms')
+        dispatch(GetOnePublicChannel(channel.id, token))
+        dispatch(ChannelsSelectAction(channel, token))
     }
-    const setPrivateActiveRoom = (id) => {
-        handleActive(id, 'privateRooms')
-        dispatch(GetOnePrivateChannelAction(id, token))
+    const setPrivateActiveRoom = (channel) => {
+        handleActive(channel.id, 'privateRooms')
+        dispatch(GetOnePrivateChannelAction(channel.id, token))
+        dispatch(ChannelsSelectAction(channel, token))
+
     }
 
     const deleteChannel = (id, type) => {
@@ -87,7 +91,7 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
             receiver: owner_id,
             channelType: type
         }
-        dispatch(JoinToPublicChannel(id, data, token))
+        dispatch(JoinToChannel(id, data, token))
         setOpen(false)
     }
 
@@ -182,7 +186,7 @@ export const ChannelPanel = memo(({friends, isLoading, lastMessages, publicChann
             />
         </div>
     )
-})
+}
 
 ChannelPanel.propTypes = {
     friends: PropTypes.array,

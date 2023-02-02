@@ -2,8 +2,7 @@ import React from 'react';
 import {ChatForm} from "./ChatForm";
 import {Message} from "./Message";
 import PropTypes from "prop-types";
-import {RecipientAvatar} from "./RecipientAvatar";
-import {PublicChannelPanel} from "./PublicChannels/PublicChannelPanel";
+import {MessageContainer} from "./ContainersComponent/MessageContainer";
 
 export const MessagesPanel = (props) => {
     const {
@@ -14,24 +13,24 @@ export const MessagesPanel = (props) => {
         fields,
         activeUserId,
         messagesEnd,
+        publicMessages,
+        privateMessages,
         recipient,
     } = props
+
     return (
         <>
             <div className="p-2 w-100">
                 {
-                    chatMessages.length !== 0
+                    chatMessages.length !== 0 || publicMessages.length !== 0 || privateMessages.length !== 0
                         ? <>
                             <div className="message_panel" ref={messagesEnd}>
-                                {
-                                    chatMessages.map((el, idx) => (
-                                        <Message
-                                            key={idx}
-                                            el={el}
-                                            profile={profile}
-                                        />
-                                    ))
-                                }
+                                <MessageContainer
+                                    userMessages={chatMessages}
+                                    publicMessages={publicMessages}
+                                    privateMessages={privateMessages}
+                                    profile={profile}
+                                />
                             </div>
                             <ChatForm
                                 sendMessage={sendMessage}

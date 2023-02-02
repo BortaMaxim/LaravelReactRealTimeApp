@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {URL} from '../../redux/utils'
 
-export const RecipientInfo = (props) => {
+export const RecipientInfo = memo((props) => {
     const {recipient} = props
     return (
         <div>
@@ -20,4 +20,4 @@ export const RecipientInfo = (props) => {
             </h5>
         </div>
     )
-}
+})

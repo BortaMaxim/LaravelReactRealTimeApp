@@ -18,6 +18,7 @@ import EventBus from "../../EventBus";
 import {echoInstance} from "../../bootstrap";
 import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channelAction";
 import PropTypes from "prop-types";
+import {channelSelect, joinToPublicChannel} from "../../redux/actions/echoActions";
 
 
 class DashboardContainer extends Component {
@@ -25,7 +26,7 @@ class DashboardContainer extends Component {
         super(props);
         this.state = {
             message: '',
-            notification: new Audio('/sounds/facebookchat.mp3')
+            notification: new Audio('/sounds/facebookchat.mp3'),
         }
         this.startConversation = this.startConversation.bind(this)
         this.sendMessage = this.sendMessage.bind(this)
@@ -50,11 +51,12 @@ class DashboardContainer extends Component {
         this.props.StatusNotificationAction(this.token)
         this.props.GetNotificationsAction(this.token)
         this.props.GetAllPrivateChannelsAction(this.token)
-
+        // this.props.channelSelect(1, null, this.token)
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
                 this.props.MessageChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
+                this.props.joinToPublicChannel(this.props.profile.id, this.token)
             })
         this.scrollToBottom()
     }
@@ -116,6 +118,8 @@ class DashboardContainer extends Component {
                     sendMessage={this.sendMessage}
                     handleChange={this.handleChange}
                     fields={this.state.message}
+                    publicMessages={this.props.publicMessages}
+                    privateMessages={this.props.privateMessages}
                 />
             </div>
         )
@@ -157,6 +161,8 @@ const mapStateToProps = (state) => ({
     activeUserId: state.activeUserId,
     conversation: state.conversation,
     message: state.message,
+    publicMessages: state.roomMessages.publicMessages,
+    privateMessages: state.roomMessages.privateMessages,
 })
 
 const DashboardWithRouterContainer = withRouter(DashboardContainer)
@@ -175,5 +181,7 @@ export default connect(mapStateToProps, {
     GetAllChannelsAction,
     GetAllPrivateChannelsAction,
     StatusNotificationAction,
-    GetNotificationsAction
+    GetNotificationsAction,
+    joinToPublicChannel,
+    channelSelect,
 })(DashboardWithRouterContainer)

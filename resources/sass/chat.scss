@@ -4,6 +4,7 @@
     background-color: $scrollbar_bg;
     width: 10px;
 }
+
 .channel::-webkit-scrollbar-thumb {
     background-color: $scrollbar_thumb_bg;
     border-radius: 10px;
@@ -13,27 +14,37 @@
     background-color: $scrollbar_bg;
     width: 10px;
 }
+
 .public_channel_details_users_wrapper::-webkit-scrollbar-thumb {
     background-color: $scrollbar_thumb_bg;
     border-radius: 10px;
 }
 
- .message {
+.message {
+    position: relative;
     width: 50%;
     height: 50%;
     min-width: 200px;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 6px 3px 20px rgba(0, 0, 0, .5);
+
     &_img {
         width: 30px;
         height: 30px;
         border-radius: 15px;
         margin-right: 10px;
     }
+
     &_panel {
         height: 800px;
         overflow: auto;
+    }
+
+    &_date {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
     }
 }
 
@@ -50,31 +61,38 @@
     position: fixed;
     z-index: 100;
     box-shadow: 3px 6px 30px rgba(0, 0, 0, .5);
+
     &_details {
         margin-left: 20px;
     }
+
     &_title {
         color: #cbd5e0;
     }
+
     &_avatar {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         cursor: pointer;
     }
+
     &_status_online {
         color: #72da32;
     }
+
     &_status_offline {
         color: #cb2b15;
     }
 }
+
 .channel_actions {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 10px;
 }
+
 .channel_info {
     display: flex;
     justify-content: space-between;
@@ -86,6 +104,7 @@
     padding: 10px;
     border-radius: 10px;
 }
+
 .channel_info:hover {
     background-color: #764d7e;
     transition: background-color .2s;
@@ -106,6 +125,7 @@
     height: 200px;
     overflow: auto;
 }
+
 .channel_details_users {
     display: flex;
     justify-content: space-between;
@@ -115,6 +135,7 @@
     border-radius: 10px;
     padding: 5px;
     margin-top: 5px;
+
     &_avatar {
         width: 50px;
         height: 50px;
@@ -125,6 +146,7 @@
 .cursor {
     cursor: pointer;
 }
+
 .active {
     background-color: #da2121;
     color: #d98fc8;
@@ -135,6 +157,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     &_btns {
         margin-left: 10px;
         position: relative;

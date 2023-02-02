@@ -2,34 +2,32 @@
 
 namespace App\Events;
 
+use App\Models\Detail\Detail;
+use App\Models\Channel\Channel as CustomChannel;
+use App\Models\User\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessageToChannel implements ShouldBroadcast
+class JoinToChannelEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $user;
-    protected $message;
-    protected $channelId;
-    protected $type;
+    public string $message;
+    public $channeId;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user, $message, $channelId, $type)
+    public function __construct($channeId, $message)
     {
-        $this->user = $user;
+        $this->channeId = $channeId;
         $this->message = $message;
-        $this->channelId = $channelId ;
-        $this->type = $type;
     }
 
     /**
@@ -37,12 +35,8 @@ class SendMessageToChannel implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel|PrivateChannel|array
     {
-        if ($this->type === 'channel') {
-            return new PresenceChannel("chat.channel.".$this->channelId);
-        } else if ($this->type === 'dm') {
-            return new PresenceChannel("chat.dm.".$this->channelId);
-        }
+        return new PrivateChannel("join-to-channel.".$this->channeId);
     }
 }

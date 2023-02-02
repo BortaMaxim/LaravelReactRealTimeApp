@@ -1,12 +1,16 @@
-import React, {useEffect} from 'react';
+import React, {memo, useEffect} from 'react';
 import {CustomSideBar} from "./CustomSideBar";
 import {useHistory} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {ProfileAction, StatusNotificationAction} from "../../redux/actions/authAction";
 import PropTypes from "prop-types";
+import {echoInstance} from "../../bootstrap";
 
-export const CustomNav = ({profile, logout}) => {
+export const CustomNav = memo(({profile, logout}) => {
     const history = useHistory()
+    const token = localStorage.getItem('user-token')
+    const echo = echoInstance(token)
+    useEffect(() => {
+        return () => echo.disconnect()
+    }, [echo])
 
     return (
         <nav className="navbar bg-secondary fixed-top">
@@ -31,7 +35,7 @@ export const CustomNav = ({profile, logout}) => {
             </div>
         </nav>
     )
-}
+})
 
 CustomNav.propTypes = {
     profile: PropTypes.object,

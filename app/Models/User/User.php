@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Channel\Channel;
 use App\Models\Message\Message;
 use App\Models\Relationships\Channel\BelongsToManyChannels;
 use App\Models\Relationships\Channel\BelongsToManyChannelsI;
@@ -36,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail, IResetPassword, B
     {
         return $this->hasMany(Message::class, 'recipient_id');
     }
+
 
     /**
      * The attributes that are mass assignable.

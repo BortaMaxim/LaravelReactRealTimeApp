@@ -1,12 +1,21 @@
-import React, {memo} from 'react';
+import React from 'react';
 import {useModal} from "../../../hooks/useModal";
 import {CreateChannel} from "../CreateChannel";
 import {CreateChannelForm} from "../../../Components/Channels/CreateChannelForm";
 import CreateChannelModal from "../../../Components/Details/Modal";
 import PropTypes from "prop-types";
 
-export const CreateChanelContainer = memo((props) => {
-    const {fields, createChannel, handleCheck, handleChange, getAllChannelsSelector, compareType, compareVisible} = props
+export const CreateChanelContainer = (props) => {
+
+    const {
+        fields,
+        createChannel,
+        handleCheck,
+        handleChange,
+        getAllChannelsSelector,
+        compareType,
+        compareVisible
+    } = props
     const {active, setActive} = useModal()
 
     return (
@@ -31,7 +40,7 @@ export const CreateChanelContainer = memo((props) => {
             </CreateChannelModal>
         </>
     )
-})
+}
 
 CreateChanelContainer.propTypes = {
     fields: PropTypes.object,

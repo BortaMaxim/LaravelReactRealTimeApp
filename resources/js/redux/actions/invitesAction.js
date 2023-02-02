@@ -1,6 +1,7 @@
 // import * as InviteActionTypes from '../types/inviteActionTypes'
 import {BASE_AUTH_URL, getAuthOptions, toastOptions} from '../utils'
 import {toast} from "react-toastify";
+import {GetAllPrivateChannelsAction} from "./channelAction";
 
 
 export const AcceptInviteAction = (inviteId, requestType, token) => async (dispatch) => {

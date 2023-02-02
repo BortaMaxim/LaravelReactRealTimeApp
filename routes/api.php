@@ -39,7 +39,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::post('join-channel/{channel_id}', [ChannelController::class, 'joinChannel']); //done
         Route::post('invite-to-channel', [ChannelController::class, 'inviteToChannel']); //done
         Route::post('make-request', [ChannelController::class, 'createInvite']);///Not yet
-        Route::get('accept-invite/{invite_id}', [ChannelController::class, 'acceptRequest']);
+        Route::get('accept-invite/{invite_id}', [ChannelController::class, 'acceptRequest']);//not done
         Route::get('notifications', [ChannelController::class, 'getNotifications']); //done
         Route::get('get-one-notification/{id}', [ChannelController::class, 'getOneNotification']); //done
         Route::get('mark-as-read', [ChannelController::class, 'markNotificationAsRead']); //done

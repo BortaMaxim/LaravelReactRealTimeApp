@@ -34,8 +34,6 @@ export const getAllChannelsReducer = (state = initialState, action) => {
                 privateChannels: state.privateChannels.filter((el) => el.id !== action.id)
             }
         case ChannelActionTypes.CHANNEL_CREATED_SUCCESS:
-            console.log('reducer', action.payload)
-            console.log('reducer publicChannels', state.publicChannels)
             return {
                 ...state,
                 loading: false,
@@ -48,8 +46,6 @@ export const getAllChannelsReducer = (state = initialState, action) => {
                 createChannelExeption: action.payload
             }
         case ChannelActionTypes.CREATE_PRIVATE_CHANNEL:
-            console.log('reducer private', action.payload)
-            console.log('reducer privateChannels', state.privateChannels)
             return {
                 ...state,
                 loading: false,

@@ -11,7 +11,7 @@ export const PrivateRoomList = (props) => {
                 cursor: 'pointer'
             }}
             className="list-group-item list-group-item-secondary p-2 mt-2 rounded-1 overflow-hidden"
-            onClick={() => setPrivateActiveRoom(el.id)}
+            onClick={() => setPrivateActiveRoom(el)}
         >
             {el.name}
         </div>

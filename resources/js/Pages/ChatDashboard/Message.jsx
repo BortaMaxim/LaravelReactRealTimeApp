@@ -25,7 +25,7 @@ export const Message = (props) => {
                 <p>
                     {el.message}
                 </p>
-                <small className="text-secondary position-absolute bottom-1 right-1">{el.created_at}</small>
+                <small className="text-secondary message_date">{el.created_at}</small>
             </div>
         </div>
     )

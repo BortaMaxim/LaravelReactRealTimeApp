@@ -26,6 +26,7 @@ class Channel extends Model implements BelongsToManyUsersI
                 'details.type as detail_type',
                 'details.visible');
         $activeChannel = $channel->with(['users'])->first();
+
         return response()->json([
             'modify' => false,
             'data' => $activeChannel
