@@ -91,7 +91,6 @@ export const ChannelsSelectAction = (channel, token) => async (dispatch, getStat
     let authUserId = getState().auth.profile.id
     let usersOfChannel = channel.users
     let foundedUser = usersOfChannel.find(user => user.id === authUserId)
-    console.log(channel)
 
     await axios.get(`${BASE_AUTH_URL}get-message-to/${channel.id}`, getAuthOptions(token))
         .then((res) => {

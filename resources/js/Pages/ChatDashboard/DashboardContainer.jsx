@@ -10,7 +10,7 @@ import {
     FetchConversationWithAction,
     FetchFriendsAction,
     FetchLastMessagesAction,
-    FetchLastMessageWithAction, GetNotificationsAction, MessageChatChannelAction,
+    FetchLastMessageWithAction, GetNotificationsAction, MessageChatChannelAction, SendChannelMessageAction,
     SendMessageToAction,
     SetMessageAction,
 } from "../../redux/actions/chatAction";
@@ -26,6 +26,7 @@ class DashboardContainer extends Component {
         super(props);
         this.state = {
             message: '',
+            message2: '',
             notification: new Audio('/sounds/facebookchat.mp3'),
         }
         this.startConversation = this.startConversation.bind(this)
@@ -33,6 +34,7 @@ class DashboardContainer extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
         this.scrollToBottom = this.scrollToBottom.bind(this)
+        this.sendChannelMessage = this.sendChannelMessage.bind(this)
     }
 
     token = localStorage.getItem('user-token')
@@ -51,7 +53,7 @@ class DashboardContainer extends Component {
         this.props.StatusNotificationAction(this.token)
         this.props.GetNotificationsAction(this.token)
         this.props.GetAllPrivateChannelsAction(this.token)
-        // this.props.channelSelect(1, null, this.token)
+        this.props.channelSelect(1, null, this.token)
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
@@ -78,6 +80,7 @@ class DashboardContainer extends Component {
 
     handleChange(e) {
         this.setState({
+            ...this.state,
             [e.target.name]: e.target.value
         })
     }
@@ -96,6 +99,15 @@ class DashboardContainer extends Component {
         })
     }
 
+    sendChannelMessage(e, channel) {
+        e.preventDefault()
+        if (!this.state.message2) return
+        this.props.SendChannelMessageAction(channel, this.state.message2, this.token)
+        this.setState({
+            message2: ''
+        })
+    }
+
     logout() {
         this.props.LogoutAction(this.token, this.props.history)
     }
@@ -108,6 +120,7 @@ class DashboardContainer extends Component {
                     profile={this.props.profile}
                 />
                 <Dashboard
+                    notifications={this.state.notification}
                     messagesEnd={this.messagesEnd}
                     friends={this.props.friends}
                     activeUserId={this.props.activeUserId}
@@ -116,10 +129,14 @@ class DashboardContainer extends Component {
                     lastMessages={this.props.lastMessages}
                     profile={this.props.profile}
                     sendMessage={this.sendMessage}
+                    sendChannelMessage={this.sendChannelMessage}
                     handleChange={this.handleChange}
-                    fields={this.state.message}
+                    message={this.state.message}
+                    message2={this.state.message2}
                     publicMessages={this.props.publicMessages}
                     privateMessages={this.props.privateMessages}
+                    publicChannel={this.props.publicChannel}
+                    privateChannel={this.props.privateChannel}
                 />
             </div>
         )
@@ -163,6 +180,8 @@ const mapStateToProps = (state) => ({
     message: state.message,
     publicMessages: state.roomMessages.publicMessages,
     privateMessages: state.roomMessages.privateMessages,
+    publicChannel: state.oneChannel,
+    privateChannel: state.onePrivateChannel,
 })
 
 const DashboardWithRouterContainer = withRouter(DashboardContainer)
@@ -184,4 +203,5 @@ export default connect(mapStateToProps, {
     GetNotificationsAction,
     joinToPublicChannel,
     channelSelect,
+    SendChannelMessageAction
 })(DashboardWithRouterContainer)

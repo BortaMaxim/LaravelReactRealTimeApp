@@ -1,6 +1,4 @@
 import React from 'react';
-import {ChatForm} from "./ChatForm";
-import {Message} from "./Message";
 import PropTypes from "prop-types";
 import {MessageContainer} from "./ContainersComponent/MessageContainer";
 
@@ -10,47 +8,36 @@ export const MessagesPanel = (props) => {
         profile,
         sendMessage,
         handleChange,
-        fields,
+        message,
+        message2,
         activeUserId,
         messagesEnd,
         publicMessages,
         privateMessages,
+        sendChannelMessage,
         recipient,
+        publicChannel,
+        privateChannel
     } = props
 
     return (
         <>
             <div className="p-2 w-100">
-                {
-                    chatMessages.length !== 0 || publicMessages.length !== 0 || privateMessages.length !== 0
-                        ? <>
-                            <div className="message_panel" ref={messagesEnd}>
-                                <MessageContainer
-                                    userMessages={chatMessages}
-                                    publicMessages={publicMessages}
-                                    privateMessages={privateMessages}
-                                    profile={profile}
-                                />
-                            </div>
-                            <ChatForm
-                                sendMessage={sendMessage}
-                                handleChange={handleChange}
-                                fields={fields}
-                            />
-                        </>
-                        : <div>
-                            <span>no messages...</span>
-                            {
-                                activeUserId !== 0 &&
-                                <ChatForm
-                                    sendMessage={sendMessage}
-                                    handleChange={handleChange}
-                                    fields={fields}
-                                />
-                            }
-                        </div>
-                }
-
+                <MessageContainer
+                    message={message}
+                    message2={message2}
+                    activeUserId={activeUserId}
+                    userMessages={chatMessages}
+                    publicMessages={publicMessages}
+                    privateMessages={privateMessages}
+                    profile={profile}
+                    sendMessage={sendMessage}
+                    sendChannelMessage={sendChannelMessage}
+                    handleChange={handleChange}
+                    messagesEnd={messagesEnd}
+                    publicChannel={publicChannel}
+                    privateChannel={privateChannel}
+                />
             </div>
         </>
     )

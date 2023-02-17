@@ -14,7 +14,7 @@ import {getOnePublicChannelReducer} from "./channel/getOnePublicChannelReducer";
 import {modifiedChannelReducer} from "./channel/modifiedChannelReducer";
 import {notificationReducer} from "./chat/notificationReducer";
 import {getOnePrivateChannelReducer} from "./channel/getOnePrivateChannelReducer";
-import {publicChannelMessagesReducer} from "./chat/publicChannelMessagesReducer";
+import {chanelMessagesReducer} from "./chat/сhanelMessagesReducer";
 import {toggleChannelMessagesReducer} from "./chat/toggleChannelMessagesReducer";
 
 
@@ -34,6 +34,6 @@ export const rootReducer = combineReducers({
     onePrivateChannel: getOnePrivateChannelReducer,
     modifyFlag: modifiedChannelReducer,
     notifications: notificationReducer,
-    roomMessages: publicChannelMessagesReducer,
+    roomMessages: chanelMessagesReducer,
     toggleMessages: toggleChannelMessagesReducer
 })

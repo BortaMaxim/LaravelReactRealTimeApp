@@ -6,9 +6,6 @@ import * as ChannelActionTypes from "../types/channelActionTypes";
 import {GetAllPrivateChannelsAction} from "./channelAction";
 
 
-export const echoPresenceInit = (token) => {
-    return echoInstance(token)
-}
 export const initNotificationAndEventChannels = (userId, token, dispatch) => {
     const echo = echoInstance(token)
     echo.private(`App.Models.User.User.${userId}`)
@@ -87,9 +84,16 @@ export const joinToPublicChannel = (userId, token) => async (dispatch) => {
 }
 
 export const channelSelect = (channelId, prevChannelId = null, token) => async (dispatch) => {
-    await echoPresenceInit(token).join(`chat.channel.${channelId}`)
+    const echo = echoInstance(token)
+    await echo.join(`chat.channel.${channelId}`)
+        .here((user) => {
+            console.log('here', user)
+        })
         .listen('SendMessageToChannel', (data) => {
-            console.log('listen,', data)
+            dispatch({
+                type: ChatActionTypes.SENT_PUBLIC_CHANNEL_MESSAGE,
+                payload: data.data
+            })
         })
         .listenForWhisper('typing', (event) => {
             console.log('listenForWhisper,', event)
@@ -97,15 +101,20 @@ export const channelSelect = (channelId, prevChannelId = null, token) => async (
 }
 
 export const dmSelect = (channelId, prevChannelId, token) => async (dispatch) => {
-    await echoPresenceInit(token).join(`chat.dm.${channelId}`)
+    const echo = echoInstance(token)
+    await echo.join(`chat.dm.${channelId}`)
         .here( (user) => {
             console.log('here private', user)
         })
         .joining((user) => {
             console.log('joining', user)
         })
-        .listen('', (data) => {
+        .listen('SendMessageToChannel', (data) => {
             console.log('listen', data)
+            dispatch({
+                type: ChatActionTypes.SENT_PRIVATE_CHANNEL_MESSAGE,
+                payload: data.data
+            })
         })
         .listenForWhisper('typing', (event) => {
             console.log('listenForWhisper,', event)

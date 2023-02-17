@@ -12,16 +12,19 @@ export const Dashboard = (props) => {
         lastMessages,
         profile,
         sendMessage,
+        sendChannelMessage,
         handleChange,
-        fields,
+        message,
+        message2,
         activeUserId,
         messagesEnd,
         publicMessages,
-        privateMessages
+        privateMessages,
+        publicChannel,
+        privateChannel,
+        notifications
     } = props
 
-    const publicChannel = useSelector(state => state.oneChannel)
-    const privateChannel = useSelector(state => state.onePrivateChannel)
     return (
         <div className="pt-lg-5">
             <div className="d-flex justify-content-center min-vw-100">
@@ -32,19 +35,23 @@ export const Dashboard = (props) => {
                         friends={friends}
                         isLoading={isLoading}
                         lastMessages={lastMessages}
+                        notifications={notifications}
                     />
                 </div>
                 <MessagesPanel
-                    publicChannel={publicChannel}
                     messagesEnd={messagesEnd}
                     activeUserId={activeUserId}
                     chatMessages={conversation}
                     profile={profile}
                     sendMessage={sendMessage}
+                    sendChannelMessage={sendChannelMessage}
                     handleChange={handleChange}
-                    fields={fields}
+                    message={message}
+                    message2={message2}
                     publicMessages={publicMessages}
                     privateMessages={privateMessages}
+                    privateChannel={privateChannel}
+                    publicChannel={publicChannel}
                 />
             </div>
         </div>

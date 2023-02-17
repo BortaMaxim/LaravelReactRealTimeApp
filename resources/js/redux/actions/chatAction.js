@@ -1,6 +1,7 @@
 import * as ChatActionTypes from '../types/chatActionTypes'
-import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
+import {BASE_AUTH_URL, getAuthOptions, postAuthOptions, toastOptions} from '../utils'
 import {TOGGLE_CHANNEL_MESSAGES} from "../types/chatActionTypes";
+import {toast} from "react-toastify";
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -117,6 +118,14 @@ export const GetOneNotificationAction = (id, token) => async (dispatch) => {
     await axios.get(`${BASE_AUTH_URL}get-one-notification/${id}`, getAuthOptions(token))
         .then(res => {
             dispatch({type: ChatActionTypes.GET_ONE_NOTIFICATION, payload: res.data.data})
+        })
+}
+
+export const SendChannelMessageAction = (channel, message, token) => async (dispatch) => {
+
+    await axios.post(`${BASE_AUTH_URL}send-message-to/${channel.id}`, {message2: message}, postAuthOptions(token))
+        .then(res => {
+            return res
         })
 }
 

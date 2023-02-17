@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
-export const ChatForm = ({sendMessage, fields, handleChange}) => {
+export const ChatForm = ({sendMessage, fields, handleChange, inputName}) => {
 
     return (
         <div className="w-100">
@@ -9,7 +9,7 @@ export const ChatForm = ({sendMessage, fields, handleChange}) => {
             <form onSubmit={sendMessage}>
                 <input
                     type="text"
-                    name="message"
+                    name={inputName}
                     className="form-control-lg w-100"
                     placeholder="write a message..."
                     value={fields || ''}

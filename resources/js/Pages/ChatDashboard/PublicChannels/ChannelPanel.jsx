@@ -22,7 +22,7 @@ import {PublicChannelsContainer} from "../ContainersComponent/PublicChannelsCont
 import {PrivateChannelsContainer} from "../PrivateChannels/PrivateChannelsContainer";
 import {useModal} from "../../../hooks/useModal";
 
-export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, privateChannel}) => {
+export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, privateChannel, notifications}) => {
     const {friendId, roomId, privateRoomId, setFriendId, handleActive} = useActive()
     const {open, setOpen} = useModal()
     const token = localStorage.getItem('user-token')

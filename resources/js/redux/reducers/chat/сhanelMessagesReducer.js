@@ -5,7 +5,7 @@ let initialState = {
     privateMessages: []
 }
 
-export const publicChannelMessagesReducer = (state = initialState, action) => {
+export const chanelMessagesReducer = (state = initialState, action) => {
     switch (action.type) {
         case ChatActionTypes.FETCH_PUBLIC_CHANNEL_MESSAGES:
             return {
@@ -16,6 +16,16 @@ export const publicChannelMessagesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 privateMessages: action.payload
+            }
+        case ChatActionTypes.SENT_PUBLIC_CHANNEL_MESSAGE:
+            return {
+                ...state,
+                publicMessages: [...state.publicMessages, action.payload]
+            }
+        case ChatActionTypes.SENT_PRIVATE_CHANNEL_MESSAGE:
+            return {
+                ...state,
+                privateMessages: [...state.privateMessages, action.payload]
             }
         default:
             return state

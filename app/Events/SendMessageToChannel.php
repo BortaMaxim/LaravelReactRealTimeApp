@@ -16,20 +16,28 @@ class SendMessageToChannel implements ShouldBroadcast
 
     protected $user;
     protected $message;
-    protected $channelId;
     protected $type;
+    private $data;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user, $message, $channelId, $type)
+    public function __construct($user, $message, $type)
     {
         $this->user = $user;
         $this->message = $message;
-        $this->channelId = $channelId ;
         $this->type = $type;
+        $this->message->user = $this->user;
+        $this->data = $this->message->toArray();
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'data' => $this->data,
+        ];
     }
 
     /**
@@ -40,9 +48,9 @@ class SendMessageToChannel implements ShouldBroadcast
     public function broadcastOn()
     {
         if ($this->type === 'channel') {
-            return new PresenceChannel("chat.channel.".$this->channelId);
+            return new PresenceChannel("chat.channel.".$this->message->channel_id);
         } else if ($this->type === 'dm') {
-            return new PresenceChannel("chat.dm.".$this->channelId);
+            return new PresenceChannel("chat.dm.".$this->message->channel_id);
         }
     }
 }
