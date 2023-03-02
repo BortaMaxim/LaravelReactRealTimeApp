@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->unsigned();
             $table->text('message');
             $table->integer('channel_id')->unsigned();
+            $table->dateTime('read')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

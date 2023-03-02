@@ -48,9 +48,9 @@ class SendMessageToChannel implements ShouldBroadcast
     public function broadcastOn()
     {
         if ($this->type === 'channel') {
-            return new PresenceChannel("chat.channel.".$this->message->channel_id);
+            return new PrivateChannel("chat.channel." . $this->message->channel_id);
         } else if ($this->type === 'dm') {
-            return new PresenceChannel("chat.dm.".$this->message->channel_id);
+            return new PrivateChannel("chat.dm." . $this->message->channel_id);
         }
     }
 }

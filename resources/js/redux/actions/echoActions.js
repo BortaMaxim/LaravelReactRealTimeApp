@@ -83,13 +83,21 @@ export const joinToPublicChannel = (userId, token) => async (dispatch) => {
         })
 }
 
-export const channelSelect = (channelId, prevChannelId = null, token) => async (dispatch) => {
+export const EchoChannelSelect = (channelId, prevChannelId, token) => async (dispatch, getState) => {
     const echo = echoInstance(token)
-    await echo.join(`chat.channel.${channelId}`)
-        .here((user) => {
-            console.log('here', user)
-        })
+    console.log('channelId', channelId)
+    console.log('prevChannelId', prevChannelId)
+    // if (prevChannelId !== null && prevChannelId.id !== channelId) {
+    //     echo.leave(`chat.${prevChannelId.type}.${prevChannelId.id}`)
+    //     console.log('leave')
+    // } else {
+    //
+    //     console.log(false)
+    // }
+    await echo.private(`chat.channel.${channelId}`)
         .listen('SendMessageToChannel', (data) => {
+            console.log('event data', data)
+            // let id = parseInt(data.data.channel_id)
             dispatch({
                 type: ChatActionTypes.SENT_PUBLIC_CHANNEL_MESSAGE,
                 payload: data.data
@@ -100,15 +108,9 @@ export const channelSelect = (channelId, prevChannelId = null, token) => async (
         })
 }
 
-export const dmSelect = (channelId, prevChannelId, token) => async (dispatch) => {
+export const EchoDmSelect = (channelId, token) => async (dispatch) => {
     const echo = echoInstance(token)
-    await echo.join(`chat.dm.${channelId}`)
-        .here( (user) => {
-            console.log('here private', user)
-        })
-        .joining((user) => {
-            console.log('joining', user)
-        })
+    await echo.private(`chat.dm.${channelId}`)
         .listen('SendMessageToChannel', (data) => {
             console.log('listen', data)
             dispatch({

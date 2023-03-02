@@ -1,7 +1,5 @@
 import * as ChatActionTypes from '../types/chatActionTypes'
-import {BASE_AUTH_URL, getAuthOptions, postAuthOptions, toastOptions} from '../utils'
-import {TOGGLE_CHANNEL_MESSAGES} from "../types/chatActionTypes";
-import {toast} from "react-toastify";
+import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -92,7 +90,8 @@ export const MessageChatChannelAction = (echo, token, profileId, notification) =
     echo.private(`user-channel.${profileId}`)
         .listen('MessageEvent', (event) => {
             let msg = event.message
-            if (msg.sender_id === getState().activeUserId) {
+            let activeUserId = getState().activeUserId
+            if (msg.sender_id === activeUserId) {
                 dispatch(FetchConversationWithAction(msg.sender_id, token, true))
             } else {
                 dispatch(FetchLastMessageWithAction(msg.sender_id, token))

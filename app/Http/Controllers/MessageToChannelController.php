@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\SendMessageToChannel;
+use App\Helpers\Conversation;
 use App\Models\Channel\Channel;
 use App\Models\Message2s\Message2;
 use App\Models\User\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageToChannelController extends Controller
 {
@@ -23,9 +26,16 @@ class MessageToChannelController extends Controller
         broadcast(new SendMessageToChannel($authUser, $messageCreated, $foundedChannel->type));
     }
 
-    public function getMessages($channelId)
+    /**
+     * @throws \Exception
+     */
+    public function getMessages(Channel $channel)
     {
-
-        return Message2::where('channel_id', $channelId)->with('user.details')->get();
+        $messages = Message2::where('channel_id', $channel->id)->with('user.details')->get();
+        foreach ($messages as $message) {
+            $message->read = Carbon::now()->format('Y-m-d H:i:s');
+            $message->save();
+        }
+        return $messages;
     }
 }

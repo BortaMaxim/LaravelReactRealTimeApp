@@ -68,6 +68,7 @@ class ConversationController extends ApiController
             ->where('read', null)
             ->where('recipient_id', Auth::id())
             ->get();
+
         return $unread_messages_count->count();
     }
 }

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 export const Message = (props) => {
     const {el, profile} = props
     let profileIdComparison = profile.id === el.sender_id || !el.sender_id
-    let isSent = el.read === null ? '' : (<small>&#10003;&#10003;<strong>{el.read}</strong></small>);
+    let isSent = el.read === null ? '' : (<small className="text-secondary message_date">&#10003;&#10003;<strong>{el.read}</strong></small>);
 
     return (
         <div className="w-100 mt-3 position-relative p-2 d-flex"
@@ -14,7 +14,7 @@ export const Message = (props) => {
                 style={{
                     backgroundColor: profileIdComparison ? `#e2e8f0` : '#7ae572',
                 }}>
-                {isSent}
+
                 {
                     profileIdComparison
                     && <div>
@@ -25,7 +25,7 @@ export const Message = (props) => {
                 <p>
                     {el.message}
                 </p>
-                <small className="text-secondary message_date">{el.created_at}</small>
+                {isSent}
             </div>
         </div>
     )

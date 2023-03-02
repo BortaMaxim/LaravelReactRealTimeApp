@@ -21,9 +21,22 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 
 import Echo from 'laravel-echo';
+import {io} from 'socket.io-client'
 
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
+
+export const socket = (token) => {
+    return io({
+        withCredentials: true,
+        auth: {
+            token: 'Bearer ' + token
+        },
+        query: {
+            key: import.meta.env.VITE_PUSHER_APP_KEY
+        }
+    })
+}
 
 export const echoInstance = (token) => {
     return new Echo({
@@ -42,4 +55,5 @@ export const echoInstance = (token) => {
         }
     });
 }
+
 

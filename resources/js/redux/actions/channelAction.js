@@ -3,7 +3,7 @@ import * as ChatActionTypes from '../types/chatActionTypes'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, postAuthOptions, toastOptions} from '../utils'
 import {toast} from 'react-toastify'
-import {channelSelect, dmSelect} from "./echoActions";
+import {EchoChannelSelect, EchoDmSelect} from "./echoActions";
 
 
 export const CreateChannelAction = (formData, token) => async (dispatch) => {
@@ -87,9 +87,9 @@ export const InviteToChannelAction = (data, token) => async (dispatch) => {
 }
 
 export const ChannelsSelectAction = (channel, token) => async (dispatch, getState) => {
-    let prevChannelId = getState().oneChannel
     let authUserId = getState().auth.profile.id
     let usersOfChannel = channel.users
+    let prevChannel = getState().oneChannel
     let foundedUser = usersOfChannel.find(user => user.id === authUserId)
 
     await axios.get(`${BASE_AUTH_URL}get-message-to/${channel.id}`, getAuthOptions(token))
@@ -100,7 +100,7 @@ export const ChannelsSelectAction = (channel, token) => async (dispatch, getStat
                         dispatch({type: ChatActionTypes.TOGGLE_CHANNEL_MESSAGES, payload: 'publicMessages'})
                         dispatch({type: ChatActionTypes.FETCH_PUBLIC_CHANNEL_MESSAGES, payload: res.data})
                         if (foundedUser !== undefined) {
-                            dispatch(channelSelect(channel.id, prevChannelId, token))
+                            dispatch(EchoChannelSelect(channel.id, prevChannel, token))
                         } else {
                             toast.success('you must join to the channel!', toastOptions('top-right'))
                         }
@@ -111,7 +111,7 @@ export const ChannelsSelectAction = (channel, token) => async (dispatch, getStat
                         dispatch({type: ChatActionTypes.TOGGLE_CHANNEL_MESSAGES, payload: 'privateMessages'})
                         dispatch({type: ChatActionTypes.FETCH_PRIVATE_CHANNEL_MESSAGES, payload: res.data})
                         if (foundedUser !== undefined) {
-                            dispatch(dmSelect(channel.id, prevChannelId, token))
+                            dispatch(EchoDmSelect(channel.id, token))
                         } else {
                             toast.success('you must join to the private channel!', toastOptions('top-right'))
                         }

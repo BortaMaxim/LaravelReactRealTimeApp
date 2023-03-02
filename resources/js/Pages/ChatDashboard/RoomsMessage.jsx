@@ -4,6 +4,7 @@ import {URL} from "../../redux/utils";
 export const RoomsMessage = (props) => {
     const {el, profile} = props
     const compareUserId = el.user.id === profile.id
+    let isSent = el.read === undefined || el.read === null ? '' : (<small className="text-secondary message_date"><strong>{el.read}</strong>&#10003;&#10003;</small>);
 
     return (
         <div
@@ -14,7 +15,7 @@ export const RoomsMessage = (props) => {
                 <img className="message_img" src={`${URL}/avatars/${el.user.avatar}`} alt={el.user.name}/>
                 <strong>{el.user.name}</strong>
                 <p>{el.message}</p>
-                <small className="text-secondary message_date">{el.created_at}</small>
+                { isSent }
             </div>
         </div>
     )

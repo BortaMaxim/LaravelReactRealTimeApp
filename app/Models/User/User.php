@@ -9,8 +9,8 @@ use App\Models\Relationships\Channel\BelongsToManyChannels;
 use App\Models\Relationships\Channel\BelongsToManyChannelsI;
 use App\Models\Relationships\Detail\HasOneDetail;
 use App\Models\Relationships\Detail\HasOneDetailI;
-use App\Models\Relationships\Message\HasManyMessages;
-use App\Models\Relationships\Message\HasManyMessagesI;
+use App\Models\Relationships\Message\Messages2;
+use App\Models\Relationships\Message\Messages2I;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as IResetPassword;
@@ -20,9 +20,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail, IResetPassword, BelongsToManyChannelsI, HasOneDetailI, HasManyMessagesI
+class User extends Authenticatable implements MustVerifyEmail, IResetPassword, BelongsToManyChannelsI, HasOneDetailI, Messages2I
 {
-    use HasApiTokens, HasFactory, Notifiable, CanResetPassword, BelongsToManyChannels, HasOneDetail, HasManyMessages;
+    use HasApiTokens, HasFactory, Notifiable, CanResetPassword, BelongsToManyChannels, HasOneDetail, Messages2;
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail);

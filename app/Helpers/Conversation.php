@@ -6,11 +6,14 @@ use App\Models\User\User;
 
 class Conversation
 {
-    public User $sender;
-    public User $recipient;
+    public $sender;
+    public $recipient;
 
 
-    public function __construct(User $sender, User $recipient)
+    /**
+     * @throws \Exception
+     */
+    public function __construct($sender, $recipient)
     {
         if ($recipient->id === $sender->id)
             throw new \Exception("Sender and recipient can't be the same person", 1);
@@ -36,16 +39,13 @@ class Conversation
         }
 
         $received = $received->get();
-
         $messages = $sent->merge($received)->sortByDesc('created_at');
-
         return array_reverse($messages->values()->toArray());
     }
 
     public function lastMessage()
     {
         $messages = $this->messages(2);
-
         return (count($messages) ? $messages[count($messages) - 1] : []);
     }
 }

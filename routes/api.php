@@ -49,7 +49,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('get-channel/{channel_id}', [ChannelController::class, 'getOneChannel']); //done
         Route::get('get-private-channel/{channel_id}', [ChannelController::class, 'getOnePrivateChannel']); //done
         Route::post('send-message-to/{channel_id}', [MessageToChannelController::class, 'sendMessageTo']);
-        Route::get('get-message-to/{channel_id}', [MessageToChannelController::class, 'getMessages']);
+        Route::get('get-message-to/{channel}', [MessageToChannelController::class, 'getMessages']);
         Route::get('get-friend-list', [FriendsController::class, 'getFriendList']);///Not yet
     });
 });

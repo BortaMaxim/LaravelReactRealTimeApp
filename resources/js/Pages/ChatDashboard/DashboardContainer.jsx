@@ -10,7 +10,10 @@ import {
     FetchConversationWithAction,
     FetchFriendsAction,
     FetchLastMessagesAction,
-    FetchLastMessageWithAction, GetNotificationsAction, MessageChatChannelAction, SendChannelMessageAction,
+    FetchLastMessageWithAction,
+    GetNotificationsAction,
+    MessageChatChannelAction,
+    SendChannelMessageAction,
     SendMessageToAction,
     SetMessageAction,
 } from "../../redux/actions/chatAction";
@@ -18,7 +21,7 @@ import EventBus from "../../EventBus";
 import {echoInstance} from "../../bootstrap";
 import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channelAction";
 import PropTypes from "prop-types";
-import {channelSelect, joinToPublicChannel} from "../../redux/actions/echoActions";
+import {EchoChannelSelect, joinToPublicChannel} from "../../redux/actions/echoActions";
 
 
 class DashboardContainer extends Component {
@@ -53,12 +56,13 @@ class DashboardContainer extends Component {
         this.props.StatusNotificationAction(this.token)
         this.props.GetNotificationsAction(this.token)
         this.props.GetAllPrivateChannelsAction(this.token)
-        this.props.channelSelect(1, null, this.token)
+
 
         if (this.token !== undefined)
             this.props.ProfileAction(this.token).then(() => {
                 this.props.MessageChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
                 this.props.joinToPublicChannel(this.props.profile.id, this.token)
+                // this.props.EchoChannelSelect(1, null, this.token)
             })
         this.scrollToBottom()
     }
@@ -202,6 +206,6 @@ export default connect(mapStateToProps, {
     StatusNotificationAction,
     GetNotificationsAction,
     joinToPublicChannel,
-    channelSelect,
+    EchoChannelSelect,
     SendChannelMessageAction
 })(DashboardWithRouterContainer)

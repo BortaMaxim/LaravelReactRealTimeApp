@@ -15,6 +15,7 @@ class Message extends Model implements BelongsToUserI
     use HasFactory, SoftDeletes, BelongsToUser;
 
     protected $guarded = [];
+    protected $hidden = ['created_at', 'updated_at'];
 
     function scopeTo($query, User $to)
     {
@@ -28,7 +29,7 @@ class Message extends Model implements BelongsToUserI
 
     function scopeRead($query)
     {
-        $now = Carbon::now();
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         $copy = $query;
         $copy->update(["read" => $now]);
         return $query;
