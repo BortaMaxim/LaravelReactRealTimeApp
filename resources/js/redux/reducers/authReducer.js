@@ -7,6 +7,7 @@ let initialState = {
     profile: {},
     passwordResetToken: {},
     errorResponse: {},
+    onlineUsers: []
 }
 
 export const authReducer = (state = initialState, action) => {
@@ -112,6 +113,17 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 errorResponse: action.payload
+            }
+        case AuthActionTypes.ONLINE_CHAT_USERS:
+            return {
+                ...state,
+                onlineUsers: action.payload
+            }
+        case AuthActionTypes.REMOVE_USER_AFTER_LOGGED_OUT:
+            let authUser = state.onlineUsers.filter((user) => user.id !== action.payload.id)
+            return {
+                ...state,
+                onlineUsers: authUser
             }
         default:
             return state

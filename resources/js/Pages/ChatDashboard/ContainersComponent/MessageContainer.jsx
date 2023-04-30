@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useEffect} from 'react';
 import {useSelector} from "react-redux";
 import {PublicMessagesContainer} from "./PublicMessagesContainer";
 import {PrivateMessagesContainer} from "./PrivateMessagesContainer";
@@ -11,16 +11,12 @@ export const MessageContainer = (props) => {
         privateMessages,
         profile,
         messagesEnd,
-        sendMessage,
-        sendChannelMessage,
-        handleChange,
-        message,
-        message2,
         activeUserId,
         publicChannel,
         privateChannel
     } = props
     const channelsType = useSelector(state => state.toggleMessages)
+    // const publicMessages = useSelector(state => state.publicRoomMessages.publicMessages)
 
     return (
         <>
@@ -28,14 +24,10 @@ export const MessageContainer = (props) => {
                 channelsType === 'userChannel' && channelsType !== '' &&
                 <UserMessagesContainer
                     userMessages={userMessages}
-                    sendMessage={sendMessage}
-                    message={message}
-                    handleChange={handleChange}
                     activeUserId={activeUserId}
                     profile={profile}
                     messagesEnd={messagesEnd}
                 />
-
             }
             {
                 channelsType === 'publicMessages' && channelsType !== '' &&
@@ -43,9 +35,6 @@ export const MessageContainer = (props) => {
                     publicMessages={publicMessages}
                     profile={profile}
                     messagesEnd={messagesEnd}
-                    message2={message2}
-                    sendChannelMessage={sendChannelMessage}
-                    handleChange={handleChange}
                     publicChannel={publicChannel}
                 />
             }
@@ -53,9 +42,6 @@ export const MessageContainer = (props) => {
                 channelsType === 'privateMessages' && channelsType !== '' &&
                 <PrivateMessagesContainer
                     privateMessages={privateMessages}
-                    message2={message2}
-                    sendChannelMessage={sendChannelMessage}
-                    handleChange={handleChange}
                     privateChannel={privateChannel}
                     profile={profile}
                     messagesEnd={messagesEnd}/>

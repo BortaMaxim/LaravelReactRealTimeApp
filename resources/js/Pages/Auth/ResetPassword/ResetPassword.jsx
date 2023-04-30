@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {authSelector} from "../../../selectors/auth/authSelector";
 import {useDispatch} from "react-redux";
-import {PasswordResetTokenAction, ResetPasswordAction} from "../../../redux/actions/authAction";
+import {PasswordResetTokenAction, ResetPasswordAction} from "../../../redux/actions/auth/authAction";
 import {useForm} from "../../../hooks/useForm";
 import {CustomSpinner} from "../../../Components/Details/CustomSpinner";
 import {Link} from "react-router-dom";

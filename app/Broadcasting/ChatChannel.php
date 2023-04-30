@@ -23,12 +23,6 @@ class ChatChannel
         $foundedChannel = array_search($channelId, array_column($channelUsers, 'id', 'id'));
         return $foundedChannel == $channelId;
 
-//        if($channelId == 1) {
-//            return $user;
-//        } else {
-//            return User::where('id', $user->id)
-//                ->whereHas('channels', fn($q) => $q->where('channel_id', $channelId))
-//                ->first();
-//        }
+//         return $user->getPresenceChannelUsers($user, $channelId);
     }
 }

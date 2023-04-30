@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {ProfileAction, UpdateProfileAction} from "../../redux/actions/authAction";
+import {ProfileAction, UpdateProfileAction} from "../../redux/actions/auth/authAction";
 import {authSelector} from "../../selectors/auth/authSelector";
 import {CustomSpinner} from "../../Components/Details/CustomSpinner";
 import {ProfileLeft} from "./ProfileLeft";

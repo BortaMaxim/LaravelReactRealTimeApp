@@ -1,4 +1,4 @@
-import * as ChannelActionTypes from '../../types/channelActionTypes'
+import * as ChannelActionTypes from '../../../types/channelActionTypes'
 
 let initialState = {
     loading: false,

@@ -10,7 +10,7 @@ export const PublicChannelsContainer = (props) => {
         publicChannel,
         joinToChannel,
         profile, deleteChannel,
-        compairedOwnerId,
+        comparedOwnerId,
         userChoice,
         inviteToChannel,
         setOpen,
@@ -19,8 +19,6 @@ export const PublicChannelsContainer = (props) => {
     } = props
 
     const users = useSelector((state) => state.chat.friends)
-
-
     return (
         <>
             <PublicChannelPanel
@@ -42,7 +40,7 @@ export const PublicChannelsContainer = (props) => {
                     setOpen={setOpen}
                     publicChannel={publicChannel}
                     deleteChannel={deleteChannel}
-                    compairedOwnerId={compairedOwnerId}
+                    compairedOwnerId={comparedOwnerId}
                 />
             </ModalChannelDetails>
         </>
@@ -56,7 +54,7 @@ PublicChannelsContainer.propTypes = {
     userChoice: PropTypes.func.isRequired,
     inviteToChannel: PropTypes.func.isRequired,
     setOpen: PropTypes.func.isRequired,
-    compairedOwnerId: PropTypes.bool,
+    comparedOwnerId: PropTypes.bool,
     friendId: PropTypes.any,
     open: PropTypes.bool,
 }

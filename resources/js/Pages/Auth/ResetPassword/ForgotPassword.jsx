@@ -2,7 +2,7 @@ import React from 'react';
 import {useHistory} from "react-router-dom";
 import {useForm} from "../../../hooks/useForm";
 import {authSelector} from "../../../selectors/auth/authSelector";
-import {ForgotPasswordAction} from "../../../redux/actions/authAction";
+import {ForgotPasswordAction} from "../../../redux/actions/auth/authAction";
 import {CustomSpinner} from "../../../Components/Details/CustomSpinner";
 
 export const ForgotPassword = () => {

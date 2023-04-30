@@ -6,15 +6,10 @@ export const MessagesPanel = (props) => {
     const {
         chatMessages,
         profile,
-        sendMessage,
-        handleChange,
-        message,
-        message2,
         activeUserId,
         messagesEnd,
         publicMessages,
         privateMessages,
-        sendChannelMessage,
         recipient,
         publicChannel,
         privateChannel
@@ -24,16 +19,11 @@ export const MessagesPanel = (props) => {
         <>
             <div className="p-2 w-100">
                 <MessageContainer
-                    message={message}
-                    message2={message2}
                     activeUserId={activeUserId}
                     userMessages={chatMessages}
                     publicMessages={publicMessages}
                     privateMessages={privateMessages}
                     profile={profile}
-                    sendMessage={sendMessage}
-                    sendChannelMessage={sendChannelMessage}
-                    handleChange={handleChange}
                     messagesEnd={messagesEnd}
                     publicChannel={publicChannel}
                     privateChannel={privateChannel}
@@ -46,8 +36,6 @@ export const MessagesPanel = (props) => {
 MessagesPanel.propTypes = {
     chatMessages: PropTypes.array,
     profile: PropTypes.object,
-    sendMessage: PropTypes.func.isRequired,
-    handleChange: PropTypes.func.isRequired,
     fields: PropTypes.string,
     activeUserId: PropTypes.number,
     messagesEnd: PropTypes.object,

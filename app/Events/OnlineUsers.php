@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,29 +11,39 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OnlineUsers
+class OnlineUsers implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public object $users;
+    private int $count;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($users, $count)
     {
-        $this->user = $user;
+        $this->users = $users;
+        $this->count = $count;
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'online-users' => $this->users,
+            'online-users-count' => $this->count,
+        ];
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|PresenceChannel|array
      */
     public function broadcastOn(): Channel|PresenceChannel|array
     {
-        return new PresenceChannel('chat');
+        return new PrivateChannel('chat');
     }
 }

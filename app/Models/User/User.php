@@ -18,6 +18,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail, IResetPassword, BelongsToManyChannelsI, HasOneDetailI, Messages2I
@@ -38,6 +39,16 @@ class User extends Authenticatable implements MustVerifyEmail, IResetPassword, B
         return $this->hasMany(Message::class, 'recipient_id');
     }
 
+    public function getPresenceChannelUsers(User $user,  $channelId)
+    {
+        if ($channelId == 1) {
+            return $user;
+        } else {
+            return static::where('id', $user->id)
+                ->whereHas('channels', fn($q) => $q->where('channel_id', $channelId))
+                ->first();
+        }
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -3,7 +3,7 @@ import {AuthForm} from "../../../Components/Auth/AuthForm";
 import {useHistory} from "react-router-dom";
 import {authSelector} from "../../../selectors/auth/authSelector";
 import {useForm} from "../../../hooks/useForm";
-import {LoginAction} from "../../../redux/actions/authAction";
+import {LoginAction} from "../../../redux/actions/auth/authAction";
 
 export const LoginContainer = () => {
     const history = useHistory()

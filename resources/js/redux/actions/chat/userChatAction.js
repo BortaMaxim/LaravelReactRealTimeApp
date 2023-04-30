@@ -1,5 +1,5 @@
-import * as ChatActionTypes from '../types/chatActionTypes'
-import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../utils'
+import * as ChatActionTypes from '../../types/chatActionTypes'
+import {BASE_AUTH_URL, getAuthOptions, postAuthOptions} from '../../utils'
 
 export const FetchFriendsAction = (token) => async (dispatch) => {
     dispatch({type: ChatActionTypes.IS_FETCHING_FRIENDS})
@@ -47,7 +47,6 @@ export const FetchConversationWithAction = (id, token, force = false) => (dispat
 export const FetchLastMessageWithAction = (id, token) => async (dispatch) =>
     await new Promise(async (resolve, reject) => {
         await axios.get(`${BASE_AUTH_URL}conversation/last/${id}`, getAuthOptions(token)).then(res => {
-
             dispatch({
                 type: ChatActionTypes.FETCH_LAST_MESSAGE_WITH,
                 payload: {
@@ -120,12 +119,5 @@ export const GetOneNotificationAction = (id, token) => async (dispatch) => {
         })
 }
 
-export const SendChannelMessageAction = (channel, message, token) => async (dispatch) => {
-
-    await axios.post(`${BASE_AUTH_URL}send-message-to/${channel.id}`, {message2: message}, postAuthOptions(token))
-        .then(res => {
-            return res
-        })
-}
 
 

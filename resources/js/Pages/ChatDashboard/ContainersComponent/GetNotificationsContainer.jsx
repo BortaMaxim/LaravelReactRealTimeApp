@@ -5,11 +5,11 @@ import {useModal} from "../../../hooks/useModal";
 import NotificationModal from '../../../Components/Details/Modal'
 import NotificationDetailsModal from '../../../Components/Details/Modal'
 import {NotificationsList} from "../NotificationsList";
-import {DeleteNotificationAction, MarkAsReadNotificationsAction} from "../../../redux/actions/authAction";
+import {DeleteNotificationAction, MarkAsReadNotificationsAction} from "../../../redux/actions/auth/authAction";
 import {NotificationDetails} from "../../../Components/Notifications/NotificationDetails";
-import {GetOneNotificationAction} from "../../../redux/actions/chatAction";
+import {GetOneNotificationAction} from "../../../redux/actions/chat/userChatAction";
 import PropTypes from "prop-types";
-import {AcceptInviteAction} from "../../../redux/actions/invitesAction";
+import {AcceptInviteAction} from "../../../redux/actions/invites/invitesAction";
 
 export const GetNotificationsContainer = (props) => {
     const {profile} = props

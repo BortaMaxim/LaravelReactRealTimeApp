@@ -19,7 +19,7 @@ class BaseChannel
     /**
      * Authenticate the user's access to the channel.
      *
-     * @param \App\Models\User\User $user
+     * @param User $user
      * @return User
      */
     public function join(User $user): User

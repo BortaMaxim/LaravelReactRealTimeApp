@@ -1,4 +1,4 @@
-import * as ChatActionTypes from '../../types/chatActionTypes'
+import * as ChatActionTypes from '../../../types/chatActionTypes'
 
 
 export const unreadMessagesCountReducer = (state = 0, action) => {

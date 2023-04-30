@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
-export const ChatForm = ({sendMessage, fields, handleChange, inputName}) => {
+export const ChatForm = ({sendMessage, handleChange, inputName, fields}) => {
 
     return (
         <div className="w-100">

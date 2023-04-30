@@ -1,4 +1,4 @@
-import * as ChatActionTypes from '../../types/chatActionTypes'
+import * as ChatActionTypes from '../../../types/chatActionTypes'
 
 
 export const messageReducer = (state = '', action) => {

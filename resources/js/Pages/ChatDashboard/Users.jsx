@@ -2,13 +2,22 @@ import React from 'react';
 import {UsersList} from "./UsersList";
 import PropTypes from "prop-types";
 import {RecipientAvatar} from "./RecipientAvatar";
+import {OnlineUsersContainer} from "./ContainersComponent/OnlineUsersContainer";
+import useSearch from "../../hooks/useSearch";
+import {UsersListContainer} from "./ContainersComponent/UsersListContainer";
 
 export const Users = (props) => {
-    const {isLoading, users, unreadMessagesCount, lastMessages, handleActive, friendId, recipient} = props
-
+    const {isLoading, users, unreadMessagesCount, lastMessages, handleActive, friendId, recipient, onlineUsers} = props
     return (
         <>
-            <h1 className="text-light">Users:</h1>
+            <div className="row">
+                <div className="col-4">
+                    <h4 className="text-light">Users:</h4>
+                </div>
+                <div className="col-4">
+                    <OnlineUsersContainer onlineUsers={onlineUsers}/>
+                </div>
+            </div>
             {
                 friendId !== ''
                 && <RecipientAvatar
@@ -19,27 +28,13 @@ export const Users = (props) => {
             {
                 isLoading === true
                     ? <span className="text-white">loading...</span>
-                    : <>
-                        {
-                            users.length !== 0
-                                ? <div className="channel">
-                                    {
-                                        users.map(el => (
-                                            <UsersList
-                                                unreadMessagesCount={unreadMessagesCount}
-                                                lastMessage={lastMessages[el.id]}
-                                                key={el.id}
-                                                el={el}
-                                                handleActive={handleActive}
-                                                friendId={friendId}
-                                            />
-
-                                        ))
-                                    }
-                                </div>
-                                : <span>No Users...</span>
-                        }
-                    </>
+                    : <UsersListContainer
+                        users={users}
+                        unreadMessagesCount={unreadMessagesCount}
+                        lastMessages={lastMessages}
+                        handleActive={handleActive}
+                        friendId={friendId}
+                    />
             }
         </>
     )
@@ -53,4 +48,5 @@ Users.propTypes = {
     handleActive: PropTypes.func.isRequired,
     friendId: PropTypes.any,
     recipient: PropTypes.object,
+    onlineUsers: PropTypes.array,
 }

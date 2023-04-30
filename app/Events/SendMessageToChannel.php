@@ -7,16 +7,17 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessageToChannel implements ShouldBroadcast
+class SendMessageToChannel implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $user;
     protected $message;
-    protected $type;
+    protected $channel;
     private $data;
 
     /**
@@ -24,11 +25,11 @@ class SendMessageToChannel implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($user, $message, $type)
+    public function __construct($user, $message, $channel)
     {
         $this->user = $user;
         $this->message = $message;
-        $this->type = $type;
+        $this->channel = $channel;
         $this->message->user = $this->user;
         $this->data = $this->message->toArray();
     }
@@ -37,6 +38,7 @@ class SendMessageToChannel implements ShouldBroadcast
     {
         return [
             'data' => $this->data,
+            'channel' => $this->channel
         ];
     }
 
@@ -47,10 +49,10 @@ class SendMessageToChannel implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        if ($this->type === 'channel') {
-            return new PrivateChannel("chat.channel." . $this->message->channel_id);
-        } else if ($this->type === 'dm') {
-            return new PrivateChannel("chat.dm." . $this->message->channel_id);
+        if ($this->channel->channel_type === 'channel') {
+            return new PrivateChannel("chat.channel." . $this->data['channel_id']);
+        } else if ($this->channel->channel_type === 'dm') {
+            return new PrivateChannel("chat.dm." . $this->data['channel_id']);
         }
     }
 }

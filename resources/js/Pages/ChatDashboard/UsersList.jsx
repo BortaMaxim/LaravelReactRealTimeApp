@@ -1,5 +1,5 @@
 import React from 'react';
-import {FetchConversationWithAction} from "../../redux/actions/chatAction";
+import {FetchConversationWithAction} from "../../redux/actions/chat/userChatAction";
 import {useDispatch} from "react-redux";
 import PropTypes from "prop-types";
 

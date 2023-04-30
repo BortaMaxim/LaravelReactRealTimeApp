@@ -7,7 +7,7 @@ export const PrivateMessages = (props) => {
         <>
             {
                 privateMessages !== 0
-                && privateMessages.map((el, idx) => <RoomsMessage key={idx} el={el} profile={profile}/>)
+                && privateMessages.map((el, idx) => <RoomsMessage key={idx.toString()} el={el} profile={profile}/>)
             }
         </>
     )

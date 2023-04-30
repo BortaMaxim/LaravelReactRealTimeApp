@@ -1,9 +1,8 @@
 import React, {Component, createRef} from 'react';
-import {SEND_MESSAGE_TO, SET_ACTIVE_USER_ID} from '../../redux/types/chatActionTypes'
 import {CustomNav} from "../../Components/Details/CustomNav";
 import {Dashboard} from "./Dashboard";
 import {connect} from "react-redux";
-import {LogoutAction, ProfileAction, StatusNotificationAction} from "../../redux/actions/authAction";
+import {LogoutAction, OnlineChatUsersAction, ProfileAction} from "../../redux/actions/auth/authAction";
 import {withRouter} from "react-router-dom";
 import {
     AddLocalMsgToConversationAction,
@@ -13,31 +12,23 @@ import {
     FetchLastMessageWithAction,
     GetNotificationsAction,
     MessageChatChannelAction,
-    SendChannelMessageAction,
     SendMessageToAction,
     SetMessageAction,
-} from "../../redux/actions/chatAction";
-import EventBus from "../../EventBus";
+} from "../../redux/actions/chat/userChatAction";
 import {echoInstance} from "../../bootstrap";
-import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channelAction";
+import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channel/channelAction";
 import PropTypes from "prop-types";
-import {EchoChannelSelect, joinToPublicChannel} from "../../redux/actions/echoActions";
+import {EchoChannelSelect, EchoOnlineChatUsers, joinToPublicChannel} from "../../redux/actions/echo/echoActions";
 
 
 class DashboardContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: '',
-            message2: '',
             notification: new Audio('/sounds/facebookchat.mp3'),
         }
-        this.startConversation = this.startConversation.bind(this)
-        this.sendMessage = this.sendMessage.bind(this)
-        this.handleChange = this.handleChange.bind(this)
         this.logout = this.logout.bind(this)
         this.scrollToBottom = this.scrollToBottom.bind(this)
-        this.sendChannelMessage = this.sendChannelMessage.bind(this)
     }
 
     token = localStorage.getItem('user-token')
@@ -45,70 +36,31 @@ class DashboardContainer extends Component {
 
     componentDidMount() {
         const echo = echoInstance(this.token)
-        EventBus.on(SET_ACTIVE_USER_ID, this.startConversation)
-        EventBus.on(SEND_MESSAGE_TO, () => {
-            this.props.FetchConversationWithAction(this.props.activeUserId, this.token)
-        });
-
         this.props.FetchFriendsAction(this.token)
         this.props.GetAllChannelsAction(this.token)
         this.props.FetchLastMessagesAction(this.token)
-        this.props.StatusNotificationAction(this.token)
         this.props.GetNotificationsAction(this.token)
         this.props.GetAllPrivateChannelsAction(this.token)
 
-
-        if (this.token !== undefined)
+        if (this.token !== undefined) {
             this.props.ProfileAction(this.token).then(() => {
                 this.props.MessageChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
                 this.props.joinToPublicChannel(this.props.profile.id, this.token)
-                // this.props.EchoChannelSelect(1, null, this.token)
+                this.props.OnlineChatUsersAction(true)
+                // this.props.EchoOnlineChatUsers(this.token)
             })
-        this.scrollToBottom()
+            this.scrollToBottom()
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.scrollToBottom()
     }
 
-    startConversation() {
-        this.props.FetchConversationWithAction(this.props.activeUserId, this.token)
-    }
-
     scrollToBottom() {
         this.messagesEnd.current?.addEventListener('DOMNodeInserted', event => {
             const {currentTarget: target} = event
             target.scroll({top: target.scrollHeight, behavior: 'smooth'})
-        })
-    }
-
-    handleChange(e) {
-        this.setState({
-            ...this.state,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    sendMessage(e) {
-        e.preventDefault()
-        this.props.SetMessageAction(this.state.message)
-        if (!this.state.message) return
-        this.props.AddLocalMsgToConversationAction().then(() => {
-            this.props.SendMessageToAction(this.props.activeUserId, this.token).then(() => {
-                EventBus.emit(SEND_MESSAGE_TO)
-            })
-        })
-        this.setState({
-            message: ''
-        })
-    }
-
-    sendChannelMessage(e, channel) {
-        e.preventDefault()
-        if (!this.state.message2) return
-        this.props.SendChannelMessageAction(channel, this.state.message2, this.token)
-        this.setState({
-            message2: ''
         })
     }
 
@@ -132,11 +84,6 @@ class DashboardContainer extends Component {
                     conversation={this.props.conversation}
                     lastMessages={this.props.lastMessages}
                     profile={this.props.profile}
-                    sendMessage={this.sendMessage}
-                    sendChannelMessage={this.sendChannelMessage}
-                    handleChange={this.handleChange}
-                    message={this.state.message}
-                    message2={this.state.message2}
                     publicMessages={this.props.publicMessages}
                     privateMessages={this.props.privateMessages}
                     publicChannel={this.props.publicChannel}
@@ -157,7 +104,6 @@ DashboardContainer.propTypes = {
     lastMessages: PropTypes.object,
     activeUserId: PropTypes.number,
     conversation: PropTypes.array,
-    message: PropTypes.string,
     FetchConversationWithAction: PropTypes.func.isRequired,
     FetchLastMessageWithAction: PropTypes.func.isRequired,
     FetchFriendsAction: PropTypes.func.isRequired,
@@ -182,8 +128,8 @@ const mapStateToProps = (state) => ({
     activeUserId: state.activeUserId,
     conversation: state.conversation,
     message: state.message,
-    publicMessages: state.roomMessages.publicMessages,
-    privateMessages: state.roomMessages.privateMessages,
+    publicMessages: state.publicRoomMessages.publicMessages,
+    privateMessages: state.privateRoomMessages.privateMessages,
     publicChannel: state.oneChannel,
     privateChannel: state.onePrivateChannel,
 })
@@ -203,9 +149,11 @@ export default connect(mapStateToProps, {
     MessageChatChannelAction,
     GetAllChannelsAction,
     GetAllPrivateChannelsAction,
-    StatusNotificationAction,
     GetNotificationsAction,
     joinToPublicChannel,
     EchoChannelSelect,
-    SendChannelMessageAction
+    OnlineChatUsersAction,
+    EchoOnlineChatUsers
 })(DashboardWithRouterContainer)
+
+

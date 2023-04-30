@@ -3,7 +3,7 @@ import {RoomList} from "../../Pages/ChatDashboard/RoomList";
 import PropTypes from "prop-types";
 
 export const PublicRooms = (props) => {
-    const {publicChannels, setActiveRoom, roomId} = props
+    const {publicChannels, publicChannel, setActiveRoom, roomId} = props
 
     return (
        <div>
@@ -13,7 +13,7 @@ export const PublicRooms = (props) => {
                        {
                            publicChannels.map(el => (
                                <RoomList
-                                   key={el.id}
+                                   key={el.id.toString()}
                                    el={el}
                                    roomId={roomId}
                                    setActiveRoom={setActiveRoom}

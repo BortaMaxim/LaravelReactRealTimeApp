@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,16 +20,27 @@ class StatusEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $message;
-    public function __construct($message)
+    private string $message;
+    private object $user;
+
+    public function __construct($message, $user)
     {
         $this->message = $message;
+        $this->user = $user;
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'message' => $this->message,
+            'user' => $this->user
+        ];
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn(): Channel|array
     {

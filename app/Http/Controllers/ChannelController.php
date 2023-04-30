@@ -42,7 +42,8 @@ class ChannelController extends Controller
 
         $createdChannel = Channel::where('channels.id', $channelId)
             ->join('details', 'channels.id', '=', 'details.channel_id')
-            ->select('channels.id', 'details.type', 'channels.name', 'details.owner_id as owner_id')->first();
+            ->join('users', 'details.owner_id', '=', 'users.id')
+            ->select('channels.id', 'details.type', 'channels.name', 'details.owner_id as owner_id')->with(['users'])->first();
         $message = "new channel $createdChannel->name is created!";
         broadcast(new CreateChannelEvent($createdChannel, $message));
         return response()->json([

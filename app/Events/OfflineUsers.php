@@ -26,6 +26,12 @@ class OfflineUsers implements ShouldBroadcast
         $this->user = $user;
     }
 
+    public function broadcastWith(): array
+    {
+        return [
+            'data' => $this->user
+        ];
+    }
     /**
      * Get the channels the event should broadcast on.
      *
@@ -33,6 +39,6 @@ class OfflineUsers implements ShouldBroadcast
      */
     public function broadcastOn(): Channel|PresenceChannel|array
     {
-        return new PresenceChannel('chat');
+        return new PrivateChannel('chat');
     }
 }

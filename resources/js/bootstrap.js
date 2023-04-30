@@ -26,15 +26,16 @@ import {io} from 'socket.io-client'
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-export const socket = (token) => {
+export const socketClient = (token) => {
     return io({
         withCredentials: true,
         auth: {
             token: 'Bearer ' + token
         },
         query: {
-            key: import.meta.env.VITE_PUSHER_APP_KEY
-        }
+            key: import.meta.env.VITE_PUSHER_APP_KEY,
+        },
+        transports: ['websocket', 'polling'],
     })
 }
 
@@ -50,7 +51,7 @@ export const echoInstance = (token) => {
         enabledTransports: ['ws', 'wss'],
         auth: {
             headers: {
-                Authorization: 'Bearer ' + token
+                Authorization: 'Bearer ' + token,
             }
         }
     });

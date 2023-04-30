@@ -22,6 +22,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
     Route::get('password-reset-token', [UserController::class, 'password_reset_token']);
     Route::post('update-password', [UserController::class, 'send_reset_response'])
         ->middleware('guest')->name('password.update');
+    Route::get('online-chat-users', [FriendsController::class, 'onlineChatUser']);
 
     Route::group(['middleware' => 'auth:api'], function ($route) {
         Route::get('profile', [UserController::class, 'profile']);
@@ -53,5 +54,4 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('get-friend-list', [FriendsController::class, 'getFriendList']);///Not yet
     });
 });
-
 

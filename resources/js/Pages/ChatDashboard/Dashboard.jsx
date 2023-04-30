@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ChannelPanel} from "./PublicChannels/ChannelPanel";
 import {MessagesPanel} from "./MessagesPanel";
 import PropTypes from "prop-types";
@@ -10,11 +10,6 @@ export const Dashboard = (props) => {
         conversation,
         lastMessages,
         profile,
-        sendMessage,
-        sendChannelMessage,
-        handleChange,
-        message,
-        message2,
         activeUserId,
         messagesEnd,
         publicMessages,
@@ -42,11 +37,6 @@ export const Dashboard = (props) => {
                     activeUserId={activeUserId}
                     chatMessages={conversation}
                     profile={profile}
-                    sendMessage={sendMessage}
-                    sendChannelMessage={sendChannelMessage}
-                    handleChange={handleChange}
-                    message={message}
-                    message2={message2}
                     publicMessages={publicMessages}
                     privateMessages={privateMessages}
                     privateChannel={privateChannel}
@@ -63,8 +53,6 @@ Dashboard.propTypes = {
     conversation: PropTypes.array,
     lastMessages: PropTypes.object,
     profile: PropTypes.object,
-    sendMessage: PropTypes.func.isRequired,
-    handleChange: PropTypes.func.isRequired,
     fields: PropTypes.string,
     activeUserId: PropTypes.number,
     messagesEnd: PropTypes.object,

@@ -1,19 +1,17 @@
 import React, {useEffect} from 'react';
-import {UnreadMessagesCountAction} from "../../../redux/actions/chatAction";
+import {UnreadMessagesCountAction} from "../../../redux/actions/chat/userChatAction";
 import {useDispatch, useSelector} from "react-redux";
 import {useActive} from "../../../hooks/useActive";
 import {Users} from "../Users";
-import {Rooms} from "../Rooms";
 import {useForm} from "../../../hooks/useForm";
 import {
+    ChannelDmSelectAction,
     ChannelsSelectAction,
     CreateChannelAction,
     DeleteChannelAction,
     GetOnePrivateChannelAction,
     GetOnePublicChannel,
-    InviteToChannelAction,
-    JoinToChannel
-} from "../../../redux/actions/channelAction";
+} from "../../../redux/actions/channel/channelAction";
 import PropTypes from "prop-types";
 import {chatPropsValidation} from "../../../propTypes/chatPropTypes/chatPropsValidation";
 import {GetNotificationsContainer} from "../ContainersComponent/GetNotificationsContainer";
@@ -21,32 +19,36 @@ import {CreateChanelContainer} from "../ContainersComponent/CreateChanelContaine
 import {PublicChannelsContainer} from "../ContainersComponent/PublicChannelsContainer";
 import {PrivateChannelsContainer} from "../PrivateChannels/PrivateChannelsContainer";
 import {useModal} from "../../../hooks/useModal";
+import {InviteToChannelAction, JoinToChannel} from "../../../redux/actions/invites/invitesAction";
+import {RoomsContainer} from "../ContainersComponent/RoomsContainer";
+import {EchoChannelSelect, EchoDmSelect, OnlineEchoPublicChannelsUsers} from "../../../redux/actions/echo/echoActions";
 
 export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, privateChannel, notifications}) => {
     const {friendId, roomId, privateRoomId, setFriendId, handleActive} = useActive()
     const {open, setOpen} = useModal()
     const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
-    const detailPublic = 'public'
-    const detailPrivate = 'private'
     const {fields, handleChange, handleCheck, handleSubmit, clear} = useForm({
         channel_name: '',
         detail_name: '',
         detail_desc: '',
         channel_type: '',
     })
-    const compareType = fields.channel_type === undefined || fields.channel_type === 'channel' ? detailPublic : detailPrivate
+    const compareType = fields.channel_type === undefined || fields.channel_type === 'channel' ? 'public' : 'private'
     const compareVisible = fields.channel_type === undefined || fields.channel_type === 'channel' ? '1' : '0'
 
     const unreadMessagesCount = chatPropsValidation(useSelector(state => state.unreadMessagesCount))
     const getAllChannelsSelector = chatPropsValidation(useSelector(state => ({
-        publicChannels: state.getAllChannels.publicChannels,
-        privateChannels: state.getAllChannels.privateChannels,
-        loading: state.getAllChannels.loading,
-        createChannelExeption: state.getAllChannels.createChannelExeption,
+        publicChannels: state.getAllPublicChannels.publicChannels,
+        privateChannels: state.getAllPublicChannels.privateChannels,
+        loading: state.getAllPublicChannels.loading,
+        createChannelExeption: state.getAllPublicChannels.createChannelExeption,
     })))
 
-    const profile = useSelector((state) => state.auth.profile)
+    const profile = useSelector((state) => ({
+        profile: state.auth.profile,
+        onlineUsers: state.auth.onlineUsers
+    }))
     const modify = useSelector((state) => state.modifyFlag)
     const recipient = chatPropsValidation(useSelector(state => state.recipient))
 
@@ -55,6 +57,23 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
         dispatch(UnreadMessagesCountAction(token))
     }, [lastMessages])
 
+    useEffect(() => {
+        if (publicChannel !== null) {
+            if (publicChannel.type === 'channel') {
+                dispatch(ChannelsSelectAction(null, token))
+                dispatch(EchoChannelSelect(publicChannel, token))
+                dispatch(OnlineEchoPublicChannelsUsers(publicChannel, token))
+            }
+        }
+    }, [publicChannel])
+    useEffect(() => {
+        if (privateChannel !== null) {
+            if (privateChannel.type === 'dm') {
+                dispatch(ChannelDmSelectAction(null, token))
+                dispatch(EchoDmSelect(privateChannel, token))
+            }
+        }
+    }, [privateChannel])
     const createChannel = (e) => {
         e.preventDefault()
         let data = {
@@ -69,15 +88,15 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
         clear()
     }
 
-    const setActiveRoom = (channel) => {
+    const setActiveRoom = (channel, e) => {
+        if (e !== undefined) e.stopPropagation()
         handleActive(channel.id, 'rooms')
         dispatch(GetOnePublicChannel(channel.id, token))
-        dispatch(ChannelsSelectAction(channel, token))
     }
-    const setPrivateActiveRoom = (channel) => {
+    const setPrivateActiveRoom = (channel, e) => {
+        if (e !== undefined) e.stopPropagation()
         handleActive(channel.id, 'privateRooms')
         dispatch(GetOnePrivateChannelAction(channel.id, token))
-        dispatch(ChannelsSelectAction(channel, token))
 
     }
 
@@ -122,7 +141,7 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                     getAllChannelsSelector={getAllChannelsSelector}
                 />
                 <GetNotificationsContainer
-                    profile={profile}
+                    profile={profile.profile}
                 />
             </div>
             <Users
@@ -133,6 +152,7 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                 lastMessages={lastMessages}
                 handleActive={handleActive}
                 friendId={friendId}
+                onlineUsers={profile.onlineUsers}
             />
             {
                 publicChannel !== null
@@ -176,9 +196,10 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                     </div>
                     : null
             }
-            <Rooms
+            <RoomsContainer
                 publicChannels={getAllChannelsSelector.publicChannels}
                 privateChannels={getAllChannelsSelector.privateChannels}
+                publicChannel={publicChannel}
                 setActiveRoom={setActiveRoom}
                 setPrivateActiveRoom={setPrivateActiveRoom}
                 roomId={roomId}
@@ -194,4 +215,5 @@ ChannelPanel.propTypes = {
     lastMessages: PropTypes.object,
     publicChannel: PropTypes.object,
     privateChannel: PropTypes.object,
+    notifications: PropTypes.object,
 }

@@ -1,4 +1,4 @@
-import * as ChannelsActionTypes from '../../types/channelActionTypes'
+import * as ChannelsActionTypes from '../../../types/channelActionTypes'
 
 
 export const getOnePublicChannelReducer = (state = null, action) => {

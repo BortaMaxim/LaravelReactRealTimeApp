@@ -12,10 +12,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function status($authUserName, $authUserStatus): \Illuminate\Broadcasting\PendingBroadcast
+    protected function status($authUser, $authUserStatus): \Illuminate\Broadcasting\PendingBroadcast
     {
         return $authUserStatus === 'online'
-            ? broadcast(new StatusEvent("$authUserName is online!"))->toOthers()
-            : broadcast(new StatusEvent("$authUserName is offline!"))->toOthers();
+            ? broadcast(new StatusEvent(  "$authUser->name is online!", $authUser))->toOthers()
+            : broadcast(new StatusEvent( "$authUser->name is offline!", $authUser))->toOthers();
     }
 }

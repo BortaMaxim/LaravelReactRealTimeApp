@@ -1,5 +1,5 @@
-import * as ChatActionTypes from '../../types/chatActionTypes'
-import * as AuthActionTypes from '../../types/authActionTypes'
+import * as ChatActionTypes from '../../../types/chatActionTypes'
+import * as AuthActionTypes from '../../../types/authActionTypes'
 
 let initialState = {
     notifications: [],

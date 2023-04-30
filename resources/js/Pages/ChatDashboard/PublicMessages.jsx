@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useEffect} from 'react';
 import {RoomsMessage} from "./RoomsMessage";
 
 export const PublicMessages = (props) => {
@@ -8,7 +8,7 @@ export const PublicMessages = (props) => {
         <>
             {
                 publicMessages.length !== 0
-                && publicMessages.map((el, idx) => <RoomsMessage key={idx} el={el} profile={profile}/>)
+                && publicMessages.map((el, idx) => <RoomsMessage key={idx.toString()} el={el} profile={profile}/>)
             }
         </>
     )

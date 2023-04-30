@@ -1,14 +1,15 @@
-import {echoInstance} from "../../bootstrap";
-import * as ChatActionTypes from "../types/chatActionTypes";
+import {echoInstance} from "../../../bootstrap";
+import * as ChatActionTypes from "../../types/chatActionTypes";
 import {toast} from "react-toastify";
-import {toastOptions} from "../utils";
-import * as ChannelActionTypes from "../types/channelActionTypes";
-import {GetAllPrivateChannelsAction} from "./channelAction";
+import {toastOptions} from "../../utils";
+import * as ChannelActionTypes from "../../types/channelActionTypes";
+import {ChannelDmSelectAction, ChannelsSelectAction, GetAllPrivateChannelsAction} from "../channel/channelAction";
+import {OnlineChatUsersAction, RemoveOnlineUserAfterLoggedOutAction} from "../auth/authAction";
 
 
-export const initNotificationAndEventChannels = (userId, token, dispatch) => {
+export const initNotificationAndEventChannels = (user, token) => async (dispatch, getState) => {
     const echo = echoInstance(token)
-    echo.private(`App.Models.User.User.${userId}`)
+    await echo.private(`App.Models.User.User.${user.id}`)
         .notification((notification) => {
             dispatch({
                 type: ChatActionTypes.REALTIME_NOTIFICATIONS,
@@ -19,12 +20,12 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                 }
             })
         })
-    echo.private(`event.acceptRequest.${userId}`)
+    await echo.private(`event.acceptRequest.${user.id}`)
         .listen('AcceptRequest', (data) => {
             dispatch(GetAllPrivateChannelsAction(token))
             toast(`${data[0]}, channel type: ${data[1]}`, toastOptions('top-right'))
         })
-    echo.private('create-channel')
+    await echo.private('create-channel')
         .listen('CreateChannelEvent', (channel) => {
             switch (channel.channel.type) {
                 case 'channel':
@@ -32,6 +33,7 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                     toast.success(channel.message, toastOptions('top-right'))
                     break;
                 case 'dm':
+                    console.log('echo layer', channel)
                     dispatch({type: ChannelActionTypes.CREATE_PRIVATE_CHANNEL, payload: channel.channel})
                     toast.success(channel.message, toastOptions('top-right'))
                     break;
@@ -39,7 +41,7 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                     break;
             }
         })
-    echo.private('delete-channel')
+    await echo.private('delete-channel')
         .listen('DeleteChannelEvent', (channel) => {
             dispatch({
                 type: ChannelActionTypes.MODIFIED_AFTER_DELETE_CHANNEL,
@@ -64,12 +66,13 @@ export const initNotificationAndEventChannels = (userId, token, dispatch) => {
                     break;
             }
         })
-}
-
-export const statusEventUserChannels = (token) => {
-    const echo = echoInstance(token)
-    echo.private('base-channel')
+    await echo.private('base-channel')
         .listen('StatusEvent', (data) => {
+            if (data.message.includes('online')) {
+                dispatch(OnlineChatUsersAction(true))
+            } else if(data.message.includes('offline')) {
+                dispatch(RemoveOnlineUserAfterLoggedOutAction(data.user))
+            }
             toast(data.message, toastOptions('bottom-right'))
         })
 }
@@ -83,44 +86,60 @@ export const joinToPublicChannel = (userId, token) => async (dispatch) => {
         })
 }
 
-export const EchoChannelSelect = (channelId, prevChannelId, token) => async (dispatch, getState) => {
+export const EchoChannelSelect = (channel, token) => async (dispatch) => {
     const echo = echoInstance(token)
-    console.log('channelId', channelId)
-    console.log('prevChannelId', prevChannelId)
-    // if (prevChannelId !== null && prevChannelId.id !== channelId) {
-    //     echo.leave(`chat.${prevChannelId.type}.${prevChannelId.id}`)
-    //     console.log('leave')
-    // } else {
-    //
-    //     console.log(false)
-    // }
-    await echo.private(`chat.channel.${channelId}`)
+    await echo.private(`chat.channel.${channel.id}`)
         .listen('SendMessageToChannel', (data) => {
-            console.log('event data', data)
-            // let id = parseInt(data.data.channel_id)
-            dispatch({
-                type: ChatActionTypes.SENT_PUBLIC_CHANNEL_MESSAGE,
-                payload: data.data
-            })
-        })
-        .listenForWhisper('typing', (event) => {
-            console.log('listenForWhisper,', event)
+            let id = data.data.channel_id
+            if (channel.id === id || channel.channel_id === id) {
+                dispatch(ChannelsSelectAction(data.data, token))
+            } else {
+                console.log('last message')
+            }
         })
 }
 
-export const EchoDmSelect = (channelId, token) => async (dispatch) => {
+export const EchoOnlineChatUsers = (token) => async (dispatch) => {
+    let echo = echoInstance(token)
+    await echo.private('chat')
+        .listen('OnlineUsers', (data) => {
+            console.log('echo online users', data)
+        })
+}
+
+export const OnlineEchoPublicChannelsUsers = (channel, token) => (dispatch) => {
     const echo = echoInstance(token)
-    await echo.private(`chat.dm.${channelId}`)
+    echo.private(`online.public.channel.users.${channel.id}`)
+        .listen('ChannelsOnlineUsers', (data) => {
+            let hereUsers = []
+
+            console.log('OnlineEchoPublicChannelsUsers, data', [...hereUsers, data.user])
+        })
+}
+
+export const EchoDmSelect = (channel, token) => async (dispatch) => {
+    const echo = echoInstance(token)
+    await echo.private(`chat.dm.${channel.id}`)
         .listen('SendMessageToChannel', (data) => {
-            console.log('listen', data)
+            let id = data.data.channel_id
+            if (channel.id === id) {
+                dispatch(ChannelDmSelectAction(data.data, token))
+            }
             dispatch({
                 type: ChatActionTypes.SENT_PRIVATE_CHANNEL_MESSAGE,
                 payload: data.data
             })
         })
-        .listenForWhisper('typing', (event) => {
+        .listenForWhisper('SendMessageToChannel', (event) => {
             console.log('listenForWhisper,', event)
         })
+}
+
+export const LeavingEchoChannel = (channel, token) => (dispatch) => {
+    const echo = echoInstance(token)
+    echo.join(`chat.channel.${channel.id}`)
+        .stopListening('SendMessageToChannel')
+    console.log('LeavingEchoChannel')
 }
 
 

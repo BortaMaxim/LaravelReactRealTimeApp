@@ -2,6 +2,7 @@
 
 namespace App\Repository\AuthRepository;
 
+use App\Events\ChannelsOnlineUsers;
 use App\Events\OfflineUsers;
 use App\Events\OnlineUsers;
 use App\Http\Controllers\Controller;
@@ -63,7 +64,7 @@ class AuthRepository extends Controller implements Authable
             } else {
                 $accessToken = auth()->user()->createToken('accessToken')->accessToken;
                 $user->status = 'online';
-                $this->status($user->name, $user->status);
+                $this->status($user, $user->status);
                 $user->save();
 
                 $responseMessage = "Login Success";
@@ -104,7 +105,6 @@ class AuthRepository extends Controller implements Authable
     {
         $user = auth()->user();
         $user->status = 'online';
-        broadcast(new OnlineUsers($user));
         return $user;
     }
 
@@ -113,11 +113,11 @@ class AuthRepository extends Controller implements Authable
         $user = Auth::guard('api')->user()->token();
         $auth_user = auth()->user();
         $auth_user->status = 'offline';
-        broadcast(new OfflineUsers($user))->toOthers();
+//        broadcast(new OfflineUsers($user));
 
         $auth_user->save();
         $user->revoke();
-        $this->status($auth_user->name, $auth_user->status);
+        $this->status($auth_user, $auth_user->status);
         $responseMessage = "Successfully logged out ";
         return response()->json([
             'success' => true,

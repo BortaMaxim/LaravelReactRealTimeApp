@@ -1,9 +1,9 @@
-import * as AuthActionTypes from '../types/authActionTypes'
-import * as ProfileActionTypes from '../types/profileActionTypes'
+import * as AuthActionTypes from '../../types/authActionTypes'
+import * as ProfileActionTypes from '../../types/profileActionTypes'
 import {toast} from 'react-toastify'
 import axios from 'axios'
-import {BASE_AUTH_URL, getAuthOptions, postOptions, toastOptions, uploadAuthOptions} from "../utils";
-import {initNotificationAndEventChannels, statusEventUserChannels} from "./echoActions";
+import {BASE_AUTH_URL, getAuthOptions, getOptions, postOptions, toastOptions, uploadAuthOptions} from "../../utils";
+import {EchoOnlineChatUsers, initNotificationAndEventChannels} from "../echo/echoActions";
 
 export const ShowNotificationAction = () => {
     return {
@@ -58,15 +58,31 @@ export const LoginAction = (formData, history) => async (dispatch) => {
     })
 }
 
-export const ProfileAction = (token) => async (dispatch) =>
-     await new Promise(async (resolve, reject) => {
+export const ProfileAction = (token) => async (dispatch, getState) =>
+    await new Promise(async (resolve, reject) => {
         dispatch({type: AuthActionTypes.IS_FETCHING_PROFILE})
         await axios.get(`${BASE_AUTH_URL}profile`, getAuthOptions(token)).then(res => {
             dispatch({type: AuthActionTypes.PROFILE_FETCHED, payload: res.data})
-            initNotificationAndEventChannels(res.data.id, token, dispatch)
+            dispatch(initNotificationAndEventChannels(res.data, token))
+            // dispatch(OnlineChatUsersAction(token))
             resolve()
         })
     })
+
+export const OnlineChatUsersAction = (modify = null) => async (dispatch) => {
+    if (modify === true) {
+        await axios.get(`${BASE_AUTH_URL}online-chat-users`, getOptions()).then((res) => {
+            dispatch({type: AuthActionTypes.ONLINE_CHAT_USERS, payload: res.data.online_users})
+        })
+    } else {
+        // dispatch(EchoOnlineChatUsers(token))
+    }
+}
+
+export const RemoveOnlineUserAfterLoggedOutAction = (user) => (dispatch) => {
+    console.log('RemoveOnlineUserAfterLoggedOutAction')
+    dispatch({type: AuthActionTypes.REMOVE_USER_AFTER_LOGGED_OUT, payload: user})
+}
 
 export const LogoutAction = (token, history) => async (dispatch) => {
     dispatch({type: AuthActionTypes.IS_LOGGED_OUT})
@@ -145,10 +161,6 @@ export const UpdateProfileAction = (formData, token) => async (dispatch) => {
             dispatch(HideNotificationAction())
         }, 3000)
     })
-}
-
-export const StatusNotificationAction = (token) => async () => {
-    await statusEventUserChannels(token)
 }
 
 export const MarkAsReadNotificationsAction = (token) => async (dispatch) => {
