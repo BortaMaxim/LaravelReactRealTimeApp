@@ -3,7 +3,7 @@ import {NotificationsListItem} from "./NotificationsListItem";
 import PropTypes from "prop-types";
 
 export const NotificationsList = (props) => {
-    const {notifications, profile, deleteNotification, showNotificationDetails, accentInvite} = props
+    const {notifications, deleteNotification, showNotificationDetails, accentInvite} = props
 
     return (
         <div className="public_channel_details_users_wrapper">
@@ -14,7 +14,6 @@ export const NotificationsList = (props) => {
                             deleteNotification={deleteNotification}
                             showNotificationDetails={showNotificationDetails}
                             accentInvite={accentInvite}
-                            profile={profile}
                             key={el.id}
                             el={el}
                         />

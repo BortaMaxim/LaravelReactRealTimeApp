@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {UsersList} from "../UsersList";
 import useSearch from "../../../hooks/useSearch";
 import SearchUsersForm from '../../../Components/Details/SearchForm'
 import PropTypes from "prop-types";
-
+import {FriendsContext} from "../../../Context/FriendsProvider";
+import {LastMessageContext} from '../../../Context/LastMessageProvider'
 export const UsersListContainer = (props) => {
-    const {users, unreadMessagesCount, lastMessages, handleActive, friendId} = props
+    const {unreadMessagesCount, handleActive, friendId} = props
+    const users = useContext(FriendsContext)
+    const lastMessages = useContext(LastMessageContext)
     const {state, handleChange} = useSearch(users, '')
 
     return (
@@ -37,9 +40,7 @@ export const UsersListContainer = (props) => {
     )
 }
 UsersListContainer.propTypes = {
-    users: PropTypes.array,
     unreadMessagesCount: PropTypes.number,
-    lastMessages: PropTypes.object,
     handleActive: PropTypes.func.isRequired,
     friendId: PropTypes.any,
 }

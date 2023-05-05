@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from "prop-types";
+import {PrivateChannelContext} from "../../../Context/PrivateChannelProvider";
 
 export const PrivateChannelPanel = (props) => {
-    const {privateChannel, handleOpen} = props
+    const {handleOpen} = props
+    const privateChannel = useContext(PrivateChannelContext)
     return (
         <div className="channel_info">
             {
@@ -20,6 +22,5 @@ export const PrivateChannelPanel = (props) => {
     )
 }
 PrivateChannelPanel.propTypes = {
-    privateChannel: PropTypes.object,
     handleOpen: PropTypes.func,
 }

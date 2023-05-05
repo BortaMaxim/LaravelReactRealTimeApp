@@ -1,4 +1,4 @@
-import React, {StrictMode} from 'react'
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'react-toastify/dist/ReactToastify.css'
@@ -8,7 +8,6 @@ import {Provider} from "react-redux";
 import store from "./redux/store";
 import {BrowserRouter} from "react-router-dom";
 import {PublicRoutes} from "./routes/PublicRoutes";
-import {Footer} from "./Components/Footer/Footer";
 import {ToastContainer} from "react-toastify";
 
 

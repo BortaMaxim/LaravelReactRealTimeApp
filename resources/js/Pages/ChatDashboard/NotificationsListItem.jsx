@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from "prop-types";
+import {ProfileContext} from "../../Context/ProfileProvider";
 
 export const NotificationsListItem = (props) => {
-    const {el, profile, deleteNotification, showNotificationDetails, accentInvite} = props
+    const {el, deleteNotification, showNotificationDetails, accentInvite} = props
+    const profile = useContext(ProfileContext)
     const {data} = el
     const {name} = profile
     const {sender_name, desc, request_type, invite_id} = data

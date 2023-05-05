@@ -9,6 +9,7 @@ export const CreateChanelContainer = (props) => {
 
     const {
         fields,
+        inputRef,
         createChannel,
         handleCheck,
         handleChange,
@@ -17,7 +18,7 @@ export const CreateChanelContainer = (props) => {
         compareVisible
     } = props
     const {active, setActive} = useModal()
-
+    console.log('CreateChannelContainer')
     return (
         <>
             <CreateChannel
@@ -33,6 +34,7 @@ export const CreateChanelContainer = (props) => {
                     compareVisible={compareVisible}
                     getAllChannelsSelector={getAllChannelsSelector}
                     fields={fields}
+                    inputRef={inputRef}
                     handleChange={handleChange}
                     handleCheck={handleCheck}
                     createChannel={createChannel}

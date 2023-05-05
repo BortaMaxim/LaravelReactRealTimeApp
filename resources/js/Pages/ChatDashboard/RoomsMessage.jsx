@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {URL} from "../../redux/utils";
+import {ProfileContext} from "../../Context/ProfileProvider";
 
 export const RoomsMessage = (props) => {
-    const {el, profile} = props
+    const {el} = props
+    const profile = useContext(ProfileContext)
     const compareUserId = el.user.id === profile.id
     let isSent = el.read === undefined || el.read === null ? '' : (<small className="text-secondary message_date"><strong>{el.read}</strong>&#10003;&#10003;</small>);
 

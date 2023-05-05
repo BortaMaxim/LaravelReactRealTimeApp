@@ -7,23 +7,18 @@ import PropTypes from "prop-types";
 
 export const PublicChannelsContainer = (props) => {
     const {
-        publicChannel,
-        joinToChannel,
-        profile, deleteChannel,
-        comparedOwnerId,
+        joinToChannel, deleteChannel,
         userChoice,
         inviteToChannel,
         setOpen,
         friendId,
         open
     } = props
-
     const users = useSelector((state) => state.chat.friends)
     return (
         <>
             <PublicChannelPanel
                 handleOpen={() => setOpen(true)}
-                publicChannel={publicChannel}
             />
             <ModalChannelDetails
                 isOpen={open}
@@ -36,18 +31,14 @@ export const PublicChannelsContainer = (props) => {
                     allUsers={users}
                     friendId={friendId}
                     joinToChannel={joinToChannel}
-                    profile={profile}
                     setOpen={setOpen}
-                    publicChannel={publicChannel}
                     deleteChannel={deleteChannel}
-                    compairedOwnerId={comparedOwnerId}
                 />
             </ModalChannelDetails>
         </>
     )
 }
 PublicChannelsContainer.propTypes = {
-    publicChannel: PropTypes.object,
     joinToChannel: PropTypes.func.isRequired,
     profile: PropTypes.object,
     deleteChannel: PropTypes.func.isRequired,

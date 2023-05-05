@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import DeleteChannelBtn from "../../../Components/Channels/DeleteChannelBtn";
 import InviteToChannelBtn from "../../../Components/Channels/InviteToChannelBtn";
 import JoinToChannelBtn from "../../../Components/Channels/JoinToChannelBtn";
 import {UsersOfChannels} from "../UsersOfChannels";
 import PropTypes from "prop-types";
+import {PrivateChannelContext} from "../../../Context/PrivateChannelProvider";
 
 export const PrivateChannelsDetails = (props) => {
     const {
-        privateChannel,
         compairedOwnerId,
         profile,
         allUsers,
@@ -18,6 +18,7 @@ export const PrivateChannelsDetails = (props) => {
         inviteToChannel,
         setOpen
     } = props
+    const privateChannel = useContext(PrivateChannelContext)
     const {name, type, detail_type, desc, id, owner_id, users} = privateChannel
     const compareId = profile.id === owner_id
 
@@ -72,7 +73,6 @@ export const PrivateChannelsDetails = (props) => {
     )
 }
 PrivateChannelsDetails.propTypes = {
-    privateChannel: PropTypes.object,
     compairedOwnerId: PropTypes.bool,
     profile: PropTypes.object,
     allUsers: PropTypes.array,

@@ -11,8 +11,7 @@ import {GetOneNotificationAction} from "../../../redux/actions/chat/userChatActi
 import PropTypes from "prop-types";
 import {AcceptInviteAction} from "../../../redux/actions/invites/invitesAction";
 
-export const GetNotificationsContainer = (props) => {
-    const {profile} = props
+export const GetNotificationsContainer = () => {
     const token = localStorage.getItem('user-token')
     const dispatch = useDispatch()
     const {active, setActive} = useModal()
@@ -44,7 +43,6 @@ export const GetNotificationsContainer = (props) => {
     const accentInvite = (inviteId, requestType) => {
         dispatch(AcceptInviteAction(inviteId, requestType, token))
     }
-
     return (
         <>
             <Notifications
@@ -57,7 +55,6 @@ export const GetNotificationsContainer = (props) => {
                 handleClose={() => setOpenNotification(false)}
             >
                 <NotificationsList
-                    profile={profile}
                     accentInvite={accentInvite}
                     showNotificationDetails={showNotificationDetails}
                     deleteNotification={deleteNotification}

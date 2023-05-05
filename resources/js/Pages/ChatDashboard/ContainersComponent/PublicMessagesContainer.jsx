@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {memo, useContext} from 'react';
 import {PublicMessages} from "../PublicMessages";
 import {ChatForm} from "../ChatForm";
 import {useForm} from "../../../hooks/useForm";
@@ -8,22 +8,24 @@ import {
     SendPublicMessageAction,
     SetPublicMessageAction
 } from "../../../redux/actions/chat/publiChatAction";
-import {EchoChannelSelect} from "../../../redux/actions/echo/echoActions";
 import {compareChannelUsers} from "../../../helpers/helpers";
 import {toast} from "react-toastify";
 import {toastOptions} from "../../../redux/utils";
+import {ProfileContext} from "../../../Context/ProfileProvider";
+import {PublicMessagesContext} from "../../../Context/PublicMessagesProvider";
+import {PublicChannelContext} from "../../../Context/PublicChannelProvider";
 
 
 let MPublicMessages = memo(PublicMessages)
 export const PublicMessagesContainer = (props) => {
     const {
-        publicMessages,
-        publicChannel,
-        profile,
         messagesEnd,
     } = props
     const {fields, handleChange, clear} = useForm({message2: ''})
     const dispatch = useDispatch()
+    const publicMessages = useContext(PublicMessagesContext)
+    const profile = useContext(ProfileContext)
+    const publicChannel = useContext(PublicChannelContext)
     const token = localStorage.getItem('user-token')
     const onSubmit = (e, channel) => {
         e.preventDefault()
@@ -44,7 +46,7 @@ export const PublicMessagesContainer = (props) => {
             {
                 publicMessages !== undefined && publicMessages.length !== 0
                     ? <>
-                        <MPublicMessages publicMessages={publicMessages} profile={profile}/>
+                        <MPublicMessages publicMessages={publicMessages}/>
                         <ChatForm
                             sendMessage={(e) => onSubmit(e, publicChannel)}
                             handleChange={handleChange}

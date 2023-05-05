@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useContext} from 'react';
 import {PrivateMessages} from "../PrivateMessages";
 import {ChatForm} from "../ChatForm";
 import {useForm} from "../../../hooks/useForm";
@@ -11,13 +11,19 @@ import {
 import {compareChannelUsers} from "../../../helpers/helpers";
 import {toast} from "react-toastify";
 import {toastOptions} from "../../../redux/utils";
+import {ProfileContext} from "../../../Context/ProfileProvider";
+import {PrivateMessagesContext} from "../../../Context/PrivateMessagesProvider";
+import {PrivateChannelContext} from "../../../Context/PrivateChannelProvider";
 
 
 let MPrivateMessages = memo(PrivateMessages)
 export const PrivateMessagesContainer = (props) => {
-    const {privateMessages, profile, privateChannel, messagesEnd} = props
+    const {messagesEnd} = props
     const {fields, handleChange, clear} = useForm({message2: ''})
     const dispatch = useDispatch()
+    const privateMessages = useContext(PrivateMessagesContext)
+    const profile = useContext(ProfileContext)
+    const privateChannel = useContext(PrivateChannelContext)
     const token = localStorage.getItem('user-token')
     const onSubmit = (e, channel) => {
         e.preventDefault()
@@ -36,7 +42,7 @@ export const PrivateMessagesContainer = (props) => {
             {
                 privateMessages !== undefined && privateMessages.length !== 0
                     ? <>
-                        <MPrivateMessages privateMessages={privateMessages} profile={profile}/>
+                        <MPrivateMessages privateMessages={privateMessages}/>
                         <ChatForm
                             sendMessage={(e) => onSubmit(e, privateChannel)}
                             handleChange={handleChange}

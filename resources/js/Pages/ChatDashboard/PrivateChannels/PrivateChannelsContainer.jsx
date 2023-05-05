@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 export const PrivateChannelsContainer = (props) => {
     const {
         profile,
-        privateChannel,
         compairedOwnerId,
         deleteChannel,
         joinToChannel,
@@ -23,7 +22,6 @@ export const PrivateChannelsContainer = (props) => {
     return (
         <>
             <PrivateChannelPanel
-                privateChannel={privateChannel}
                 handleOpen={() => setOpen(true)}
             />
             <ModalPrivateChannelDetails
@@ -40,7 +38,6 @@ export const PrivateChannelsContainer = (props) => {
                     profile={profile}
                     deleteChannel={deleteChannel}
                     allUsers={users}
-                    privateChannel={privateChannel}
                     compairedOwnerId={compairedOwnerId}
                 />
             </ModalPrivateChannelDetails>
@@ -50,7 +47,6 @@ export const PrivateChannelsContainer = (props) => {
 
 PrivateChannelsContainer.propTypes = {
     profile: PropTypes.object,
-    privateChannel: PropTypes.object,
     compairedOwnerId: PropTypes.bool,
     deleteChannel: PropTypes.func.isRequired,
     joinToChannel: PropTypes.func.isRequired,

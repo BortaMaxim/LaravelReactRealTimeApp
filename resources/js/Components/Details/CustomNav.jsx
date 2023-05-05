@@ -1,12 +1,14 @@
-import React, {memo, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {CustomSideBar} from "./CustomSideBar";
 import {useHistory} from "react-router-dom";
 import PropTypes from "prop-types";
 import {echoInstance} from "../../bootstrap";
+import {ProfileContext} from "../../Context/ProfileProvider";
 
-export const CustomNav = memo(({profile, logout}) => {
+export const CustomNav = ({logout}) => {
     const history = useHistory()
     const token = localStorage.getItem('user-token')
+    const profile = useContext(ProfileContext)
     const echo = echoInstance(token)
     useEffect(() => {
         return () => echo.disconnect()
@@ -30,14 +32,13 @@ export const CustomNav = memo(({profile, logout}) => {
                             Logout
                         </button>
                     </div>
-                    <CustomSideBar />
+                    <CustomSideBar/>
                 </div>
             </div>
         </nav>
     )
-})
+}
 
 CustomNav.propTypes = {
-    profile: PropTypes.object,
     logout: PropTypes.func.isRequired,
 }

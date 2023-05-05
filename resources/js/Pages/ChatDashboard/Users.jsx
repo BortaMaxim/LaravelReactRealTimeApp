@@ -1,13 +1,13 @@
-import React from 'react';
-import {UsersList} from "./UsersList";
+import React, {useContext} from 'react';
 import PropTypes from "prop-types";
 import {RecipientAvatar} from "./RecipientAvatar";
 import {OnlineUsersContainer} from "./ContainersComponent/OnlineUsersContainer";
-import useSearch from "../../hooks/useSearch";
 import {UsersListContainer} from "./ContainersComponent/UsersListContainer";
+import {IsLoadingContext} from "../../Context/IsLoadingProvider";
 
 export const Users = (props) => {
-    const {isLoading, users, unreadMessagesCount, lastMessages, handleActive, friendId, recipient, onlineUsers} = props
+    const {unreadMessagesCount, handleActive, friendId, recipient, onlineUsers} = props
+    const isLoading = useContext(IsLoadingContext)
     return (
         <>
             <div className="row">
@@ -29,9 +29,7 @@ export const Users = (props) => {
                 isLoading === true
                     ? <span className="text-white">loading...</span>
                     : <UsersListContainer
-                        users={users}
                         unreadMessagesCount={unreadMessagesCount}
-                        lastMessages={lastMessages}
                         handleActive={handleActive}
                         friendId={friendId}
                     />
@@ -41,10 +39,8 @@ export const Users = (props) => {
 }
 
 Users.propTypes = {
-    isLoading: PropTypes.bool,
     users: PropTypes.array,
     unreadMessagesCount: PropTypes.number,
-    lastMessages: PropTypes.object,
     handleActive: PropTypes.func.isRequired,
     friendId: PropTypes.any,
     recipient: PropTypes.object,

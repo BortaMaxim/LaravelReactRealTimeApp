@@ -1,20 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {UsersOfChannels} from "../UsersOfChannels";
 import DeleteChannelBtn from "../../../Components/Channels/DeleteChannelBtn";
 import JoinToChannelBtn from '../../../Components/Channels/JoinToChannelBtn'
 import InviteToChannelBtn from "../../../Components/Channels/InviteToChannelBtn";
 import PropTypes from "prop-types";
+import {ProfileContext} from "../../../Context/ProfileProvider";
+import {PublicChannelContext} from "../../../Context/PublicChannelProvider";
 
 export const PublicChannelDetails = (props) => {
     const {
-        compairedOwnerId,
-        publicChannel,
         deleteChannel,
-        profile,
         joinToChannel,
         setOpen,
-        allUsers, userChoice, friendId, inviteToChannel} = props
+        allUsers, userChoice, friendId, inviteToChannel
+    } = props
+    const publicChannel = useContext(PublicChannelContext)
     const {users, owner_id, id, desc, name, type, detail_type} = publicChannel
+    const profile = useContext(ProfileContext)
     const compareAuthId = profile.id === owner_id
 
     return (
@@ -32,7 +34,7 @@ export const PublicChannelDetails = (props) => {
             </p>
             <div className="channel_actions">
                 {
-                    compairedOwnerId === true
+                    compareAuthId === true
                         ? <>
                             <DeleteChannelBtn
                                 channelId={id}
@@ -77,9 +79,7 @@ export const PublicChannelDetails = (props) => {
 }
 
 PublicChannelDetails.propTypes = {
-    compairedOwnerId: PropTypes.bool,
     friendId: PropTypes.any,
-    publicChannel: PropTypes.object,
     profile: PropTypes.object,
     allUsers: PropTypes.array,
     deleteChannel: PropTypes.func.isRequired,

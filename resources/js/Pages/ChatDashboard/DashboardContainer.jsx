@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component, createRef, memo} from 'react';
 import {CustomNav} from "../../Components/Details/CustomNav";
 import {Dashboard} from "./Dashboard";
 import {connect} from "react-redux";
@@ -19,7 +19,10 @@ import {echoInstance} from "../../bootstrap";
 import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channel/channelAction";
 import PropTypes from "prop-types";
 import {EchoChannelSelect, EchoOnlineChatUsers, joinToPublicChannel} from "../../redux/actions/echo/echoActions";
+import {MessageEndContext} from "../../Context/RootContext";
+import {AppContextProvider} from "../../Context/Providers";
 
+const MemoNav = memo(CustomNav)
 
 class DashboardContainer extends Component {
     constructor(props) {
@@ -47,7 +50,6 @@ class DashboardContainer extends Component {
                 this.props.MessageChatChannelAction(echo, this.token, this.props.profile.id, this.state.notification)
                 this.props.joinToPublicChannel(this.props.profile.id, this.token)
                 this.props.OnlineChatUsersAction(true)
-                // this.props.EchoOnlineChatUsers(this.token)
             })
             this.scrollToBottom()
         }
@@ -70,34 +72,24 @@ class DashboardContainer extends Component {
 
     render() {
         return (
-            <div>
-                <CustomNav
-                    logout={this.logout}
-                    profile={this.props.profile}
-                />
-                <Dashboard
-                    notifications={this.state.notification}
-                    messagesEnd={this.messagesEnd}
-                    friends={this.props.friends}
-                    activeUserId={this.props.activeUserId}
-                    isLoading={this.props.isLoading}
-                    conversation={this.props.conversation}
-                    lastMessages={this.props.lastMessages}
-                    profile={this.props.profile}
-                    publicMessages={this.props.publicMessages}
-                    privateMessages={this.props.privateMessages}
-                    publicChannel={this.props.publicChannel}
-                    privateChannel={this.props.privateChannel}
-                />
-            </div>
+            <AppContextProvider>
+                <MessageEndContext.Provider value={this.messagesEnd}>
+                    <div>
+                        <MemoNav
+                            logout={this.logout}
+                        />
+                        <Dashboard/>
+                    </div>
+                </MessageEndContext.Provider>
+            </AppContextProvider>
         )
     }
 }
 
 DashboardContainer.propTypes = {
     loading: PropTypes.bool,
-    errorResponse: PropTypes.object,
     profile: PropTypes.object,
+    errorResponse: PropTypes.object,
     isShow: PropTypes.bool,
     isLoading: PropTypes.bool,
     friends: PropTypes.array,
@@ -119,8 +111,8 @@ DashboardContainer.propTypes = {
 
 const mapStateToProps = (state) => ({
     loading: state.auth.loading,
-    errorResponse: state.auth.errorResponse,
     profile: state.auth.profile,
+    errorResponse: state.auth.errorResponse,
     isShow: state.auth.isShow,
     isLoading: state.chat.loading,
     friends: state.chat.friends,

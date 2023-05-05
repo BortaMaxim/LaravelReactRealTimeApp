@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from "prop-types";
+import {PublicChannelContext} from "../../../Context/PublicChannelProvider";
 
 export const PublicChannelPanel = (props) => {
 
-    const {publicChannel, handleOpen} = props
-
+    const {handleOpen} = props
+    const publicChannel = useContext(PublicChannelContext)
     return (
         <div className="channel_info">
             {
@@ -22,6 +23,5 @@ export const PublicChannelPanel = (props) => {
     )
 }
 PublicChannelPanel.propTypes = {
-    publicChannel: PropTypes.object,
     handleOpen: PropTypes.func.isRequired,
 }

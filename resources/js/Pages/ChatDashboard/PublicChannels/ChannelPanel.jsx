@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {memo, useContext, useEffect, useRef} from 'react';
 import {UnreadMessagesCountAction} from "../../../redux/actions/chat/userChatAction";
 import {useDispatch, useSelector} from "react-redux";
 import {useActive} from "../../../hooks/useActive";
@@ -22,16 +22,21 @@ import {useModal} from "../../../hooks/useModal";
 import {InviteToChannelAction, JoinToChannel} from "../../../redux/actions/invites/invitesAction";
 import {RoomsContainer} from "../ContainersComponent/RoomsContainer";
 import {EchoChannelSelect, EchoDmSelect, OnlineEchoPublicChannelsUsers} from "../../../redux/actions/echo/echoActions";
+import {LastMessageContext} from "../../../Context/LastMessageProvider";
+import {PublicChannelContext} from "../../../Context/PublicChannelProvider";
+import {PrivateChannelContext} from "../../../Context/PrivateChannelProvider";
 
-export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, privateChannel, notifications}) => {
+const MGetNotificationsContainer = memo(GetNotificationsContainer)
+export const ChannelPanel = () => {
     const {friendId, roomId, privateRoomId, setFriendId, handleActive} = useActive()
     const {open, setOpen} = useModal()
     const token = localStorage.getItem('user-token')
+    const lastMessages = useContext(LastMessageContext)
     const dispatch = useDispatch()
+    const inputRef = useRef([])
+    const publicChannel = useContext(PublicChannelContext)
+    const privateChannel = useContext(PrivateChannelContext)
     const {fields, handleChange, handleCheck, handleSubmit, clear} = useForm({
-        channel_name: '',
-        detail_name: '',
-        detail_desc: '',
         channel_type: '',
     })
     const compareType = fields.channel_type === undefined || fields.channel_type === 'channel' ? 'public' : 'private'
@@ -77,9 +82,9 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
     const createChannel = (e) => {
         e.preventDefault()
         let data = {
-            channel_name: fields.channel_name,
-            detail_name: fields.detail_name,
-            detail_desc: fields.detail_desc,
+            channel_name: inputRef.current[1].value,
+            detail_name: inputRef.current[2].value,
+            detail_desc: inputRef.current[3].value,
             detail_visible: compareVisible,
             detail_type: compareType,
             channel_type: fields.channel_type || 'channel'
@@ -127,7 +132,7 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
         setOpen(false)
         setFriendId('')
     }
-
+    console.log('ChannelPanel')
     return (
         <div className="bg-secondary vh-100 p-2 channel">
             <div className="chat_panel_header">
@@ -135,21 +140,17 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                     compareType={compareType}
                     compareVisible={compareVisible}
                     fields={fields}
+                    inputRef={inputRef}
                     createChannel={createChannel}
                     handleCheck={handleCheck}
                     handleChange={handleChange}
                     getAllChannelsSelector={getAllChannelsSelector}
                 />
-                <GetNotificationsContainer
-                    profile={profile.profile}
-                />
+                <MGetNotificationsContainer/>
             </div>
             <Users
                 recipient={recipient}
-                isLoading={isLoading}
-                users={friends}
                 unreadMessagesCount={unreadMessagesCount}
-                lastMessages={lastMessages}
                 handleActive={handleActive}
                 friendId={friendId}
                 onlineUsers={profile.onlineUsers}
@@ -161,16 +162,13 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                                display: modify === true || roomId === '' ? 'none' : 'block'
                            }}>
                         <PublicChannelsContainer
-                            publicChannel={publicChannel}
                             joinToChannel={joinToChannel}
                             deleteChannel={deleteChannel}
                             userChoice={userChoice}
                             inviteToChannel={inviteToChannel}
                             setOpen={setOpen}
                             open={open}
-                            profile={profile}
                             friendId={friendId}
-                            compairedOwnerId={publicChannel.owner_id === profile.id}
                         />
                     </div>
                     : null
@@ -182,7 +180,6 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                             display: modify === true || privateRoomId === '' ? 'none' : 'block'
                         }}>
                         <PrivateChannelsContainer
-                            privateChannel={privateChannel}
                             deleteChannel={deleteChannel}
                             joinToChannel={joinToChannel}
                             inviteToChannel={inviteToChannel}
@@ -190,8 +187,8 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
                             open={open}
                             setOpen={setOpen}
                             friendId={friendId}
-                            profile={profile}
-                            compairedOwnerId={privateChannel.owner_id === profile.id}
+                            profile={profile.profile}
+                            compairedOwnerId={privateChannel.owner_id === profile.profile.id}
                         />
                     </div>
                     : null
@@ -211,9 +208,5 @@ export const ChannelPanel = ({friends, isLoading, lastMessages, publicChannel, p
 
 ChannelPanel.propTypes = {
     friends: PropTypes.array,
-    isLoading: PropTypes.bool,
-    lastMessages: PropTypes.object,
-    publicChannel: PropTypes.object,
-    privateChannel: PropTypes.object,
     notifications: PropTypes.object,
 }

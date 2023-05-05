@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {UserMessages} from "../UserMessages";
 import {ChatForm} from "../ChatForm";
 import {useForm} from "../../../hooks/useForm";
@@ -9,15 +9,16 @@ import {
     SetMessageAction
 } from "../../../redux/actions/chat/userChatAction";
 import {useDispatch} from "react-redux";
+import {ActiveUserIdContext} from "../../../Context/ActiveUserIdProvider";
+import {ConversationContext} from "../../../Context/ConversationProvider";
 
 export const UserMessagesContainer = (props) => {
     const {
-        userMessages,
-        profile,
         messagesEnd,
-        activeUserId
     } = props
     const dispatch = useDispatch()
+    const userMessages = useContext(ConversationContext)
+    const activeUserId = useContext(ActiveUserIdContext)
     const token = localStorage.getItem('user-token')
     const {fields, clear, handleChange} = useForm({message: ''})
 
@@ -39,7 +40,7 @@ export const UserMessagesContainer = (props) => {
             {
                 userMessages.length !== 0
                     ? <div>
-                        <UserMessages userMessages={userMessages} profile={profile}/>
+                        <UserMessages userMessages={userMessages}/>
                         <ChatForm sendMessage={sendMessage} fields={fields.message} handleChange={handleChange}
                                   inputName="message"/>
                     </div>
