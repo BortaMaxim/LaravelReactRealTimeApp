@@ -9,6 +9,8 @@ import {PublicMessagesProvider} from "./PublicMessagesProvider";
 import {PrivateMessagesProvider} from "./PrivateMessagesProvider";
 import PublicChannelProvider from "./PublicChannelProvider";
 import PrivateChannelProvider from "./PrivateChannelProvider";
+import {AllPublicChannelsProvider} from "./AllPublicChannelsProvider";
+import AllPrivateChannelsProvider from "./AllPrivateChannelsProvider";
 
 
 const combineComponents = (...components) => {
@@ -38,6 +40,8 @@ const providers = [
     PrivateMessagesProvider,
     PublicChannelProvider,
     PrivateChannelProvider,
+    AllPublicChannelsProvider,
+    AllPrivateChannelsProvider
 ]
 
 export const AppContextProvider = combineComponents(...providers)

@@ -2,9 +2,6 @@
 
 namespace App\Repository\AuthRepository;
 
-use App\Events\ChannelsOnlineUsers;
-use App\Events\OfflineUsers;
-use App\Events\OnlineUsers;
 use App\Http\Controllers\Controller;
 use App\Models\User\User;
 use Illuminate\Auth\Events\Registered;
@@ -113,7 +110,6 @@ class AuthRepository extends Controller implements Authable
         $user = Auth::guard('api')->user()->token();
         $auth_user = auth()->user();
         $auth_user->status = 'offline';
-//        broadcast(new OfflineUsers($user));
 
         $auth_user->save();
         $user->revoke();

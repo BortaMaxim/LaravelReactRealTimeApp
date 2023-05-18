@@ -92,10 +92,8 @@ export const MessageChatChannelAction = (echo, token, profileId, notification) =
             let activeUserId = getState().activeUserId
             if (msg.sender_id === activeUserId) {
                 dispatch(FetchConversationWithAction(msg.sender_id, token, true))
-                console.log('FetchConversationWithAction')
             } else {
                 dispatch(FetchLastMessageWithAction(msg.sender_id, token))
-                console.log('FetchLastMessageWithAction')
             }
 
             if (!document.hasFocus()) notification.play()

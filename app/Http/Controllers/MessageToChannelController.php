@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ChannelsOnlineUsers;
 use App\Events\SendMessageToChannel;
 use App\Helpers\Conversation;
+use App\Http\Resources\UnreadMessagesCollection;
 use App\Models\Channel\Channel;
 use App\Models\Message2s\Message2;
 use App\Models\User\User;
@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MessageToChannelController extends Controller
+class MessageToChannelController extends ApiController
 {
     public function sendMessageTo(Request $request, $channelId)
     {
@@ -27,7 +27,6 @@ class MessageToChannelController extends Controller
             'user' => $authUser,
             'channel_id' => intval($channelId),
         ]);
-
         broadcast(new SendMessageToChannel($authUser, $messageCreated, $foundedChannel));
     }
 
@@ -36,15 +35,20 @@ class MessageToChannelController extends Controller
      */
     public function getMessages(Channel $channel)
     {
-        $messages = Message2::where('channel_id', $channel->id)->with('user.details')->get();
-//        $channelUsers = $channel->getChannel($channel->id, $channel->type);
-//        return $channelUsers;
-//        $authUser = Auth::user();
-        foreach ($messages as $message) {
-            $message->read = Carbon::now()->format('Y-m-d H:i:s');
-            $message->save();
+        $conversation = new Conversation(auth()->user(), $channel);
+        return $conversation->channelMessages(true);
+    }
+
+    public function getLast(Channel $channel = null)
+    {
+        if ($channel) {
+            $one_channel =  Channel::find($channel->id);
+            $messages = $one_channel->messages()->where('read', '=', null)->get();
+            return [$one_channel->id => count($messages) ? $messages[count($messages) - 1]: []];
         }
-//
-        return $messages;
+        $channels = Channel::with(['messages' => function ($query) {
+            $query->where('read', '=', null);
+        }])->get('id')->keyBy('id');
+        return $channels;
     }
 }

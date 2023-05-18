@@ -29,16 +29,6 @@ class User extends Authenticatable implements MustVerifyEmail, IResetPassword, B
         $this->notify(new VerifyEmail);
     }
 
-    public function sentMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Message::class, 'sender_id');
-    }
-
-    public function receivedMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Message::class, 'recipient_id');
-    }
-
     public function getPresenceChannelUsers(User $user,  $channelId)
     {
         if ($channelId == 1) {

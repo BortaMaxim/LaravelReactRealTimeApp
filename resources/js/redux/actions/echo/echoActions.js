@@ -70,7 +70,7 @@ export const initNotificationAndEventChannels = (user, token) => async (dispatch
         .listen('StatusEvent', (data) => {
             if (data.message.includes('online')) {
                 dispatch(OnlineChatUsersAction(true))
-            } else if(data.message.includes('offline')) {
+            } else if (data.message.includes('offline')) {
                 dispatch(RemoveOnlineUserAfterLoggedOutAction(data.user))
             }
             toast(data.message, toastOptions('bottom-right'))
@@ -86,16 +86,21 @@ export const joinToPublicChannel = (userId, token) => async (dispatch) => {
         })
 }
 
-export const EchoChannelSelect = (channel, token) => async (dispatch) => {
+export const EchoChannelSelect = (ID, token) => async (dispatch, getState) => {
     const echo = echoInstance(token)
-    await echo.private(`chat.channel.${channel.id}`)
+    const authId = getState().auth.profile.id
+    await echo.private(`chat.channel.${ID}`)
         .listen('SendMessageToChannel', (data) => {
+            let sender_id = data.data.user_id
             let id = data.data.channel_id
-            if (channel.id === id || channel.channel_id === id) {
-                dispatch(ChannelsSelectAction(data.data, token))
-            } else {
-                console.log('last message')
+            console.log('echo ', sender_id)
+            console.log('authId', authId)
+            if (ID === id) {
+                if (sender_id !== authId) {
+                    dispatch(ChannelsSelectAction(data.data, token))
+                }
             }
+            console.log('last message')
         })
 }
 
@@ -117,18 +122,22 @@ export const OnlineEchoPublicChannelsUsers = (channel, token) => (dispatch) => {
         })
 }
 
-export const EchoDmSelect = (channel, token) => async (dispatch) => {
+export const EchoDmSelect = (channel, token) => async (dispatch, getState) => {
     const echo = echoInstance(token)
+    const authId = getState().auth.profile.id
     await echo.private(`chat.dm.${channel.id}`)
         .listen('SendMessageToChannel', (data) => {
             let id = data.data.channel_id
+            let sender_id = data.data.user_id
             if (channel.id === id) {
-                dispatch(ChannelDmSelectAction(data.data, token))
+                if (authId !== sender_id) {
+                    dispatch(ChannelDmSelectAction(data.data, token))
+                }
             }
-            dispatch({
-                type: ChatActionTypes.SENT_PRIVATE_CHANNEL_MESSAGE,
-                payload: data.data
-            })
+            // dispatch({
+            //     type: ChatActionTypes.SENT_PRIVATE_CHANNEL_MESSAGE,
+            //     payload: data.data
+            // })
         })
         .listenForWhisper('SendMessageToChannel', (event) => {
             console.log('listenForWhisper,', event)

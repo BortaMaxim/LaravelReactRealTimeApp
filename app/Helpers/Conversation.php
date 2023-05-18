@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Message2s\Message2;
 use App\Models\User\User;
 
 class Conversation
@@ -47,5 +48,15 @@ class Conversation
     {
         $messages = $this->messages(2);
         return (count($messages) ? $messages[count($messages) - 1] : []);
+    }
+
+    public function channelMessages($read = false)
+    {
+        $sent =
+        $channel = Message2::where('channel_id', $this->recipient->id)->with('user.details');
+        if ($read === true) {
+            $channel->read();
+        }
+        return $channel->get();
     }
 }

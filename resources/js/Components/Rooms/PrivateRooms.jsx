@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {PrivateRoomList} from "../../Pages/ChatDashboard/PrivateChannels/PrivateRoomList";
 import PropTypes from "prop-types";
+import {AllPrivateChannelsContext} from "../../Context/AllPrivateChannelsProvider";
 
 export const PrivateRooms = (props) => {
-    const {privateChannels, privateRoomId, setPrivateActiveRoom} = props
-
+    const {privateRoomId, setPrivateActiveRoom} = props
+    const privateChannels = useContext(AllPrivateChannelsContext)
     return (
         <div>
             {

@@ -252,6 +252,8 @@ class ChannelController extends Controller
 
     public function getOneChannel($channelId)
     {
+//        $auth_user = auth()->user();
+//        dd($auth_user);
         return Channel::getChannel($channelId, 'channel');
     }
 

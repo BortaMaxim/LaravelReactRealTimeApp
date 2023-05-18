@@ -18,7 +18,6 @@ export const CreateChanelContainer = (props) => {
         compareVisible
     } = props
     const {active, setActive} = useModal()
-    console.log('CreateChannelContainer')
     return (
         <>
             <CreateChannel

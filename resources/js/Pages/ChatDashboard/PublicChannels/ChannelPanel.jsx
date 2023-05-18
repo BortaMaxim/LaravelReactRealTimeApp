@@ -66,8 +66,8 @@ export const ChannelPanel = () => {
         if (publicChannel !== null) {
             if (publicChannel.type === 'channel') {
                 dispatch(ChannelsSelectAction(null, token))
-                dispatch(EchoChannelSelect(publicChannel, token))
-                dispatch(OnlineEchoPublicChannelsUsers(publicChannel, token))
+                dispatch(EchoChannelSelect(publicChannel.id, token))
+                // dispatch(OnlineEchoPublicChannelsUsers(publicChannel, token))
             }
         }
     }, [publicChannel])
@@ -132,7 +132,7 @@ export const ChannelPanel = () => {
         setOpen(false)
         setFriendId('')
     }
-    console.log('ChannelPanel')
+
     return (
         <div className="bg-secondary vh-100 p-2 channel">
             <div className="chat_panel_header">
@@ -194,8 +194,6 @@ export const ChannelPanel = () => {
                     : null
             }
             <RoomsContainer
-                publicChannels={getAllChannelsSelector.publicChannels}
-                privateChannels={getAllChannelsSelector.privateChannels}
                 publicChannel={publicChannel}
                 setActiveRoom={setActiveRoom}
                 setPrivateActiveRoom={setPrivateActiveRoom}

@@ -42,5 +42,4 @@ class Channel extends Model implements BelongsToManyUsersI, Messages2I
     protected $attributes = [
         'name' => null,
     ];
-
 }

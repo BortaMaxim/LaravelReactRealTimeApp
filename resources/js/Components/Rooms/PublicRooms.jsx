@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {RoomList} from "../../Pages/ChatDashboard/RoomList";
 import PropTypes from "prop-types";
+import {AllPublicChannelsContext} from "../../Context/AllPublicChannelsProvider";
 
 export const PublicRooms = (props) => {
-    const {publicChannels, publicChannel, setActiveRoom, roomId} = props
-
+    const {publicChannel, setActiveRoom, roomId} = props
+    const publicChannels = useContext(AllPublicChannelsContext)
     return (
        <div>
            {

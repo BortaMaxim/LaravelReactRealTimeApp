@@ -38,7 +38,7 @@ class SendMessageToChannel implements ShouldBroadcastNow
     {
         return [
             'data' => $this->data,
-            'channel' => $this->channel
+            'channel' => $this->channel,
         ];
     }
 
