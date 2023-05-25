@@ -18,7 +18,7 @@ import {
 import {echoInstance} from "../../bootstrap";
 import {GetAllChannelsAction, GetAllPrivateChannelsAction} from "../../redux/actions/channel/channelAction";
 import PropTypes from "prop-types";
-import {EchoChannelSelect, EchoOnlineChatUsers, joinToPublicChannel} from "../../redux/actions/echo/echoActions";
+import {EchoChannelSelect, joinToPublicChannel} from "../../redux/actions/echo/echoActions";
 import {MessageEndContext} from "../../Context/RootContext";
 import {AppContextProvider} from "../../Context/Providers";
 
@@ -145,7 +145,6 @@ export default connect(mapStateToProps, {
     joinToPublicChannel,
     EchoChannelSelect,
     OnlineChatUsersAction,
-    EchoOnlineChatUsers
 })(DashboardWithRouterContainer)
 
 

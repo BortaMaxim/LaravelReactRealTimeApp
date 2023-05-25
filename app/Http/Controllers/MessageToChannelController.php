@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\SendMessageToChannel;
 use App\Helpers\Conversation;
-use App\Http\Resources\UnreadMessagesCollection;
 use App\Models\Channel\Channel;
 use App\Models\Message2s\Message2;
-use App\Models\User\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class MessageToChannelController extends ApiController
 {
@@ -35,8 +31,9 @@ class MessageToChannelController extends ApiController
      */
     public function getMessages(Channel $channel)
     {
-        $conversation = new Conversation(auth()->user(), $channel);
-        return $conversation->channelMessages(true);
+        $curr_channel = Message2::where('channel_id', $channel->id)->with('user.details');
+        $curr_channel->read();
+        return $curr_channel->get();
     }
 
     public function getLast(Channel $channel = null)

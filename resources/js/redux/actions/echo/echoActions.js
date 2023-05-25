@@ -95,32 +95,17 @@ export const EchoChannelSelect = (ID, token) => async (dispatch, getState) => {
             let id = data.data.channel_id
             console.log('echo ', sender_id)
             console.log('authId', authId)
-            if (ID === id) {
+            console.log(data)
+            if (id === ID) {
                 if (sender_id !== authId) {
                     dispatch(ChannelsSelectAction(data.data, token))
+                } else {
                 }
             }
             console.log('last message')
         })
 }
 
-export const EchoOnlineChatUsers = (token) => async (dispatch) => {
-    let echo = echoInstance(token)
-    await echo.private('chat')
-        .listen('OnlineUsers', (data) => {
-            console.log('echo online users', data)
-        })
-}
-
-export const OnlineEchoPublicChannelsUsers = (channel, token) => (dispatch) => {
-    const echo = echoInstance(token)
-    echo.private(`online.public.channel.users.${channel.id}`)
-        .listen('ChannelsOnlineUsers', (data) => {
-            let hereUsers = []
-
-            console.log('OnlineEchoPublicChannelsUsers, data', [...hereUsers, data.user])
-        })
-}
 
 export const EchoDmSelect = (channel, token) => async (dispatch, getState) => {
     const echo = echoInstance(token)
@@ -149,6 +134,16 @@ export const LeavingEchoChannel = (channel, token) => (dispatch) => {
     echo.join(`chat.channel.${channel.id}`)
         .stopListening('SendMessageToChannel')
     console.log('LeavingEchoChannel')
+}
+
+
+export const TypingEventEchoAction = (token, user) => (dispatch) => {
+    let echo = echoInstance(token)
+    echo.private(`user-channel.${user.id}`)
+        .whisper('typing', {
+            user: user.name + ' is typing...',
+            typing: true
+        })
 }
 
 

@@ -52,11 +52,6 @@ class Conversation
 
     public function channelMessages($read = false)
     {
-        $sent =
-        $channel = Message2::where('channel_id', $this->recipient->id)->with('user.details');
-        if ($read === true) {
-            $channel->read();
-        }
-        return $channel->get();
+
     }
 }

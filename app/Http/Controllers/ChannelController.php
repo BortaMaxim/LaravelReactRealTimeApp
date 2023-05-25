@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\CreateChannelEvent;
 use App\Events\DeleteChannelEvent;
 use App\Events\JoinToChannelEvent;
+use App\Events\OnlineChatChannelUser;
 use App\Events\StatusEvent;
 use App\Http\Requests\CreateChannelRequest;
 use App\Models\Channel\Channel;
@@ -252,8 +253,6 @@ class ChannelController extends Controller
 
     public function getOneChannel($channelId)
     {
-//        $auth_user = auth()->user();
-//        dd($auth_user);
         return Channel::getChannel($channelId, 'channel');
     }
 

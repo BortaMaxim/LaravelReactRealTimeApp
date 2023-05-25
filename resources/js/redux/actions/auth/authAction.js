@@ -3,7 +3,7 @@ import * as ProfileActionTypes from '../../types/profileActionTypes'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import {BASE_AUTH_URL, getAuthOptions, getOptions, postOptions, toastOptions, uploadAuthOptions} from "../../utils";
-import {EchoOnlineChatUsers, initNotificationAndEventChannels} from "../echo/echoActions";
+import {initNotificationAndEventChannels} from "../echo/echoActions";
 
 export const ShowNotificationAction = () => {
     return {

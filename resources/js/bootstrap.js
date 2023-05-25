@@ -43,6 +43,7 @@ export const echoInstance = (token) => {
     return new Echo({
         broadcaster: 'pusher',
         cluster: 'eu',
+        encrypted: true,
         key: import.meta.env.VITE_PUSHER_APP_KEY,
         wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
         wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,

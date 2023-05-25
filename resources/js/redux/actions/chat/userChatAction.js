@@ -98,6 +98,9 @@ export const MessageChatChannelAction = (echo, token, profileId, notification) =
 
             if (!document.hasFocus()) notification.play()
         })
+        .listenForWhisper('typing', (event) => {
+            console.log('whisper', event)
+        })
 }
 
 

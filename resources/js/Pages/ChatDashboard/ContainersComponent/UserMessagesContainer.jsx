@@ -11,6 +11,8 @@ import {
 import {useDispatch} from "react-redux";
 import {ActiveUserIdContext} from "../../../Context/ActiveUserIdProvider";
 import {ConversationContext} from "../../../Context/ConversationProvider";
+import {TypingEventEchoAction} from "../../../redux/actions/echo/echoActions";
+import {ProfileContext} from "../../../Context/ProfileProvider";
 
 export const UserMessagesContainer = (props) => {
     const {
@@ -19,6 +21,7 @@ export const UserMessagesContainer = (props) => {
     const dispatch = useDispatch()
     const userMessages = useContext(ConversationContext)
     const activeUserId = useContext(ActiveUserIdContext)
+    const user = useContext(ProfileContext)
     const token = localStorage.getItem('user-token')
     const {fields, clear, handleChange} = useForm({message: ''})
 
@@ -35,19 +38,26 @@ export const UserMessagesContainer = (props) => {
         clear()
     }
 
+
     return (
         <div className="message_panel" ref={messagesEnd}>
             {
                 userMessages.length !== 0
                     ? <div>
                         <UserMessages userMessages={userMessages}/>
-                        <ChatForm sendMessage={sendMessage} fields={fields.message} handleChange={handleChange}
-                                  inputName="message"/>
+                        <ChatForm
+                            sendMessage={sendMessage}
+                            fields={fields.message}
+                            handleChange={handleChange}
+                            inputName="message"/>
                     </div>
                     : <div>
                         <span>no messages...</span>
-                        <ChatForm sendMessage={sendMessage} fields={fields.message} handleChange={handleChange}
-                                  inputName="message"/>
+                        <ChatForm
+                            sendMessage={sendMessage}
+                            fields={fields.message}
+                            handleChange={handleChange}
+                            inputName="message"/>
                     </div>
             }
 

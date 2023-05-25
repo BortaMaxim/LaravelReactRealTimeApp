@@ -51,8 +51,8 @@ Route::group(['prefix' => 'auth', 'middleware' => 'cors'], function ($route) {
         Route::get('get-private-channel/{channel_id}', [ChannelController::class, 'getOnePrivateChannel']); //done
         Route::post('send-message-to/{channel_id}', [MessageToChannelController::class, 'sendMessageTo']);
         Route::get('get-message-to/{channel}', [MessageToChannelController::class, 'getMessages']);
-        Route::get('get-last-messages', [MessageToChannelController::class, 'getLast']);
-        Route::get('get-last-messages/{channel}', [MessageToChannelController::class, 'getLast']);
+        Route::get('get-last-messages', [MessageToChannelController::class, 'getLast']);//not
+        Route::get('get-last-messages/{channel}', [MessageToChannelController::class, 'getLast']);//not
         Route::get('get-friend-list', [FriendsController::class, 'getFriendList']);///Not yet
     });
 });

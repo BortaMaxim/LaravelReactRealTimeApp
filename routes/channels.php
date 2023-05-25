@@ -20,12 +20,12 @@ Broadcast::channel('chat.dm.{channel_id}', ChatDm::class);
 Broadcast::channel('create-channel', CreateChannel::class);
 Broadcast::channel('delete-channel', DeleteChannel::class);
 Broadcast::channel('join-to-channel.{user_id}', JoinToChannel::class);
-Broadcast::channel('online.public.channel.users.{channelId}', OnlinePublicChatChannel::class);
+//Broadcast::channel('online.public.channel.users.{channelId}', OnlinePublicChatChannel::class);
 Broadcast::channel('chat', function ($user) {
     if (auth()->check()) {
         return $user;
     };
 });
 Broadcast::channel('App.Models.User.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    return (int)$user->id === (int)$id;
 });

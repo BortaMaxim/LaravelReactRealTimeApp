@@ -21,7 +21,7 @@ import {PrivateChannelsContainer} from "../PrivateChannels/PrivateChannelsContai
 import {useModal} from "../../../hooks/useModal";
 import {InviteToChannelAction, JoinToChannel} from "../../../redux/actions/invites/invitesAction";
 import {RoomsContainer} from "../ContainersComponent/RoomsContainer";
-import {EchoChannelSelect, EchoDmSelect, OnlineEchoPublicChannelsUsers} from "../../../redux/actions/echo/echoActions";
+import {EchoChannelSelect, EchoDmSelect} from "../../../redux/actions/echo/echoActions";
 import {LastMessageContext} from "../../../Context/LastMessageProvider";
 import {PublicChannelContext} from "../../../Context/PublicChannelProvider";
 import {PrivateChannelContext} from "../../../Context/PrivateChannelProvider";
@@ -67,7 +67,7 @@ export const ChannelPanel = () => {
             if (publicChannel.type === 'channel') {
                 dispatch(ChannelsSelectAction(null, token))
                 dispatch(EchoChannelSelect(publicChannel.id, token))
-                // dispatch(OnlineEchoPublicChannelsUsers(publicChannel, token))
+                // dispatch(OnlineEchoPublicChannelsUsers(publicChannel.id, token))
             }
         }
     }, [publicChannel])
